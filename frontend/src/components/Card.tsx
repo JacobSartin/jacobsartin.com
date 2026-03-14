@@ -4,16 +4,15 @@ import "@/projects/projects.css";
 export enum iconStyle {
   solid = "fa-solid",
   regular = "fa-regular",
+  brand = "fa-brands",
 }
-
-type ProjectSlug = "3d-renderer" | "cluster" | "smesh-vpn" | "this-site";
 
 export type CardData = {
   icon: string;
   iconStyle?: iconStyle; // "fa-solid" | "fa-regular"
   title: string;
   subtitle: string;
-  slug?: ProjectSlug;
+  link?: string;
   handleClick?: () => void;
 };
 
@@ -22,7 +21,7 @@ export default function Card({
   iconStyle,
   title,
   subtitle,
-  slug,
+  link,
   handleClick,
 }: CardData) {
   const iconClass = `${iconStyle ?? "fa-solid"} ${icon}`;
@@ -40,10 +39,10 @@ export default function Card({
     </div>
   );
 
-  // If the card maps to a project slug, render a link to that project
-  if (slug) {
+  // If the card has a destination, render it as a link card
+  if (link) {
     return (
-      <Link key={title} to={`/projects/${slug}`} className="card">
+      <Link key={title} to={link} className="card">
         {content}
       </Link>
     );

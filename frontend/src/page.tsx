@@ -14,13 +14,13 @@ export default function HomePage() {
           <span className="cursor" aria-hidden="true" />
         </h2>
         <p className="hero-description">
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum."
+          "I am a computer science student with a passion for software
+          development. I enjoy a variety of programming languages and
+          technologies, and I am always eager to learn new things. I have
+          experience in web development, backend development, database
+          management, DevOps, and some basic graphics/game programming. I am
+          currently seeking opportunities to apply my skills and grow as a
+          developer."
         </p>
         <div className="cta-buttons">
           <Link to="/projects" className="cta-button">

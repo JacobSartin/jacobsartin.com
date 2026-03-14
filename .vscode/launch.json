@@ -5,7 +5,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Open Dev in Chrome",
-      "url": "http://localhost:3000",
+      "url": "http://localhost:5173",
       "webRoot": "${workspaceFolder}/frontend/app",
       "userDataDir": "${workspaceFolder}/.vscode/chrome",
       "sourceMaps": true,

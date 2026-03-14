@@ -27,18 +27,21 @@ export default function AboutPage() {
           <p>
             Hi! I&apos;m <span className="highlight">Jacob Sartin</span>, a
             software developer with a passion for building elegant and efficient
-            solutions to complex problems.
+            solutions to complex problems. I consider myself a generalist, and I
+            am always open to exploring new areas of technology and software
+            development.
           </p>
           <p>
-            I enjoy working across the full stack, from crafting intuitive user
-            interfaces to designing robust backend systems. My approach combines
-            technical expertise with creative problem-solving, always keeping
-            the end user in mind.
+            I tend to gravitate towards backend development, DevOps, and more
+            systems-oriented work, but I also have experience with web
+            development, databases, and some basic graphics/game programming. I
+            enjoy learning new technologies and programming languages, and I am
+            always looking for opportunities to grow as a developer.
           </p>
           <p>
             When I&apos;m not coding, you&apos;ll find me exploring new
-            technologies, contributing to open-source projects, and continuously
-            learning to stay at the forefront of software development.
+            technologies, reading tech blogs, or relaxing with my family and
+            friends.
           </p>
         </div>
 

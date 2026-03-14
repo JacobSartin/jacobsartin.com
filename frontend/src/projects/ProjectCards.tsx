@@ -4,52 +4,46 @@ import { useCallback, type MouseEvent } from "react";
 // Build card list from projects where appropriate, and keep a few action cards.
 const cards: CardData[] = [
   {
-    title: "Duplicate",
-    subtitle: "Open This Page in a New Tab",
-    icon: "fa-window-restore",
+    title: "Solitaire",
+    subtitle: "A simple solitaire web app",
+    icon: "fa-diamond",
     iconStyle: iconStyle.solid,
-    handleClick: () => window.open(window.location.href),
+    link: "/projects/solitaire",
   },
   {
     title: "3D Renderer",
     subtitle: "A lightweight renderer",
     icon: "fa-cube",
     iconStyle: iconStyle.solid,
-    slug: "3d-renderer",
+    link: "/projects/3d-renderer",
   },
   {
     title: "Cluster",
     subtitle: "Distributed tooling",
-    icon: "fa-network-wired",
-    iconStyle: iconStyle.solid,
-    slug: "cluster",
+    icon: "fa-kubernetes",
+    iconStyle: iconStyle.brand,
+    link: "/projects/cluster",
   },
   {
     title: "Smesh VPN",
     subtitle: "Mesh VPN experiment",
-    icon: "fa-shield-halved",
+    icon: "fa-network-wired",
     iconStyle: iconStyle.solid,
-    slug: "smesh-vpn",
+    link: "/projects/smesh-vpn",
   },
   {
     title: "This Site",
     subtitle: "About this website",
     icon: "fa-file",
     iconStyle: iconStyle.solid,
-    slug: "this-site",
+    link: "/projects/this-site",
   },
   {
-    title: "Copy",
-    subtitle: "Copy this page URL",
-    icon: "fa-copy",
-    iconStyle: iconStyle.regular,
-    handleClick: () => {
-      const url = window.location.href;
-      navigator.clipboard
-        .writeText(url)
-        .then(() => alert("Copied the url: " + url))
-        .catch((err) => console.error("Failed to copy URL:", err));
-    },
+    title: "Game of Life",
+    subtitle: "A cellular automaton implementation",
+    icon: "fa-table-cells-large",
+    iconStyle: iconStyle.solid,
+    link: "/projects/game-of-life",
   },
   {
     title: "Unicorns",

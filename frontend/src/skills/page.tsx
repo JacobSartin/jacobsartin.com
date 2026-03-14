@@ -11,7 +11,7 @@ const skillCategories: SkillCategory[] = [
   {
     icon: "fa-solid fa-code",
     title: "Languages",
-    skills: ["C++", "JavaScript / TypeScript", "Python", "Java", "HTML / CSS"],
+    skills: ["C++", "JavaScript / TypeScript", "Python", "Java", "And more..."],
   },
   {
     icon: "fa-solid fa-laptop-code",
@@ -33,21 +33,16 @@ const skillCategories: SkillCategory[] = [
     title: "Concepts",
     skills: [
       "REST APIs",
-      "Microservices",
-      "Agile / Scrum",
+      "Cryptography",
+      "Networking",
       "Test-Driven Development",
       "System Design",
     ],
   },
   {
-    icon: "fa-solid fa-pen-ruler",
-    title: "Design",
-    skills: [
-      "UI / UX Principles",
-      "Responsive Design",
-      "Accessibility (a11y)",
-      "Figma",
-    ],
+    icon: "fa-solid fa-certificate",
+    title: "Certifications",
+    skills: ["Comptia Security+"],
   },
 ];
 

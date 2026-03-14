@@ -4,23 +4,38 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
+import { lazy, Suspense, type ComponentType } from "react";
 import Nav from "@/components/Nav";
 import HomePage from "@/page";
 import AboutPage from "@/about/page";
 import SkillsPage from "@/skills/page";
 import ProjectsPage from "@/projects/page";
-import RendererPage from "@/projects/3d-renderer/page";
-import ClusterPage from "@/projects/cluster/page";
-import SmeshVpnPage from "@/projects/smesh-vpn/page";
-import ThisSite from "@/projects/this-site/page";
 import NotFound from "@/not-found";
+
+type PageModule = {
+  default: ComponentType;
+};
+
+function createLazyPageComponent(loadPage: () => Promise<PageModule>) {
+  const LazyPage = lazy(loadPage);
+
+  return function LazyPageComponent() {
+    return <LazyPage />;
+  };
+}
+
+function getProjectRoutePath(modulePath: string) {
+  return modulePath.replace(/^\./, "").replace(/\/page\.tsx$/, "");
+}
 
 function RootLayout() {
   return (
     <>
       <Nav />
       <main>
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </main>
     </>
   );
@@ -55,39 +70,26 @@ const projectsRoute = createRoute({
   component: ProjectsPage,
 });
 
-const rendererRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/projects/3d-renderer",
-  component: RendererPage,
-});
+const projectPageModules = import.meta.glob<PageModule>(
+  "./projects/*/page.tsx",
+);
 
-const clusterRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/projects/cluster",
-  component: ClusterPage,
-});
-
-const smeshVpnRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/projects/smesh-vpn",
-  component: SmeshVpnPage,
-});
-
-const thisPageRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/projects/this-site",
-  component: ThisSite,
-});
+const projectRoutes = Object.entries(projectPageModules)
+  .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
+  .map(([modulePath, loadPage]) =>
+    createRoute({
+      getParentRoute: () => rootRoute,
+      path: getProjectRoutePath(modulePath),
+      component: createLazyPageComponent(loadPage),
+    }),
+  );
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
   aboutRoute,
   skillsRoute,
   projectsRoute,
-  rendererRoute,
-  clusterRoute,
-  smeshVpnRoute,
-  thisPageRoute,
+  ...projectRoutes,
 ]);
 
 export const router = createRouter({ routeTree });
