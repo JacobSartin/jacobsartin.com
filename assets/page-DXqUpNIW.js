@@ -1,0 +1,1 @@
+import{j as t}from"./index-CM36-8f0.js";import{P as e}from"./ProjectTemplate-PKNfhmbR.js";function r(){return t.jsx(e,{title:"This Site",subtitle:"this website",children:t.jsx("p",{children:"Notes about this site, build process, and the small utilities used to generate and serve content."})})}export{r as default};
