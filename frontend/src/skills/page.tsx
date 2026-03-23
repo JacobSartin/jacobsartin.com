@@ -6,7 +6,6 @@ interface SkillCategory {
   skills: string[];
 }
 
-// TODO make real content
 const skillCategories: SkillCategory[] = [
   {
     icon: "fa-solid fa-code",

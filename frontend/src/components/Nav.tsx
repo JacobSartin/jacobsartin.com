@@ -1,4 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
+import AccentPicker from "./AccentPicker";
 import ThemeToggle from "./ThemeToggle";
 
 interface NavLink {
@@ -36,7 +37,10 @@ export default function Nav() {
         </div>
       </div>
       <div className="nav-right">
-        <ThemeToggle />
+        <div className="theme-controls">
+          <AccentPicker />
+          <ThemeToggle />
+        </div>
         <div className="social-links">
           <a
             className="link"

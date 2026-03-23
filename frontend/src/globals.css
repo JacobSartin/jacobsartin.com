@@ -32,7 +32,6 @@
   --content-lg: 1600px;
 
   /* Base colors — everything derives from these */
-  /* TODO Theme picker, pick accent and the rest just works */
   --accent: oklch(0.475 0.25 300);
   --accent-bright: oklch(from var(--accent) calc(l + 0.1) c h);
 }
@@ -77,6 +76,9 @@
   --overlay-light: oklch(1 0 0 / 0.05);
   --overlay-medium: oklch(from var(--overlay-light) l c h / 0.08);
 
+  /* Status colors */
+  --status-error: oklch(0.75 0.18 26);
+
   /* Shadows */
   --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.3), 0 1px 2px oklch(0 0 0 / 0.2);
   --shadow-md: 0 4px 16px oklch(0 0 0 / 0.4), 0 2px 6px oklch(0 0 0 / 0.3);
@@ -89,7 +91,7 @@
 [data-theme="light"] {
   color-scheme: light;
 
-  /* Base colors — shift lightness for light mode */
+  /* Base colors */
   --neutral: oklch(0.95 0.005 285);
   --text-base: oklch(0.2 0.01 285);
 
@@ -122,6 +124,9 @@
   /* Overlays */
   --overlay-light: oklch(0 0 0 / 0.03);
   --overlay-medium: oklch(from var(--overlay-light) l c h / 0.06);
+
+  /* Status colors */
+  --status-error: oklch(0.5 0.18 26);
 
   /* Shadows */
   --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.08), 0 1px 2px oklch(0 0 0 / 0.05);

@@ -22,12 +22,22 @@
       (function () {
         try {
           var t = localStorage.getItem("theme");
+          var accent = localStorage.getItem("accent");
           if (t !== "light" && t !== "dark") {
             t = matchMedia("(prefers-color-scheme: dark)").matches
               ? "dark"
               : "light";
           }
           document.documentElement.setAttribute("data-theme", t);
+
+          if (
+            typeof accent === "string" &&
+            /^oklch\(\s*-?\d*\.?\d+\s+-?\d*\.?\d+\s+-?\d*\.?\d+\s*\)$/i.test(
+              accent,
+            )
+          ) {
+            document.documentElement.style.setProperty("--accent", accent);
+          }
         } catch (e) {}
       })();
     </script>

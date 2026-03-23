@@ -1,6 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { safeGetStorage, safeSetStorage } from "@/utils/storage";
 
 type Theme = "light" | "dark";
+
+const THEME_STORAGE_KEY = "theme";
 
 function getSystemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -18,9 +21,10 @@ export default function ThemeToggle() {
 
   // On mount: read stored preference or fall back to system preference
   useEffect(() => {
-    const stored = localStorage.getItem("theme") as Theme | null;
+    const stored = safeGetStorage(THEME_STORAGE_KEY) as Theme | null;
     const resolved =
       stored === "light" || stored === "dark" ? stored : getSystemTheme();
+
     setTheme(resolved);
     applyTheme(resolved);
     setMounted(true);
@@ -30,7 +34,7 @@ export default function ThemeToggle() {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem("theme")) {
+      if (!safeGetStorage(THEME_STORAGE_KEY)) {
         const next = e.matches ? "dark" : "light";
         setTheme(next);
         applyTheme(next);
@@ -44,16 +48,18 @@ export default function ThemeToggle() {
     setTheme((prev) => {
       const next: Theme = prev === "dark" ? "light" : "dark";
       applyTheme(next);
-      localStorage.setItem("theme", next);
+      safeSetStorage(THEME_STORAGE_KEY, next);
       return next;
     });
   }, []);
 
-  // Avoid hydration mismatch — render nothing on the server
-  if (!mounted) return <div className="theme-toggle" aria-hidden="true" />;
+  if (!mounted) {
+    return <div className="theme-toggle" aria-hidden="true" />;
+  }
 
   return (
     <button
+      type="button"
       onClick={toggle}
       className="theme-toggle"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
