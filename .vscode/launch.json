@@ -2,6 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach to Integrated Browser",
+      "request": "launch",
+      "type": "editor-browser",
+      "webRoot": "${workspaceFolder}frontend/app",
+      "url": "http://localhost:5173",
+      "smartStep": true,
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Open Dev in Chrome",
