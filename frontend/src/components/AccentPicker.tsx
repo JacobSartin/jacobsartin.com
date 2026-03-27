@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "culori/css";
 import { converter, formatHex, parse } from "culori/fn";
 import { HexColorPicker } from "react-colorful";
+import { Button } from "react-aria-components";
 import {
   safeGetStorage,
   safeRemoveStorage,
@@ -331,15 +332,14 @@ export default function AccentPicker() {
 
   return (
     <div className="accent-control" ref={controlRef}>
-      <button
+      <Button
         type="button"
-        onClick={isOpen ? closeWithoutApply : openPicker}
+        onPress={isOpen ? closeWithoutApply : openPicker}
         className="accent-toggle"
         aria-expanded={isOpen}
         aria-haspopup="dialog"
         aria-controls="accent-picker-panel"
         aria-label="Customize accent color"
-        title="Customize accent color"
       >
         <span
           className="accent-swatch"
@@ -347,7 +347,7 @@ export default function AccentPicker() {
           aria-hidden="true"
         />
         <i className="fa-solid fa-sliders" aria-hidden="true" />
-      </button>
+      </Button>
 
       {isOpen && (
         <div
@@ -427,20 +427,20 @@ export default function AccentPicker() {
           </p>
 
           <div className="accent-actions">
-            <button
+            <Button
               type="button"
               className="accent-apply"
-              onClick={applyDraftAccent}
+              onPress={applyDraftAccent}
             >
               Apply
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className="accent-reset"
-              onClick={resetAccent}
+              onPress={resetAccent}
             >
               Reset to default
-            </button>
+            </Button>
           </div>
         </div>
       )}

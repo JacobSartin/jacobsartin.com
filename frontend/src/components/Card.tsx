@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Button, Link } from "react-aria-components";
 import "@/projects/projects.css";
 
 export enum iconStyle {
@@ -7,12 +7,14 @@ export enum iconStyle {
   brand = "fa-brands",
 }
 
+type ProjectRoute = `/projects/${string}`;
+
 export type CardData = {
   icon: string;
   iconStyle?: iconStyle; // "fa-solid" | "fa-regular"
   title: string;
   subtitle: string;
-  link?: string;
+  link?: ProjectRoute;
   handleClick?: () => void;
 };
 
@@ -42,7 +44,7 @@ export default function Card({
   // If the card has a destination, render it as a link card
   if (link) {
     return (
-      <Link key={title} to={link} className="card">
+      <Link key={title} href={link} className="card">
         {content}
       </Link>
     );
@@ -50,13 +52,13 @@ export default function Card({
 
   // Otherwise render a button with any action attached
   return (
-    <button
+    <Button
       key={title}
       type="button"
       className="card"
-      onClick={() => handleClick?.()}
+      onPress={() => handleClick?.()}
     >
       {content}
-    </button>
+    </Button>
   );
 }

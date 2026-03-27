@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { Button } from "react-aria-components";
 import { safeGetStorage, safeSetStorage } from "@/utils/storage";
 
 type Theme = "light" | "dark";
@@ -58,17 +59,16 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button
+    <Button
       type="button"
-      onClick={toggle}
+      onPress={toggle}
       className="theme-toggle"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-      title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
     >
       <i
         className={`fa-solid ${theme === "dark" ? "fa-sun" : "fa-moon"}`}
         aria-hidden="true"
       />
-    </button>
+    </Button>
   );
 }

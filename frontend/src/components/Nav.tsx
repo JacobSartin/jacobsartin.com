@@ -1,17 +1,18 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link as RouterLink, useLocation } from "@tanstack/react-router";
+import { Link as AriaLink } from "react-aria-components";
 import AccentPicker from "./AccentPicker";
 import ThemeToggle from "./ThemeToggle";
 
 interface NavLink {
-  href: string;
+  to: "/" | "/projects" | "/skills" | "/about";
   label: string;
 }
 
 const navLinks: NavLink[] = [
-  { href: "/", label: "Home" },
-  { href: "/projects", label: "Projects" },
-  { href: "/skills", label: "Skills" },
-  { href: "/about", label: "About" },
+  { to: "/", label: "Home" },
+  { to: "/projects", label: "Projects" },
+  { to: "/skills", label: "Skills" },
+  { to: "/about", label: "About" },
 ];
 
 export default function Nav() {
@@ -21,18 +22,18 @@ export default function Nav() {
   return (
     <nav>
       <div className="nav-left">
-        <Link to="/" className="nav-brand" aria-label="Home" tabIndex={-1}>
+        <RouterLink to="/" className="nav-brand" aria-label="Home">
           <span className="nav-brand-name">jacob sartin</span>
-        </Link>
+        </RouterLink>
         <div className="nav-links">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              to={link.href}
-              className={normalizedPath === link.href ? "active" : ""}
+            <RouterLink
+              key={link.to}
+              to={link.to}
+              className={normalizedPath === link.to ? "active" : ""}
             >
               {link.label}
-            </Link>
+            </RouterLink>
           ))}
         </div>
       </div>
@@ -42,7 +43,7 @@ export default function Nav() {
           <ThemeToggle />
         </div>
         <div className="social-links">
-          <a
+          <AriaLink
             className="link"
             href="https://www.linkedin.com/in/jacob-sartin"
             target="_blank"
@@ -50,8 +51,8 @@ export default function Nav() {
           >
             <i className="fa-brands fa-linkedin" aria-hidden="true" />
             <span>LinkedIn</span>
-          </a>
-          <a
+          </AriaLink>
+          <AriaLink
             className="link"
             href="https://github.com/JacobSartin"
             target="_blank"
@@ -59,7 +60,7 @@ export default function Nav() {
           >
             <i className="fa-brands fa-github" aria-hidden="true" />
             <span>GitHub</span>
-          </a>
+          </AriaLink>
         </div>
       </div>
     </nav>
