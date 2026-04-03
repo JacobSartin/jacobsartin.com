@@ -2,13 +2,13 @@
 .about-content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-lg);
 }
 
 .interests-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  gap: var(--space-sm);
   padding: 0;
   list-style: none;
   margin: 0;
@@ -17,11 +17,11 @@
 .interests-grid li {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-md);
   background-color: var(--overlay-light);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 10px 14px;
+  padding: calc(var(--space-sm) + 2px) var(--space-md);
   color: var(--text-primary);
   font-size: var(--text-sm);
   transition:
@@ -37,7 +37,7 @@
 .interests-grid li i {
   color: var(--accent-bright);
   font-size: 1em;
-  width: 16px;
+  width: var(--space-md);
   text-align: center;
   flex-shrink: 0;
 }

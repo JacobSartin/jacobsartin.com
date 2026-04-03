@@ -3,7 +3,7 @@
 /* ===================== */
 #cards {
   display: grid;
-  gap: 8px;
+  gap: var(--space-sm);
   grid-template-columns: repeat(auto-fill, minmax(240px, 290px));
   justify-content: center;
   margin: 0 auto;
@@ -71,7 +71,7 @@
   flex-direction: column;
   flex-grow: 1;
   inset: 1px;
-  padding: 10px;
+  padding: var(--space-sm);
   position: absolute;
   z-index: 2;
   transition: background-color var(--transition-base);
@@ -106,11 +106,11 @@
 
 .card-info {
   display: grid;
-  grid-template-columns: 18px 1fr;
+  grid-template-columns: var(--space-md) 1fr;
   grid-template-rows: auto auto;
   align-items: center;
-  padding: 8px 14px 10px;
-  gap: 0 10px;
+  padding: var(--space-sm) var(--space-md) var(--space-sm);
+  gap: 0 var(--space-md);
 }
 
 .card-info > i {
@@ -158,7 +158,7 @@
   }
 
   .card-info {
-    padding: 6px 10px 8px;
+    padding: var(--space-sm);
   }
 
   .card-info > h3 {
