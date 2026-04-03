@@ -2,7 +2,11 @@ import ProjectTemplate from "@/components/ProjectTemplate";
 
 export default function SmeshVpnPage() {
   return (
-    <ProjectTemplate title="Smesh VPN" subtitle="Mesh VPN experiment">
+    <ProjectTemplate
+      title="Smesh VPN"
+      subtitle="Mesh VPN experiment"
+      sourceUrl="https://github.com/JacobSartin/SMESH-VPN"
+    >
       <p>
         Experimentation with peer-to-peer mesh VPNs, focusing on sound
         cryptography and secure key exchange with seamless node connectivity.

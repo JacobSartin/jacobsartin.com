@@ -4,6 +4,34 @@ import { useCallback, type MouseEvent } from "react";
 // Build card list from projects where appropriate, and keep a few action cards.
 const cards: CardData[] = [
   {
+    title: "This Site",
+    subtitle: "About this website",
+    icon: "fa-file",
+    iconStyle: iconStyle.solid,
+    link: "/projects/this-site",
+  },
+  {
+    title: "Smesh VPN",
+    subtitle: "Mesh VPN experiment",
+    icon: "fa-network-wired",
+    iconStyle: iconStyle.solid,
+    link: "/projects/smesh-vpn",
+  },
+  {
+    title: "Cluster",
+    subtitle: "Distributed tooling",
+    icon: "fa-kubernetes",
+    iconStyle: iconStyle.brand,
+    link: "/projects/cluster",
+  },
+  {
+    title: "Game of Life",
+    subtitle: "A cellular automaton implementation",
+    icon: "fa-table-cells-large",
+    iconStyle: iconStyle.solid,
+    link: "/projects/game-of-life",
+  },
+  {
     title: "Solitaire",
     subtitle: "A simple solitaire web app",
     icon: "fa-diamond",
@@ -16,34 +44,6 @@ const cards: CardData[] = [
     icon: "fa-cube",
     iconStyle: iconStyle.solid,
     link: "/projects/3d-renderer",
-  },
-  {
-    title: "Cluster",
-    subtitle: "Distributed tooling",
-    icon: "fa-kubernetes",
-    iconStyle: iconStyle.brand,
-    link: "/projects/cluster",
-  },
-  {
-    title: "Smesh VPN",
-    subtitle: "Mesh VPN experiment",
-    icon: "fa-network-wired",
-    iconStyle: iconStyle.solid,
-    link: "/projects/smesh-vpn",
-  },
-  {
-    title: "This Site",
-    subtitle: "About this website",
-    icon: "fa-file",
-    iconStyle: iconStyle.solid,
-    link: "/projects/this-site",
-  },
-  {
-    title: "Game of Life",
-    subtitle: "A cellular automaton implementation",
-    icon: "fa-table-cells-large",
-    iconStyle: iconStyle.solid,
-    link: "/projects/game-of-life",
   },
   {
     title: "Unicorns",
