@@ -74,6 +74,18 @@ const projectPageModules = import.meta.glob<PageModule>(
   "./projects/*/page.tsx",
 );
 
+let projectPagesPrefetchPromise: Promise<void> | null = null;
+
+export function prefetchProjectPages() {
+  if (!projectPagesPrefetchPromise) {
+    projectPagesPrefetchPromise = Promise.allSettled(
+      Object.values(projectPageModules).map((loadPage) => loadPage()),
+    ).then(() => undefined);
+  }
+
+  return projectPagesPrefetchPromise;
+}
+
 const projectRoutes = Object.entries(projectPageModules)
   .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
   .map(([modulePath, loadPage]) =>

@@ -1,8 +1,14 @@
 import "./projects.css";
 import "./template.css";
 import ProjectCards from "./ProjectCards";
+import { useEffect } from "react";
+import { prefetchProjectPages } from "@/router";
 
 export default function ProjectsPage() {
+  useEffect(() => {
+    void prefetchProjectPages();
+  }, []);
+
   return (
     <section className="container" style={{ maxWidth: "1600px" }}>
       <div className="header">
