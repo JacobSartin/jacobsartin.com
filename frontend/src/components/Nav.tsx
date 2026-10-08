@@ -1,4 +1,4 @@
-import { Link as RouterLink } from "@tanstack/react-router";
+import { Link as RouterLink, useMatchRoute } from "@tanstack/react-router";
 import { Link as AriaLink } from "react-aria-components";
 import AccentPicker from "./AccentPicker";
 import ThemeToggle from "./ThemeToggle";
@@ -16,6 +16,14 @@ const navLinks: NavLink[] = [
 ];
 
 export default function Nav() {
+  const matchRoute = useMatchRoute();
+
+  // TanStack marks every active link aria-current="page", so section links
+  // (e.g. Projects on /projects/foo) are highlighted via inactiveProps instead
+  // and announced as aria-current="true" rather than as the current page.
+  const isInSection = (to: NavLink["to"]) =>
+    to !== "/" && Boolean(matchRoute({ to, fuzzy: true }));
+
   return (
     <nav>
       <div className="nav-left">
@@ -32,8 +40,13 @@ export default function Nav() {
             <RouterLink
               key={link.to}
               to={link.to}
-              activeOptions={{ exact: link.to === "/" }}
+              activeOptions={{ exact: true }}
               activeProps={{ className: "active" }}
+              inactiveProps={
+                isInSection(link.to)
+                  ? { className: "active", "aria-current": "true" }
+                  : undefined
+              }
             >
               {link.label}
             </RouterLink>
