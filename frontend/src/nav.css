@@ -146,13 +146,6 @@ nav {
   margin-top: var(--space-md);
 }
 
-.accent-input-label {
-  color: var(--text-secondary);
-  font-size: var(--text-xs);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
 .accent-channel-grid {
   display: grid;
   gap: var(--space-sm);

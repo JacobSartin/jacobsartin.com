@@ -19,7 +19,7 @@
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
   --text-xs: 0.82em;
   --text-sm: 0.88em;
-  --text-base: 1em;
+  --text-md: 1em;
   --text-lg: 1.05em;
 
   /* Transitions */
@@ -29,6 +29,7 @@
 
   /* Content widths */
   --content-sm: 760px;
+  --content-md: 1100px;
   --content-lg: 1600px;
 
   /* Base colors — everything derives from these */
@@ -166,7 +167,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: var(--font-mono);
-  font-display: swap;
   font-variant-ligatures: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -294,9 +294,6 @@ li::marker {
 .cta-button.secondary:hover {
   background-color: var(--overlay-medium);
   border-color: var(--accent-bright);
-  box-shadow:
-    inset 0 0 0 1px var(--border-accent),
-    0 10px 24px rgb(0 0 0 / 0.26);
   box-shadow: var(--shadow-md);
 }
 
@@ -380,6 +377,48 @@ li::marker {
   max-width: var(--content-sm);
 }
 
+.container-md {
+  max-width: var(--content-md);
+}
+
 .container-lg {
   max-width: var(--content-lg);
+}
+
+/* Subtle grid backdrop shared by the hero and 404 pages */
+.grid-backdrop {
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+  background-size: var(--space-xl) var(--space-xl);
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    black 30%,
+    transparent 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    black 30%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

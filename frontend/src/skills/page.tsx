@@ -47,7 +47,7 @@ const skillCategories: SkillCategory[] = [
 
 export default function SkillsPage() {
   return (
-    <section className="container" style={{ maxWidth: "1100px" }}>
+    <section className="container container-md">
       <div className="header">
         <h1>Technical Skills</h1>
         <div className="divider" aria-hidden="true" />

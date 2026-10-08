@@ -16,7 +16,7 @@ const interests: Interest[] = [
 
 export default function AboutPage() {
   return (
-    <section className="container" style={{ maxWidth: "760px" }}>
+    <section className="container container-sm">
       <div className="header">
         <h1>About Me</h1>
         <div className="divider" aria-hidden="true" />
