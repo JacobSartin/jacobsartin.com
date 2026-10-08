@@ -1,4 +1,4 @@
-import { Link as RouterLink, useLocation } from "@tanstack/react-router";
+import { Link as RouterLink } from "@tanstack/react-router";
 import { Link as AriaLink } from "react-aria-components";
 import AccentPicker from "./AccentPicker";
 import ThemeToggle from "./ThemeToggle";
@@ -16,13 +16,15 @@ const navLinks: NavLink[] = [
 ];
 
 export default function Nav() {
-  const pathname = useLocation({ select: (location) => location.pathname });
-  const normalizedPath = pathname.replace(/\/+$/, "") || "/";
-
   return (
     <nav>
       <div className="nav-left">
-        <RouterLink to="/" className="nav-brand" aria-label="Home">
+        <RouterLink
+          to="/"
+          className="nav-brand"
+          aria-label="Home"
+          activeOptions={{ exact: true }}
+        >
           <span className="nav-brand-name">jacob sartin</span>
         </RouterLink>
         <div className="nav-links">
@@ -30,7 +32,8 @@ export default function Nav() {
             <RouterLink
               key={link.to}
               to={link.to}
-              className={normalizedPath === link.to ? "active" : ""}
+              activeOptions={{ exact: link.to === "/" }}
+              activeProps={{ className: "active" }}
             >
               {link.label}
             </RouterLink>
