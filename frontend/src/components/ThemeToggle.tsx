@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "react-aria-components";
-import { safeGetStorage, safeSetStorage } from "@/utils/storage";
+import { safeGetStorage, safeSetStorage, StorageKey } from "@/utils/storage";
 
 type Theme = "light" | "dark";
-
-const THEME_STORAGE_KEY = "theme";
 
 function getSystemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -22,7 +20,7 @@ export default function ThemeToggle() {
 
   // On mount: read stored preference or fall back to system preference
   useEffect(() => {
-    const stored = safeGetStorage(THEME_STORAGE_KEY) as Theme | null;
+    const stored = safeGetStorage(StorageKey.Theme) as Theme | null;
     const resolved =
       stored === "light" || stored === "dark" ? stored : getSystemTheme();
 
@@ -35,7 +33,7 @@ export default function ThemeToggle() {
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e: MediaQueryListEvent) => {
-      if (!safeGetStorage(THEME_STORAGE_KEY)) {
+      if (!safeGetStorage(StorageKey.Theme)) {
         const next = e.matches ? "dark" : "light";
         setTheme(next);
         applyTheme(next);
@@ -49,7 +47,7 @@ export default function ThemeToggle() {
     setTheme((prev) => {
       const next: Theme = prev === "dark" ? "light" : "dark";
       applyTheme(next);
-      safeSetStorage(THEME_STORAGE_KEY, next);
+      safeSetStorage(StorageKey.Theme, next);
       return next;
     });
   }, []);
