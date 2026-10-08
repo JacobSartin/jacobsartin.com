@@ -2,7 +2,7 @@ import Card, { CardData, iconStyle } from "@/components/Card";
 import { useCallback, type MouseEvent } from "react";
 
 // Build card list from projects where appropriate, and keep a few action cards.
-const cards: CardData[] = [
+export const cards: CardData[] = [
   {
     title: "This Site",
     subtitle: "About this website",
