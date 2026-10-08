@@ -32,7 +32,8 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.4.0
         with:
-          version: latest
+          # Version comes from the packageManager field.
+          package_json_file: frontend/package.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v6.3.0
@@ -44,6 +45,10 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        working-directory: frontend
+        run: pnpm run typecheck
 
       - name: Build
         working-directory: frontend
