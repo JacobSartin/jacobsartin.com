@@ -10,7 +10,14 @@ const skillCategories: SkillCategory[] = [
   {
     icon: "fa-solid fa-code",
     title: "Languages",
-    skills: ["C++", "JavaScript / TypeScript", "Python", "Java", "And more..."],
+    skills: [
+      "C++",
+      "Go",
+      "JavaScript / TypeScript",
+      "Python",
+      "Java",
+      "And more...",
+    ],
   },
   {
     icon: "fa-solid fa-laptop-code",
@@ -20,7 +27,7 @@ const skillCategories: SkillCategory[] = [
   {
     icon: "fa-solid fa-database",
     title: "Databases",
-    skills: ["PostgreSQL", "MongoDB", "MySQL", "Redis"],
+    skills: ["PostgreSQL", "MySQL"],
   },
   {
     icon: "fa-solid fa-screwdriver-wrench",
