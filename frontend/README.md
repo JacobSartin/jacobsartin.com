@@ -18,6 +18,7 @@ Open <http://localhost:5173> in your browser.
 - `pnpm dev`: start the Vite dev server
 - `pnpm build`: build the production bundle into `dist/`, then run the post-build step
 - `pnpm typecheck`: type-check the project with `tsc --noEmit`
+- `pnpm test`: run the deploy script tests (`scripts/*.test.mjs`)
 - `pnpm start`: preview the production build locally
 
 ## Project Layout
@@ -30,9 +31,25 @@ Open <http://localhost:5173> in your browser.
 
 ## Deployment
 
-jacobsartin.com is a static build of `dist/`, served by [static-web-server](https://static-web-server.net/) in my homelab Kubernetes cluster.
+jacobsartin.com is deployed with Jenkins. On every change to `main`, the [`Jenkinsfile`](../Jenkinsfile) installs dependencies, runs the tests and builds the site. Then `scripts/deploy.mjs` uploads `dist/` over FTP. The build fails unless the live page references the same hashed assets as `dist/index.html`, with matching SHA-256 hashes.
 
-`.github/workflows/ci.yaml` type-checks and builds every pull request. `.github/workflows/gh-pages.yaml` does the same on every push to `main`, then deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
+`scripts/deploy-plan.mjs` keeps the site consistent during an upload:
+
+- Files are uploaded under a temporary name and renamed into place.
+- Assets go first and HTML last, so no page references an asset that isn't there yet.
+- Files the build no longer has are removed afterwards. Old hashed assets are kept for 7 days, so pages that are already open can still load their chunks.
+- A non-empty target directory without `index.html` is refused.
+
+To check what is live, build the commit you expect and run:
+
+```bash
+pnpm build
+node scripts/verify-live.mjs https://jacobsartin.com
+```
+
+`DRY_RUN=true` prints the deploy plan without changing anything; the other variables are listed at the top of `scripts/deploy.mjs`. To roll back, revert the commit on `main`.
+
+`.github/workflows/ci.yaml` type-checks, tests and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 The post-build step (`scripts/postbuild.mjs`) creates:
 

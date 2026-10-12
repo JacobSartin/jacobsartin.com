@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build && node scripts/postbuild.mjs",
     "start": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.17",
@@ -23,6 +24,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "basic-ftp": "^6.2.3",
     "typescript": "^6.0.3",
     "vite": "^8.1.4"
   }
