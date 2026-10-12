@@ -171,14 +171,6 @@
 }
 
 @media (max-width: 600px) {
-  .projects-container {
-    padding: var(--space-lg) var(--space-md);
-  }
-
-  .projects-intro {
-    font-size: 0.92em;
-  }
-
   #cards {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }

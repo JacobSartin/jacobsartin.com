@@ -3,7 +3,7 @@ import "./not-found.css";
 
 export default function NotFound() {
   return (
-    <section className="not-found">
+    <section className="not-found grid-backdrop">
       <div className="not-found-inner">
         <span className="not-found-prompt" aria-hidden="true">
           <span className="prompt-char">$</span> cd /page

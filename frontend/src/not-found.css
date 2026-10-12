@@ -8,30 +8,6 @@
   height: 100%;
   min-height: 100%;
   padding: var(--space-2xl) var(--space-lg);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Grid background */
-.not-found::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--border-subtle) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
-  background-size: var(--space-xl) var(--space-xl);
-  mask-image: radial-gradient(
-    ellipse 70% 60% at 50% 50%,
-    black 30%,
-    transparent 100%
-  );
-  -webkit-mask-image: radial-gradient(
-    ellipse 70% 60% at 50% 50%,
-    black 30%,
-    transparent 100%
-  );
-  pointer-events: none;
 }
 
 .not-found-inner {
@@ -50,7 +26,7 @@
   color: var(--text-muted);
   letter-spacing: 0.06em;
   margin-bottom: var(--space-md);
-  animation: notFoundFadeUp 0.5s ease both;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
 .not-found-prompt .prompt-char {
@@ -72,7 +48,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: notFoundFadeUp 0.5s 0.1s ease both;
+  animation: fadeSlideUp 0.5s 0.1s ease both;
 }
 
 .not-found-message {
@@ -80,7 +56,7 @@
   line-height: 1.7;
   color: var(--text-secondary);
   margin-bottom: var(--space-xl);
-  animation: notFoundFadeUp 0.5s 0.2s ease both;
+  animation: fadeSlideUp 0.5s 0.2s ease both;
 }
 
 .not-found-actions {
@@ -88,18 +64,7 @@
   gap: var(--space-md);
   justify-content: center;
   flex-wrap: wrap;
-  animation: notFoundFadeUp 0.5s 0.3s ease both;
-}
-
-@keyframes notFoundFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  animation: fadeSlideUp 0.5s 0.3s ease both;
 }
 
 @media (max-width: 600px) {

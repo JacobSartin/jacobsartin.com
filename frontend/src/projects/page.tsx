@@ -10,7 +10,7 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <section className="container" style={{ maxWidth: "1600px" }}>
+    <section className="container container-lg">
       <div className="header">
         <h1>Projects</h1>
         <div className="divider" aria-hidden="true" />

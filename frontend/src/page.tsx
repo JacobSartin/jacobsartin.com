@@ -3,7 +3,7 @@ import "./home.css";
 
 export default function HomePage() {
   return (
-    <section className="hero">
+    <section className="hero grid-backdrop">
       <div className="hero-inner">
         <span className="hero-prompt" aria-hidden="true">
           <span className="prompt-char">$</span> whoami

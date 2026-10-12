@@ -43,15 +43,6 @@
 }
 
 @media (max-width: 600px) {
-  .about-container {
-    padding: var(--space-lg) var(--space-md);
-  }
-
-  .about-card,
-  .interests {
-    padding: var(--space-md);
-  }
-
   .interests-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
