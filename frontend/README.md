@@ -1,10 +1,10 @@
 # jacobsartin.com
 
-Personal portfolio site, built as a single-page app with [Vite](https://vite.dev/), React, [TanStack Router](https://tanstack.com/router/latest), and [React Aria Components](https://react-spectrum.adobe.com/react-aria/). It deploys to GitHub Pages.
+Personal portfolio site, built as a single-page app with [Vite](https://vite.dev/), React, [TanStack Router](https://tanstack.com/router/latest), and [React Aria Components](https://react-spectrum.adobe.com/react-aria/). jacobsartin.com is served from my homelab; CI also publishes a mirror to GitHub Pages.
 
 ## Getting Started
 
-The pnpm version is pinned through the `packageManager` field in `package.json`. Run `corepack enable` once to use it. Then install dependencies and start the dev server:
+The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. Install dependencies and start the dev server:
 
 ```bash
 pnpm install
@@ -30,9 +30,11 @@ Open <http://localhost:5173> in your browser.
 
 ## Deployment
 
-`.github/workflows/gh-pages.yaml` type-checks and builds on every push to `main`, then deploys `dist/` to GitHub Pages. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
+jacobsartin.com is a static build of `dist/`, served by [static-web-server](https://static-web-server.net/) in my homelab Kubernetes cluster. Its fallback page serves `index.html` for client-side routes such as `/projects/smesh-vpn`.
+
+`.github/workflows/ci.yaml` type-checks and builds every pull request. `.github/workflows/gh-pages.yaml` does the same on every push to `main`, then deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 The post-build step (`scripts/postbuild.mjs`) creates:
 
 - `.nojekyll` for GitHub Pages compatibility
-- `404.html` (copied from `index.html`) for SPA deep-link fallback
+- `404.html` (copied from `index.html`) so GitHub Pages serves the app for deep links
