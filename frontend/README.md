@@ -18,6 +18,7 @@ Open <http://localhost:5173> in your browser.
 - `pnpm dev`: start the Vite dev server
 - `pnpm build`: build the production bundle into `dist/`, then run the post-build step
 - `pnpm typecheck`: type-check the project with `tsc --noEmit`
+- `pnpm test`: run the tests in `scripts/*.test.mjs`
 - `pnpm start`: preview the production build locally
 
 ## Project Layout
@@ -30,9 +31,20 @@ Open <http://localhost:5173> in your browser.
 
 ## Deployment
 
-jacobsartin.com is a static build of `dist/`, served by [static-web-server](https://static-web-server.net/) in my homelab Kubernetes cluster.
+Every push to `main` runs `.github/workflows/deploy.yaml`. It tests and builds the site, then force-pushes `dist/` to the `site` branch as a single commit. jacobsartin.com serves whatever that branch holds and picks up a new build within about a minute. The workflow then runs `scripts/verify-live.mjs`, which fails unless the live page references the same hashed assets as the build, with matching SHA-256 hashes.
 
-`.github/workflows/ci.yaml` type-checks and builds every pull request. `.github/workflows/gh-pages.yaml` does the same on every push to `main`, then deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
+To check what is live, build the commit you expect and run:
+
+```bash
+pnpm build
+node scripts/verify-live.mjs https://jacobsartin.com
+```
+
+To roll back, revert the commit on `main`, or re-run an earlier Deploy run.
+
+A deploy replaces the previous build's hashed chunks. A page opened before the deploy reloads once when it fails to load one (the `vite:preloadError` handler in `index.html`).
+
+`.github/workflows/ci.yaml` type-checks, tests and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 The post-build step (`scripts/postbuild.mjs`) creates:
 

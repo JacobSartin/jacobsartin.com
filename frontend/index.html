@@ -41,6 +41,19 @@
         } catch (e) {}
       })();
     </script>
+    <script>
+      // A deploy replaces the previous build's chunks, so a page opened before it
+      // reloads once to pick up the new build instead of failing to load a page.
+      window.addEventListener("vite:preloadError", function (event) {
+        try {
+          var last = Number(sessionStorage.getItem("preload-reload")) || 0;
+          if (Date.now() - last < 10000) return;
+          sessionStorage.setItem("preload-reload", String(Date.now()));
+        } catch (e) {}
+        event.preventDefault();
+        location.reload();
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
