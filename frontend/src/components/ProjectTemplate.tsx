@@ -27,7 +27,11 @@ export default function ProjectTemplate({
   return (
     <section className="container">
       <div className="header">
-        <Link to="/projects" className="project-back-link">
+        <Link
+          to="/projects"
+          className="project-back-link"
+          activeOptions={{ exact: true }}
+        >
           <i className="fa-solid fa-arrow-left" aria-hidden="true" />
           Projects
         </Link>

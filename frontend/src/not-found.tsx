@@ -13,7 +13,7 @@ export default function NotFound() {
           Page not found. The path you followed doesn&apos;t exist.
         </p>
         <div className="not-found-actions">
-          <Link to="/" className="cta-button">
+          <Link to="/" className="cta-button" activeOptions={{ exact: true }}>
             <i className="fa-solid fa-house" aria-hidden="true" />
             Go Home
           </Link>

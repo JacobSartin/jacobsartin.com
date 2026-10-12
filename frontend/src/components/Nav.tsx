@@ -1,4 +1,4 @@
-import { Link as RouterLink, useLocation } from "@tanstack/react-router";
+import { Link as RouterLink, useMatchRoute } from "@tanstack/react-router";
 import { Link as AriaLink } from "react-aria-components";
 import { lazy, Suspense } from "react";
 import ThemeToggle from "./ThemeToggle";
@@ -19,13 +19,23 @@ const navLinks: NavLink[] = [
 ];
 
 export default function Nav() {
-  const pathname = useLocation({ select: (location) => location.pathname });
-  const normalizedPath = pathname.replace(/\/+$/, "") || "/";
+  const matchRoute = useMatchRoute();
+
+  // TanStack marks every active link aria-current="page", so section links
+  // (e.g. Projects on /projects/foo) are highlighted via inactiveProps instead
+  // and announced as aria-current="true" rather than as the current page.
+  const isInSection = (to: NavLink["to"]) =>
+    to !== "/" && Boolean(matchRoute({ to, fuzzy: true }));
 
   return (
     <nav>
       <div className="nav-left">
-        <RouterLink to="/" className="nav-brand" aria-label="Home">
+        <RouterLink
+          to="/"
+          className="nav-brand"
+          aria-label="Home"
+          activeOptions={{ exact: true }}
+        >
           <span className="nav-brand-name">jacob sartin</span>
         </RouterLink>
         <div className="nav-links">
@@ -33,7 +43,13 @@ export default function Nav() {
             <RouterLink
               key={link.to}
               to={link.to}
-              className={normalizedPath === link.to ? "active" : ""}
+              activeOptions={{ exact: true }}
+              activeProps={{ className: "active" }}
+              inactiveProps={
+                isInSection(link.to)
+                  ? { className: "active", "aria-current": "true" }
+                  : undefined
+              }
             >
               {link.label}
             </RouterLink>
