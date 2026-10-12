@@ -1,0 +1,71 @@
+name: Deploy
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+# Deploys run one at a time, in order.
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+permissions:
+  # Push the build to the site branch.
+  contents: write
+
+jobs:
+  deploy:
+    environment:
+      name: production
+      url: https://jacobsartin.com
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6.1.0
+        with:
+          # Version comes from the packageManager field.
+          package_json_file: frontend/package.json
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6.3.0
+        with:
+          node-version: lts/*
+          cache: pnpm
+          cache-dependency-path: frontend/pnpm-lock.yaml
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Test
+        working-directory: frontend
+        run: pnpm test
+
+      - name: Build
+        working-directory: frontend
+        run: pnpm run build
+
+      # The site branch holds only the latest build, as a single commit; the web server
+      # serves whatever it points to.
+      - name: Publish to the site branch
+        working-directory: frontend/dist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init --quiet --initial-branch=site
+          git add --all
+          git -c user.name="github-actions[bot]" \
+            -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit --quiet --message="Build of ${GITHUB_SHA}"
+          gh auth setup-git
+          git push --force "https://github.com/${GITHUB_REPOSITORY}.git" site
+
+      - name: Check the live site
+        working-directory: frontend
+        run: node scripts/verify-live.mjs https://jacobsartin.com
