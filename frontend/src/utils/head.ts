@@ -1,8 +1,7 @@
-import { useLocation, useMatches } from "@tanstack/react-router";
+import { useMatches } from "@tanstack/react-router";
 import { useEffect } from "react";
 
 export const SITE_NAME = "Jacob Sartin";
-export const SITE_URL = "https://jacobsartin.com";
 export const DEFAULT_DESCRIPTION =
   "Software developer passionate about creating elegant solutions to complex problems.";
 
@@ -29,11 +28,6 @@ function setMetaContent(selector: string, content: string) {
   document.querySelector(selector)?.setAttribute("content", content);
 }
 
-function setCanonicalUrl(url: string) {
-  document.querySelector('link[rel="canonical"]')?.setAttribute("href", url);
-  setMetaContent('meta[property="og:url"]', url);
-}
-
 // Returns the value from the deepest matched route that defines one.
 function findMeta(
   matches: Array<HeadMatch>,
@@ -54,11 +48,12 @@ function findMeta(
 
 /**
  * Syncs the matched routes' `head` title/description into the static tags in
- * index.html (including the Open Graph and Twitter equivalents), and points the
- * canonical/og:url tags at the current path on the canonical domain.
+ * index.html, including the Open Graph and Twitter equivalents. There is no
+ * canonical or og:url tag: the same HTML shell is served for every route, so a
+ * static one would point every page at the home page for crawlers that don't
+ * run JavaScript.
  */
 export function useDocumentHead() {
-  const pathname = useLocation({ select: (location) => location.pathname });
   const title = useMatches({
     select: (matches) => findMeta(matches, (tag) => tag.title, SITE_NAME),
   });
@@ -82,9 +77,4 @@ export function useDocumentHead() {
     setMetaContent('meta[property="og:description"]', description);
     setMetaContent('meta[name="twitter:description"]', description);
   }, [description]);
-
-  useEffect(() => {
-    const path = pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
-    setCanonicalUrl(`${SITE_URL}${path}`);
-  }, [pathname]);
 }
