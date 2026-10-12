@@ -155,6 +155,24 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Respect the OS "reduce motion" setting: skip entrance animations and the
+   blinking cursor, make transitions instant, and disable smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
 body {
   background-color: var(--bg-primary);
   background-image:
