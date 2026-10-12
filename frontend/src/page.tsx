@@ -14,13 +14,11 @@ export default function HomePage() {
           <span className="cursor" aria-hidden="true" />
         </h2>
         <p className="hero-description">
-          "I am a computer science student with a passion for software
-          development. I enjoy a variety of programming languages and
-          technologies, and I am always eager to learn new things. I have
-          experience in web development, backend development, database
-          management, DevOps, and some basic graphics/game programming. I am
-          currently seeking opportunities to apply my skills and grow as a
-          developer."
+          I&apos;m a software developer with a B.S. in computer science from
+          Bradley University (2026). I&apos;ve built web apps, backend services
+          and infrastructure tooling in TypeScript, Go, C++ and Python, and I
+          run my own Kubernetes homelab. I&apos;m looking for my first full-time
+          role in software or infrastructure engineering.
         </p>
         <div className="cta-buttons">
           <Link to="/projects" className="cta-button">

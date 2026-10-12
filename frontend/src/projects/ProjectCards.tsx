@@ -1,7 +1,7 @@
 import Card, { CardData, iconStyle } from "@/components/Card";
 import { useCallback, type MouseEvent } from "react";
 
-// Build card list from projects where appropriate, and keep a few action cards.
+// One card per project page under /projects.
 export const cards: CardData[] = [
   {
     title: "This Site",
@@ -37,32 +37,6 @@ export const cards: CardData[] = [
     icon: "fa-diamond",
     iconStyle: iconStyle.solid,
     link: "/projects/solitaire",
-  },
-  {
-    title: "3D Renderer",
-    subtitle: "A lightweight renderer",
-    icon: "fa-cube",
-    iconStyle: iconStyle.solid,
-    link: "/projects/3d-renderer",
-  },
-  {
-    title: "Unicorns",
-    subtitle: "A playful demo",
-    icon: "fa-chess-knight",
-    iconStyle: iconStyle.solid,
-  },
-  {
-    title: "Otters",
-    subtitle: "Cute little animals",
-    icon: "fa-otter",
-    iconStyle: iconStyle.solid,
-  },
-  {
-    title: "Adios",
-    subtitle: "See you...",
-    icon: "fa-hand-peace",
-    iconStyle: iconStyle.solid,
-    handleClick: () => window.close(),
   },
 ];
 
