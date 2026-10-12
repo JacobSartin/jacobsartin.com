@@ -3,8 +3,9 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
+  lazyRouteComponent,
 } from "@tanstack/react-router";
-import { lazy, Suspense, type ComponentType } from "react";
+import { Suspense, type ComponentType } from "react";
 import Nav from "@/components/Nav";
 import HomePage from "@/page";
 import AboutPage from "@/about/page";
@@ -17,14 +18,6 @@ import { pageHead, useDocumentHead } from "@/utils/head";
 type PageModule = {
   default: ComponentType;
 };
-
-function createLazyPageComponent(loadPage: () => Promise<PageModule>) {
-  const LazyPage = lazy(loadPage);
-
-  return function LazyPageComponent() {
-    return <LazyPage />;
-  };
-}
 
 function getProjectRoutePath(modulePath: string) {
   return modulePath.replace(/^\./, "").replace(/\/page\.tsx$/, "");
@@ -43,11 +36,19 @@ function RootLayout() {
     <>
       <Nav />
       <main>
-        <Suspense fallback={null}>
+        <Suspense fallback={<PageLoading />}>
           <Outlet />
         </Suspense>
       </main>
     </>
+  );
+}
+
+function PageLoading() {
+  return (
+    <p className="page-loading" role="status">
+      Loading…
+    </p>
   );
 }
 
@@ -119,7 +120,9 @@ const projectRoutes = Object.entries(projectPageModules)
       getParentRoute: () => rootRoute,
       head: () => getProjectHead(getProjectRoutePath(modulePath)),
       path: getProjectRoutePath(modulePath),
-      component: createLazyPageComponent(loadPage),
+      // lazyRouteComponent lets the router load the chunk before rendering,
+      // so direct loads and navigations don't suspend into a blank page.
+      component: lazyRouteComponent(loadPage),
     }),
   );
 
