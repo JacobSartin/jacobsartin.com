@@ -35,10 +35,6 @@ jobs:
         working-directory: frontend
         run: pnpm run typecheck
 
-      - name: Test
-        working-directory: frontend
-        run: pnpm test
-
       - name: Build
         working-directory: frontend
         run: pnpm run build

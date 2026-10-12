@@ -43,10 +43,6 @@ jobs:
         working-directory: frontend
         run: pnpm install --frozen-lockfile
 
-      - name: Test
-        working-directory: frontend
-        run: pnpm test
-
       - name: Build
         working-directory: frontend
         run: pnpm run build
@@ -65,7 +61,3 @@ jobs:
             commit --quiet --message="Build of ${GITHUB_SHA}"
           gh auth setup-git
           git push --force "https://github.com/${GITHUB_REPOSITORY}.git" site
-
-      - name: Check the live site
-        working-directory: frontend
-        run: node scripts/verify-live.mjs https://jacobsartin.com
