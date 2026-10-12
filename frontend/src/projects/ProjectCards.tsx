@@ -2,7 +2,7 @@ import Card, { CardData, iconStyle } from "@/components/Card";
 import { useCallback, type MouseEvent } from "react";
 
 // One card per project page under /projects.
-const cards: CardData[] = [
+export const cards: CardData[] = [
   {
     title: "This Site",
     subtitle: "About this website",

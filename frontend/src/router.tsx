@@ -11,6 +11,8 @@ import AboutPage from "@/about/page";
 import SkillsPage from "@/skills/page";
 import ProjectsPage from "@/projects/page";
 import NotFound from "@/not-found";
+import { cards as projectCards } from "@/projects/ProjectCards";
+import { pageHead, useDocumentHead } from "@/utils/head";
 
 type PageModule = {
   default: ComponentType;
@@ -28,7 +30,15 @@ function getProjectRoutePath(modulePath: string) {
   return modulePath.replace(/^\./, "").replace(/\/page\.tsx$/, "");
 }
 
+// Project pages take their title and description from their card.
+function getProjectHead(path: string) {
+  const card = projectCards.find((projectCard) => projectCard.link === path);
+  return pageHead(card?.title ?? null, card?.subtitle);
+}
+
 function RootLayout() {
+  useDocumentHead();
+
   return (
     <>
       <Nav />
@@ -44,6 +54,7 @@ function RootLayout() {
 const rootRoute = createRootRoute({
   component: RootLayout,
   notFoundComponent: NotFound,
+  head: () => pageHead(null),
 });
 
 const indexRoute = createRoute({
@@ -55,18 +66,33 @@ const indexRoute = createRoute({
 const aboutRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/about",
+  head: () =>
+    pageHead(
+      "About",
+      "About Jacob Sartin, a software developer focused on backend development, DevOps, and systems work.",
+    ),
   component: AboutPage,
 });
 
 const skillsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/skills",
+  head: () =>
+    pageHead(
+      "Skills",
+      "Languages, frameworks, databases, tools, and certifications Jacob Sartin works with.",
+    ),
   component: SkillsPage,
 });
 
 const projectsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/projects",
+  head: () =>
+    pageHead(
+      "Projects",
+      "A portfolio of projects showcasing various technologies and creative solutions.",
+    ),
   component: ProjectsPage,
 });
 
@@ -91,6 +117,7 @@ const projectRoutes = Object.entries(projectPageModules)
   .map(([modulePath, loadPage]) =>
     createRoute({
       getParentRoute: () => rootRoute,
+      head: () => getProjectHead(getProjectRoutePath(modulePath)),
       path: getProjectRoutePath(modulePath),
       component: createLazyPageComponent(loadPage),
     }),
