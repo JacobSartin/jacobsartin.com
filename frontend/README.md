@@ -30,11 +30,12 @@ Open <http://localhost:5173> in your browser.
 
 ## Deployment
 
-jacobsartin.com is a static build of `dist/`, served by [static-web-server](https://static-web-server.net/) in my homelab Kubernetes cluster. Its fallback page serves `index.html` for client-side routes such as `/projects/smesh-vpn`.
+jacobsartin.com is a static build of `dist/`, served by [static-web-server](https://static-web-server.net/) in my homelab Kubernetes cluster.
 
 `.github/workflows/ci.yaml` type-checks and builds every pull request. `.github/workflows/gh-pages.yaml` does the same on every push to `main`, then deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 The post-build step (`scripts/postbuild.mjs`) creates:
 
 - `.nojekyll` for GitHub Pages compatibility
-- `404.html` (copied from `index.html`) so GitHub Pages serves the app for deep links
+- `<route>/index.html` (copied from `index.html`) for each route, so deep links such as `/projects/smesh-vpn` are real files that return 200 on any static host
+- `404.html` (copied from `index.html`) so unknown paths still load the app and show its not-found page
