@@ -1,0 +1,1 @@
+import{C as e}from"./index-p6Ng3W2y.js";import{t}from"./ProjectTemplate-D9TR2B58.js";var n=e();function r(){return(0,n.jsx)(t,{title:`Solitaire`,subtitle:`A simple solitaire web app`,children:(0,n.jsx)(`p`,{children:`A simple solitaire web app built with React and TypeScript. It features a rudimentary scoring system and simple click controls.`})})}export{r as default};
