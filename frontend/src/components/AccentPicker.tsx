@@ -1,8 +1,13 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import "culori/css";
-import { converter, formatHex, parse } from "culori/fn";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { converter, formatHex, modeOklch, modeRgb, parse, useMode } from "culori/fn";
 import { HexColorPicker } from "react-colorful";
-import { Button } from "react-aria-components";
 import Icon from "./Icon";
 import { slidersIcon } from "./icons";
 import {
@@ -41,6 +46,9 @@ type ChannelErrors = {
   h: boolean;
 };
 
+// Only hex/RGB and persisted/numeric OKLCH colors enter this control.
+useMode(modeRgb);
+useMode(modeOklch);
 const toOklch = converter("oklch");
 
 // Rounds a number to the specified decimals and converts to string, removing trailing zeros
@@ -181,12 +189,20 @@ function applyAccent(accent: string) {
   document.documentElement.style.setProperty("--accent", accent);
 }
 
-export default function AccentPicker() {
+interface Props {
+  initiallyOpen?: boolean;
+  focusFrom?: HTMLElement | null;
+}
+
+export default function AccentPicker({
+  initiallyOpen = false,
+  focusFrom = null,
+}: Props) {
   const [mounted, setMounted] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
   const [accent, setAccent] = useState(DEFAULT_ACCENT);
   const [draft, setDraft] = useState<DraftChannels>(
-    toDraftChannels(DEFAULT_ACCENT),
+    () => toDraftChannels(DEFAULT_ACCENT),
   );
   const [channelErrors, setChannelErrors] = useState<ChannelErrors>({
     l: false,
@@ -195,6 +211,8 @@ export default function AccentPicker() {
   });
   const [liveMessage, setLiveMessage] = useState("");
   const controlRef = useRef<HTMLDivElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const focusHandledRef = useRef(false);
 
   useEffect(() => {
     const resolvedAccent = resolveAccent(safeGetStorage(StorageKey.Accent));
@@ -208,6 +226,19 @@ export default function AccentPicker() {
     applyAccent(resolvedAccent);
     setMounted(true);
   }, []);
+
+  useLayoutEffect(() => {
+    if (!mounted || !focusFrom || focusHandledRef.current) return;
+    focusHandledRef.current = true;
+    // Replacing the loading trigger drops focus to body. Keep a user's newer
+    // focus target if they moved elsewhere while the module was loading.
+    if (
+      document.activeElement === document.body ||
+      document.activeElement === focusFrom
+    ) {
+      triggerRef.current?.focus();
+    }
+  }, [focusFrom, mounted]);
 
   const closeWithoutApply = useCallback(() => {
     setDraft(toDraftChannels(accent));
@@ -233,6 +264,7 @@ export default function AccentPicker() {
       if (event.key === "Escape") {
         event.preventDefault();
         closeWithoutApply();
+        triggerRef.current?.focus();
       }
     };
 
@@ -316,6 +348,7 @@ export default function AccentPicker() {
     applyAccent(validation.accent);
     safeSetStorage(StorageKey.Accent, validation.accent);
     setIsOpen(false);
+    triggerRef.current?.focus();
     setLiveMessage("Accent color applied.");
   }, [draft]);
 
@@ -334,9 +367,10 @@ export default function AccentPicker() {
 
   return (
     <div className="accent-control" ref={controlRef}>
-      <Button
+      <button
+        ref={triggerRef}
         type="button"
-        onPress={isOpen ? closeWithoutApply : openPicker}
+        onClick={isOpen ? closeWithoutApply : openPicker}
         className="accent-toggle"
         aria-expanded={isOpen}
         aria-haspopup="dialog"
@@ -349,7 +383,7 @@ export default function AccentPicker() {
           aria-hidden="true"
         />
         <Icon icon={slidersIcon} />
-      </Button>
+      </button>
 
       {isOpen && (
         <div
@@ -429,20 +463,20 @@ export default function AccentPicker() {
           </p>
 
           <div className="accent-actions">
-            <Button
+            <button
               type="button"
               className="accent-apply"
-              onPress={applyDraftAccent}
+              onClick={applyDraftAccent}
             >
               Apply
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
               className="accent-reset"
-              onPress={resetAccent}
+              onClick={resetAccent}
             >
               Reset to default
-            </Button>
+            </button>
           </div>
         </div>
       )}

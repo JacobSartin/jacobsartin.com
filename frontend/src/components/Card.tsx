@@ -1,5 +1,4 @@
-import { createLink } from "@tanstack/react-router";
-import { Button, Link as AriaLink } from "react-aria-components";
+import { Link } from "@tanstack/react-router";
 import Icon from "./Icon";
 import type { IconDefinition } from "./icons";
 import "@/projects/projects.css";
@@ -11,8 +10,6 @@ type ProjectLink = InternalProjectRoute | ExternalProjectLink;
 function isExternalProjectLink(link: ProjectLink): link is ExternalProjectLink {
   return link.startsWith("http://") || link.startsWith("https://");
 }
-
-const RouterAriaLink = createLink(AriaLink);
 
 export type CardData = {
   icon: IconDefinition;
@@ -46,7 +43,7 @@ export default function Card({
   if (link) {
     if (isExternalProjectLink(link)) {
       return (
-        <AriaLink
+        <a
           key={title}
           href={link}
           className="card"
@@ -54,26 +51,26 @@ export default function Card({
           rel="noopener noreferrer"
         >
           {content}
-        </AriaLink>
+        </a>
       );
     }
 
     return (
-      <RouterAriaLink key={title} to={link as never} className="card">
+      <Link key={title} to={link as never} className="card">
         {content}
-      </RouterAriaLink>
+      </Link>
     );
   }
 
   // Otherwise render a button with any action attached
   return (
-    <Button
+    <button
       key={title}
       type="button"
       className="card"
-      onPress={() => handleClick?.()}
+      onClick={handleClick}
     >
       {content}
-    </Button>
+    </button>
   );
 }

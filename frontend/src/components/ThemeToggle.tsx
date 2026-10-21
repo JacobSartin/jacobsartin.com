@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "react-aria-components";
 import Icon from "./Icon";
 import { moonIcon, sunIcon } from "./icons";
 import { safeGetStorage, safeSetStorage, StorageKey } from "@/utils/storage";
@@ -59,13 +58,13 @@ export default function ThemeToggle() {
   }
 
   return (
-    <Button
+    <button
       type="button"
-      onPress={toggle}
+      onClick={toggle}
       className="theme-toggle"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
     >
       <Icon icon={theme === "dark" ? sunIcon : moonIcon} />
-    </Button>
+    </button>
   );
 }
