@@ -27,8 +27,8 @@ export default function ProjectTemplate({
   children,
   liveUrl,
   liveLabel = "Open live site",
-  sourceUrl: sourceUrl,
-  sourceLabel: sourceLabel = "View on GitHub",
+  sourceUrl,
+  sourceLabel = "View on GitHub",
   sourceIcon = githubIcon,
 }: Props) {
   return (

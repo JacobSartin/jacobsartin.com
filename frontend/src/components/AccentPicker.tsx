@@ -6,7 +6,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { converter, formatHex, modeOklch, modeRgb, parse, useMode } from "culori/fn";
+import {
+  converter,
+  formatHex,
+  modeOklch,
+  modeRgb,
+  parse,
+  useMode,
+} from "culori/fn";
 import { HexColorPicker } from "react-colorful";
 import Icon from "./Icon";
 import { slidersIcon } from "./icons";
@@ -201,8 +208,8 @@ export default function AccentPicker({
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(initiallyOpen);
   const [accent, setAccent] = useState(DEFAULT_ACCENT);
-  const [draft, setDraft] = useState<DraftChannels>(
-    () => toDraftChannels(DEFAULT_ACCENT),
+  const [draft, setDraft] = useState<DraftChannels>(() =>
+    toDraftChannels(DEFAULT_ACCENT),
   );
   const [channelErrors, setChannelErrors] = useState<ChannelErrors>({
     l: false,

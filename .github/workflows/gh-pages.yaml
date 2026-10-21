@@ -29,32 +29,24 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6.1.0
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@v1.21.2
         with:
-          # Version comes from the packageManager field.
-          package_json_file: frontend/package.json
+          node-version: '24'
+          working-directory: frontend
+          cache: true
+          run-install: |
+            args: ['--frozen-lockfile']
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6.3.0
-        with:
-          node-version: lts/*
-          cache: pnpm
-          cache-dependency-path: frontend/pnpm-lock.yaml
-
-      - name: Install dependencies
+      - name: Check
         working-directory: frontend
-        run: pnpm install --frozen-lockfile
-
-      - name: Type check
-        working-directory: frontend
-        run: pnpm run typecheck
+        run: vp run check
 
       - name: Build
         working-directory: frontend
         env:
           VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-        run: pnpm run build
+        run: vp run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

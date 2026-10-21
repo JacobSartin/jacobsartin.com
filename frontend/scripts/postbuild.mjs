@@ -29,7 +29,7 @@ const projectRoutes = fs
 
 const indexPath = path.join(outDir, "index.html");
 if (!fs.existsSync(indexPath)) {
-  throw new Error(`${indexPath} not found; run vite build first`);
+  throw new Error(`${indexPath} not found; run pnpm build first`);
 }
 
 // ── 1. .nojekyll ────────────────────────────────────────────────────────────────
