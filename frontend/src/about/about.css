@@ -34,7 +34,7 @@
   border-color: var(--border-hover);
 }
 
-.interests-grid li i {
+.interests-grid li .icon {
   color: var(--accent-bright);
   font-size: 1em;
   width: var(--space-md);

@@ -3,6 +3,8 @@ import "culori/css";
 import { converter, formatHex, parse } from "culori/fn";
 import { HexColorPicker } from "react-colorful";
 import { Button } from "react-aria-components";
+import Icon from "./Icon";
+import { slidersIcon } from "./icons";
 import {
   safeGetStorage,
   safeRemoveStorage,
@@ -346,7 +348,7 @@ export default function AccentPicker() {
           style={{ backgroundColor: accent }}
           aria-hidden="true"
         />
-        <i className="fa-solid fa-sliders" aria-hidden="true" />
+        <Icon icon={slidersIcon} />
       </Button>
 
       {isOpen && (

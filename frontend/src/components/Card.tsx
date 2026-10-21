@@ -1,12 +1,8 @@
 import { createLink } from "@tanstack/react-router";
 import { Button, Link as AriaLink } from "react-aria-components";
+import Icon from "./Icon";
+import type { IconDefinition } from "./icons";
 import "@/projects/projects.css";
-
-export enum iconStyle {
-  solid = "fa-solid",
-  regular = "fa-regular",
-  brand = "fa-brands",
-}
 
 type InternalProjectRoute = "/projects" | `/projects/${string}`;
 type ExternalProjectLink = `http://${string}` | `https://${string}`;
@@ -19,8 +15,7 @@ function isExternalProjectLink(link: ProjectLink): link is ExternalProjectLink {
 const RouterAriaLink = createLink(AriaLink);
 
 export type CardData = {
-  icon: string;
-  iconStyle?: iconStyle; // "fa-solid" | "fa-regular"
+  icon: IconDefinition;
   title: string;
   subtitle: string;
   link?: ProjectLink;
@@ -29,21 +24,18 @@ export type CardData = {
 
 export default function Card({
   icon,
-  iconStyle,
   title,
   subtitle,
   link,
   handleClick,
 }: CardData) {
-  const iconClass = `${iconStyle ?? "fa-solid"} ${icon}`;
-
   const content = (
     <div className="card-content">
       <div className="card-image">
-        <i className={iconClass} aria-hidden="true" />
+        <Icon icon={icon} />
       </div>
       <div className="card-info">
-        <i className={iconClass} aria-hidden="true" />
+        <Icon icon={icon} />
         <h3>{title}</h3>
         <h4>{subtitle}</h4>
       </div>
