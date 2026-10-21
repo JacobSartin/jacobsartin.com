@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
-import { Link as AriaLink } from "react-aria-components";
 import Icon from "./Icon";
 import {
   arrowLeftIcon,
@@ -9,6 +8,7 @@ import {
   type IconDefinition,
 } from "./icons";
 import "@/projects/projects.css";
+import "@/projects/template.css";
 
 interface Props {
   title: string;
@@ -52,7 +52,7 @@ export default function ProjectTemplate({
 
         <div className="project-template-actions">
           {liveUrl && (
-            <AriaLink
+            <a
               className="cta-button"
               href={liveUrl}
               target="_blank"
@@ -60,10 +60,10 @@ export default function ProjectTemplate({
             >
               <Icon icon={externalLinkIcon} />
               {liveLabel}
-            </AriaLink>
+            </a>
           )}
           {sourceUrl && (
-            <AriaLink
+            <a
               className="cta-button secondary source-link"
               href={sourceUrl}
               target="_blank"
@@ -71,7 +71,7 @@ export default function ProjectTemplate({
             >
               <Icon icon={sourceIcon} />
               {sourceLabel}
-            </AriaLink>
+            </a>
           )}
         </div>
       </div>

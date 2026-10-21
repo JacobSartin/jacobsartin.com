@@ -1,6 +1,6 @@
 # jacobsartin.com
 
-Personal portfolio site, built as a single-page app with [Vite](https://vite.dev/), React, [TanStack Router](https://tanstack.com/router/latest), and [React Aria Components](https://react-spectrum.adobe.com/react-aria/). jacobsartin.com is served from my homelab; CI also publishes a mirror to GitHub Pages.
+Personal portfolio site, built as a single-page app with [Vite](https://vite.dev/), React, and [TanStack Router](https://tanstack.com/router/latest). jacobsartin.com is served from my homelab; CI also publishes a mirror to GitHub Pages.
 
 ## Getting Started
 
@@ -19,14 +19,18 @@ Open <http://localhost:5173> in your browser.
 - `pnpm build`: build the production bundle into `dist/`, then run the post-build step
 - `pnpm typecheck`: type-check the project with `tsc --noEmit`
 - `pnpm start`: preview the production build locally
+- `pnpm size`: build and report initial/deferred JS/CSS sizes (raw, gzip, and Brotli)
 
 ## Project Layout
 
 - `src/router.tsx`: route tree and root layout
 - `src/page.tsx`, `src/about/`, `src/skills/`, `src/projects/`: page components and their styles
 - `src/projects/<slug>/page.tsx`: project pages. Each one is registered automatically at `/projects/<slug>` and lazy-loaded.
+- `src/projects/cards.ts`: project metadata shared by routing and the listing
 - `src/components/`: shared UI (nav, cards, theme and accent controls, project template)
 - `src/globals.css`: design tokens (spacing, colors, widths) and shared utilities
+
+Home loads eagerly. Secondary routes and their CSS load on navigation or link intent; the projects listing does not fetch every detail page. The accent picker and color libraries load only when its control is activated.
 
 ## Deployment
 

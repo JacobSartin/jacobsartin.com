@@ -8,11 +8,8 @@ import {
 import { Suspense, type ComponentType } from "react";
 import Nav from "@/components/Nav";
 import HomePage from "@/page";
-import AboutPage from "@/about/page";
-import SkillsPage from "@/skills/page";
-import ProjectsPage from "@/projects/page";
 import NotFound from "@/not-found";
-import { cards as projectCards } from "@/projects/ProjectCards";
+import { cards as projectCards } from "@/projects/cards";
 import { pageHead, useDocumentHead } from "@/utils/head";
 
 type PageModule = {
@@ -72,7 +69,7 @@ const aboutRoute = createRoute({
       "About",
       "About Jacob Sartin, a software developer focused on backend development, DevOps, and systems work.",
     ),
-  component: AboutPage,
+  component: lazyRouteComponent(() => import("@/about/page")),
 });
 
 const skillsRoute = createRoute({
@@ -83,7 +80,7 @@ const skillsRoute = createRoute({
       "Skills",
       "Languages, frameworks, databases, tools, and certifications Jacob Sartin works with.",
     ),
-  component: SkillsPage,
+  component: lazyRouteComponent(() => import("@/skills/page")),
 });
 
 const projectsRoute = createRoute({
@@ -94,24 +91,12 @@ const projectsRoute = createRoute({
       "Projects",
       "A portfolio of projects showcasing various technologies and creative solutions.",
     ),
-  component: ProjectsPage,
+  component: lazyRouteComponent(() => import("@/projects/page")),
 });
 
 const projectPageModules = import.meta.glob<PageModule>(
   "./projects/*/page.tsx",
 );
-
-let projectPagesPrefetchPromise: Promise<void> | null = null;
-
-export function prefetchProjectPages() {
-  if (!projectPagesPrefetchPromise) {
-    projectPagesPrefetchPromise = Promise.allSettled(
-      Object.values(projectPageModules).map((loadPage) => loadPage()),
-    ).then(() => undefined);
-  }
-
-  return projectPagesPrefetchPromise;
-}
 
 const projectRoutes = Object.entries(projectPageModules)
   .sort(([leftPath], [rightPath]) => leftPath.localeCompare(rightPath))
@@ -139,7 +124,11 @@ const routerBasePath =
     ? "/"
     : import.meta.env.BASE_URL.replace(/\/$/, "");
 
-export const router = createRouter({ routeTree, basepath: routerBasePath });
+export const router = createRouter({
+  routeTree,
+  basepath: routerBasePath,
+  defaultPreload: "intent",
+});
 
 declare module "@tanstack/react-router" {
   interface Register {

@@ -139,6 +139,13 @@
   margin-top: 2px;
 }
 
+@media (hover: none), (pointer: coarse), (pointer: none), (prefers-reduced-motion: reduce) {
+  .card::before,
+  .card::after {
+    display: none;
+  }
+}
+
 /* ===================== */
 /* Responsive            */
 /* ===================== */
