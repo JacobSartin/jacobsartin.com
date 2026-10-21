@@ -1,17 +1,27 @@
+import Icon from "@/components/Icon";
+import {
+  bookIcon,
+  catIcon,
+  codeIcon,
+  footballIcon,
+  gamepadIcon,
+  personHikingIcon,
+  type IconDefinition,
+} from "@/components/icons";
 import "./about.css";
 
 interface Interest {
-  icon: string;
+  icon: IconDefinition;
   label: string;
 }
 
 const interests: Interest[] = [
-  { icon: "fa-solid fa-code", label: "Technology" },
-  { icon: "fa-solid fa-book", label: "Tech Blogs" },
-  { icon: "fa-solid fa-gamepad", label: "Gaming" },
-  { icon: "fa-solid fa-football", label: "Football" },
-  { icon: "fa-solid fa-person-hiking", label: "Outdoors" },
-  { icon: "fa-solid fa-cat", label: "Pets" },
+  { icon: codeIcon, label: "Technology" },
+  { icon: bookIcon, label: "Tech Blogs" },
+  { icon: gamepadIcon, label: "Gaming" },
+  { icon: footballIcon, label: "Football" },
+  { icon: personHikingIcon, label: "Outdoors" },
+  { icon: catIcon, label: "Pets" },
 ];
 
 export default function AboutPage() {
@@ -50,7 +60,7 @@ export default function AboutPage() {
           <ul className="interests-grid">
             {interests.map((interest) => (
               <li key={interest.label}>
-                <i className={interest.icon} aria-hidden="true" />
+                <Icon icon={interest.icon} />
                 {interest.label}
               </li>
             ))}

@@ -1,6 +1,13 @@
 import React from "react";
 import { Link } from "@tanstack/react-router";
 import { Link as AriaLink } from "react-aria-components";
+import Icon from "./Icon";
+import {
+  arrowLeftIcon,
+  externalLinkIcon,
+  githubIcon,
+  type IconDefinition,
+} from "./icons";
 import "@/projects/projects.css";
 
 interface Props {
@@ -11,7 +18,7 @@ interface Props {
   liveLabel?: string;
   sourceUrl?: string;
   sourceLabel?: string;
-  sourceIcon?: string;
+  sourceIcon?: IconDefinition;
 }
 
 export default function ProjectTemplate({
@@ -22,7 +29,7 @@ export default function ProjectTemplate({
   liveLabel = "Open live site",
   sourceUrl: sourceUrl,
   sourceLabel: sourceLabel = "View on GitHub",
-  sourceIcon: sourceIcon = "github",
+  sourceIcon = githubIcon,
 }: Props) {
   return (
     <section className="container">
@@ -32,7 +39,7 @@ export default function ProjectTemplate({
           className="project-back-link"
           activeOptions={{ exact: true }}
         >
-          <i className="fa-solid fa-arrow-left" aria-hidden="true" />
+          <Icon icon={arrowLeftIcon} />
           Projects
         </Link>
         <h1>{title}</h1>
@@ -51,10 +58,7 @@ export default function ProjectTemplate({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <i
-                className="fa-solid fa-arrow-up-right-from-square"
-                aria-hidden="true"
-              />
+              <Icon icon={externalLinkIcon} />
               {liveLabel}
             </AriaLink>
           )}
@@ -65,7 +69,7 @@ export default function ProjectTemplate({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <i className={`fa-brands fa-${sourceIcon}`} aria-hidden="true" />
+              <Icon icon={sourceIcon} />
               {sourceLabel}
             </AriaLink>
           )}

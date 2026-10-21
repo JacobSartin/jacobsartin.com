@@ -1,14 +1,24 @@
+import Icon from "@/components/Icon";
+import {
+  brainIcon,
+  certificateIcon,
+  codeIcon,
+  databaseIcon,
+  laptopCodeIcon,
+  toolsIcon,
+  type IconDefinition,
+} from "@/components/icons";
 import "./skills.css";
 
 interface SkillCategory {
-  icon: string;
+  icon: IconDefinition;
   title: string;
   skills: string[];
 }
 
 const skillCategories: SkillCategory[] = [
   {
-    icon: "fa-solid fa-code",
+    icon: codeIcon,
     title: "Languages",
     skills: [
       "C++",
@@ -20,22 +30,22 @@ const skillCategories: SkillCategory[] = [
     ],
   },
   {
-    icon: "fa-solid fa-laptop-code",
+    icon: laptopCodeIcon,
     title: "Frameworks",
     skills: ["React", "Node.js", "Express"],
   },
   {
-    icon: "fa-solid fa-database",
+    icon: databaseIcon,
     title: "Databases",
     skills: ["PostgreSQL", "MySQL"],
   },
   {
-    icon: "fa-solid fa-screwdriver-wrench",
+    icon: toolsIcon,
     title: "Tools & DevOps",
     skills: ["Git / GitHub", "Docker", "Kubernetes", "CI/CD", "Linux"],
   },
   {
-    icon: "fa-solid fa-brain",
+    icon: brainIcon,
     title: "Concepts",
     skills: [
       "REST APIs",
@@ -46,7 +56,7 @@ const skillCategories: SkillCategory[] = [
     ],
   },
   {
-    icon: "fa-solid fa-certificate",
+    icon: certificateIcon,
     title: "Certifications",
     skills: ["Comptia Security+"],
   },
@@ -64,7 +74,7 @@ export default function SkillsPage() {
         {skillCategories.map((category) => (
           <div key={category.title} className="skill-category">
             <h2>
-              <i className={category.icon} aria-hidden="true" />
+              <Icon icon={category.icon} />
               {category.title}
             </h2>
             <ul className="skill-list">

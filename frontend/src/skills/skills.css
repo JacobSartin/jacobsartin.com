@@ -41,7 +41,7 @@
   border-bottom: 1px solid var(--border);
 }
 
-.skill-category h2 i {
+.skill-category h2 .icon {
   color: var(--accent-bright);
   font-size: 0.95em;
 }

@@ -15,7 +15,7 @@
   color: var(--text-secondary);
 }
 
-.project-back-link i {
+.project-back-link .icon {
   color: inherit;
   font-size: 0.9em;
 }

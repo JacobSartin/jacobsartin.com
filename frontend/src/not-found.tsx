@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import Icon from "@/components/Icon";
+import { folderOpenIcon, houseIcon } from "@/components/icons";
 import "./not-found.css";
 
 export default function NotFound() {
@@ -14,11 +16,11 @@ export default function NotFound() {
         </p>
         <div className="not-found-actions">
           <Link to="/" className="cta-button" activeOptions={{ exact: true }}>
-            <i className="fa-solid fa-house" aria-hidden="true" />
+            <Icon icon={houseIcon} />
             Go Home
           </Link>
           <Link to="/projects" className="cta-button secondary">
-            <i className="fa-solid fa-folder-open" aria-hidden="true" />
+            <Icon icon={folderOpenIcon} />
             View Projects
           </Link>
         </div>

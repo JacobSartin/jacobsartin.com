@@ -2,6 +2,8 @@ import { Link as RouterLink, useMatchRoute } from "@tanstack/react-router";
 import { Link as AriaLink } from "react-aria-components";
 import { lazy, Suspense } from "react";
 import ThemeToggle from "./ThemeToggle";
+import Icon from "./Icon";
+import { githubIcon, linkedinIcon } from "./icons";
 
 // AccentPicker pulls in culori and react-colorful; keep them out of the main chunk.
 const AccentPicker = lazy(() => import("./AccentPicker"));
@@ -72,7 +74,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <i className="fa-brands fa-linkedin" aria-hidden="true" />
+            <Icon icon={linkedinIcon} className="linkedin-icon" />
             <span>LinkedIn</span>
           </AriaLink>
           <AriaLink
@@ -81,7 +83,7 @@ export default function Nav() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <i className="fa-brands fa-github" aria-hidden="true" />
+            <Icon icon={githubIcon} />
             <span>GitHub</span>
           </AriaLink>
         </div>

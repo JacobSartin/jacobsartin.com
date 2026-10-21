@@ -1,4 +1,6 @@
 import { Link } from "@tanstack/react-router";
+import Icon from "@/components/Icon";
+import { folderOpenIcon, userIcon } from "@/components/icons";
 import "./home.css";
 
 export default function HomePage() {
@@ -22,11 +24,11 @@ export default function HomePage() {
         </p>
         <div className="cta-buttons">
           <Link to="/projects" className="cta-button">
-            <i className="fa-solid fa-folder-open" aria-hidden="true" />
+            <Icon icon={folderOpenIcon} />
             View Projects
           </Link>
           <Link to="/about" className="cta-button secondary">
-            <i className="fa-solid fa-user" aria-hidden="true" />
+            <Icon icon={userIcon} />
             About Me
           </Link>
         </div>
