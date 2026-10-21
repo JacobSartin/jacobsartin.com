@@ -31,7 +31,9 @@ for (const chunk of Object.values(manifest)) {
 
 const totals = { initial: [0, 0, 0], deferred: [0, 0, 0] };
 const rows = [];
-for (const file of [...files].sort()) {
+for (const file of [...files].sort((left, right) =>
+  left.localeCompare(right),
+)) {
   if (!/\.(js|css)$/.test(file)) continue;
   const content = await readFile(resolve(dist, file));
   const sizes = [
@@ -40,7 +42,9 @@ for (const file of [...files].sort()) {
     brotliCompressSync(content).length,
   ];
   const phase = initial.has(file) ? "initial" : "deferred";
-  sizes.forEach((size, index) => { totals[phase][index] += size; });
+  sizes.forEach((size, index) => {
+    totals[phase][index] += size;
+  });
   rows.push({ file, phase, raw: sizes[0], gzip: sizes[1], brotli: sizes[2] });
 }
 

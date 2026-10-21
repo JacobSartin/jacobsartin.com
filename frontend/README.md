@@ -1,10 +1,10 @@
 # jacobsartin.com
 
-Personal portfolio site, built as a single-page app with [Vite](https://vite.dev/), React, and [TanStack Router](https://tanstack.com/router/latest). jacobsartin.com is served from my homelab; CI also publishes a mirror to GitHub Pages.
+Personal portfolio site, built as a single-page app with [Vite+](https://viteplus.dev/), React, and [TanStack Router](https://tanstack.com/router/latest). jacobsartin.com is served from my homelab; CI also publishes a mirror to GitHub Pages.
 
 ## Getting Started
 
-The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. Install dependencies and start the dev server:
+Use Node.js 22.18+, 24.11+, or 26+ (CI uses Node.js 24). The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. From `frontend/`, install dependencies and start the dev server:
 
 ```bash
 pnpm install
@@ -15,11 +15,17 @@ Open <http://localhost:5173> in your browser.
 
 ## Scripts
 
-- `pnpm dev`: start the Vite dev server
+- `pnpm dev`: start the Vite+ dev server
 - `pnpm build`: build the production bundle into `dist/`, then run the post-build step
+- `pnpm check`: check formatting, lint rules, and TypeScript types with Vite+
+- `pnpm fmt`: format the project with Vite+
 - `pnpm typecheck`: type-check the project with `tsc --noEmit`
 - `pnpm start`: preview the production build locally
 - `pnpm size`: build and report initial/deferred JS/CSS sizes (raw, gzip, and Brotli)
+
+Vite+ is installed locally, so no global CLI is required. `vite.config.ts` holds the build, lint, and format settings; `pnpm-workspace.yaml` pins Vite+ and aliases Vite to the matching Vite+ core so plugins share one toolchain. Keep those versions aligned when upgrading. The project retains its existing 80-column formatting preference.
+
+With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp check`, and `vp run build`. Use `vp run build` instead of the bare `vp build` command when you need the complete static site, including route copies and the 404 fallback. `vp build` alone only bundles the app.
 
 ## Project Layout
 
@@ -40,7 +46,9 @@ To roll back, revert the commit on `main`, or re-run an earlier Deploy run.
 
 A deploy replaces the previous build's hashed chunks. A page opened before the deploy reloads once when it fails to load one (the `vite:preloadError` handler in `index.html`).
 
-`.github/workflows/ci.yaml` type-checks and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
+All three workflows use `voidzero-dev/setup-vp` to install Node.js, the pinned Vite+ toolchain, and dependencies with a frozen lockfile. Builds run through `vp run build` so the post-build step is included.
+
+`.github/workflows/ci.yaml` runs `pnpm check` and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 The post-build step (`scripts/postbuild.mjs`) creates:
 

@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, lazyPlugins } from "vite-plus";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 
@@ -9,8 +9,14 @@ const base = normalizedBasePath.endsWith("/")
   : `${normalizedBasePath}/`;
 
 export default defineConfig({
+  fmt: { printWidth: 80 },
+  lint: {
+    jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
+    rules: { "vite-plus/prefer-vite-plus-imports": "error" },
+    options: { typeAware: true, typeCheck: true },
+  },
   base,
-  plugins: [react()],
+  plugins: lazyPlugins(() => [react()]),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),

@@ -2,13 +2,14 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@12.8.1",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build && node scripts/postbuild.mjs",
-    "start": "vite preview",
+    "dev": "vp dev",
+    "build": "vp build && node scripts/postbuild.mjs",
+    "start": "vp preview",
+    "check": "vp check",
+    "fmt": "vp fmt",
     "typecheck": "tsc --noEmit",
-    "size": "vite build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs"
+    "size": "vp build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs"
   },
   "dependencies": {
     "@tanstack/react-router": "^1.170.17",
@@ -24,6 +25,8 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "typescript": "^6.0.3",
-    "vite": "^8.1.4"
-  }
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "packageManager": "pnpm@12.8.1"
 }

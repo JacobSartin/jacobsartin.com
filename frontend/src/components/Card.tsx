@@ -64,12 +64,7 @@ export default function Card({
 
   // Otherwise render a button with any action attached
   return (
-    <button
-      key={title}
-      type="button"
-      className="card"
-      onClick={handleClick}
-    >
+    <button key={title} type="button" className="card" onClick={handleClick}>
       {content}
     </button>
   );
