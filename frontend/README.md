@@ -29,14 +29,17 @@ With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp check`, and `
 
 ## Project Layout
 
-- `src/router.tsx`: route tree and root layout
+- `src/router.tsx`: router configuration, intent preloading and scroll restoration
+- `src/routes/`: typed route definitions and root layout. The Router plugin generates `src/routeTree.gen.ts`; do not edit the generated file.
 - `src/page.tsx`, `src/about/`, `src/skills/`, `src/projects/`: page components and their styles
-- `src/projects/<slug>/page.tsx`: project pages. Each one is registered automatically at `/projects/<slug>` and lazy-loaded.
+- `src/projects/<slug>/page.tsx`: project pages. Register each with a thin `src/routes/projects/<slug>.tsx` route; the Router plugin splits page components automatically.
 - `src/projects/cards.ts`: project metadata shared by routing and the listing
 - `src/components/`: shared UI (nav, cards, theme and accent controls, project template)
 - `src/globals.css`: design tokens (spacing, colors, widths) and shared utilities
 
 Home loads eagerly. Secondary routes and their CSS load on navigation or link intent; the projects listing does not fetch every detail page. The accent picker and color libraries load only when its control is activated.
+
+Route metadata is rendered by `HeadContent`, including page titles, descriptions and social tags. A catch-all route supplies not-found metadata. Router Devtools are available in development and excluded from production. Add new internal project links using the generated route types so invalid destinations fail type checking.
 
 ## Deployment
 

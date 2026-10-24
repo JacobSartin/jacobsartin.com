@@ -12,13 +12,15 @@
     "size": "vp build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs"
   },
   "dependencies": {
-    "@tanstack/react-router": "^1.170.17",
+    "@tanstack/react-router": "^1.170.46",
+    "@tanstack/react-router-devtools": "1.167.2",
     "culori": "^4.0.2",
     "react": "19.2.4",
     "react-colorful": "^5.7.0",
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@tanstack/router-plugin": "1.168.48",
     "@types/culori": "^4.0.1",
     "@types/node": "^25.9.5",
     "@types/react": "^19.2.17",
