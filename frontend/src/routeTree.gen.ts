@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SplatRouteImport } from './routes/$'
+import { Route as FallbackRouteImport } from './routes/[_]fallback'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as SkillsRouteImport } from './routes/skills'
 import { Route as ProjectsIndexRouteImport } from './routes/projects/index'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const SplatRoute = SplatRouteImport.update({
   id: '/$',
   path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FallbackRoute = FallbackRouteImport.update({
+  id: '/_fallback',
+  path: '/_fallback',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -74,6 +80,7 @@ const ProjectsThisSiteRoute = ProjectsThisSiteRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/_fallback': typeof FallbackRoute
   '/about': typeof AboutRoute
   '/skills': typeof SkillsRoute
   '/projects/cluster': typeof ProjectsClusterRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/_fallback': typeof FallbackRoute
   '/about': typeof AboutRoute
   '/skills': typeof SkillsRoute
   '/projects/cluster': typeof ProjectsClusterRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$': typeof SplatRoute
+  '/_fallback': typeof FallbackRoute
   '/about': typeof AboutRoute
   '/skills': typeof SkillsRoute
   '/projects/cluster': typeof ProjectsClusterRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/$'
+    | '/_fallback'
     | '/about'
     | '/skills'
     | '/projects/cluster'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/$'
+    | '/_fallback'
     | '/about'
     | '/skills'
     | '/projects/cluster'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/$'
+    | '/_fallback'
     | '/about'
     | '/skills'
     | '/projects/cluster'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SplatRoute: typeof SplatRoute
+  FallbackRoute: typeof FallbackRoute
   AboutRoute: typeof AboutRoute
   SkillsRoute: typeof SkillsRoute
   ProjectsClusterRoute: typeof ProjectsClusterRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/$'
       fullPath: '/$'
       preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_fallback': {
+      id: '/_fallback'
+      path: '/_fallback'
+      fullPath: '/_fallback'
+      preLoaderRoute: typeof FallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SplatRoute: SplatRoute,
+  FallbackRoute: FallbackRoute,
   AboutRoute: AboutRoute,
   SkillsRoute: SkillsRoute,
   ProjectsClusterRoute: ProjectsClusterRoute,
@@ -250,3 +271,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
