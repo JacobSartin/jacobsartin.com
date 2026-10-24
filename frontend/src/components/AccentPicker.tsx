@@ -258,7 +258,7 @@ export default function AccentPicker({
       const { accent: nextAccent } = validateChannels(value);
       if (!nextAccent) return;
       setAccent(nextAccent);
-      form.reset(toDraftChannels(nextAccent));
+      form.reset(toDraftChannels(nextAccent), { keepDefaultValues: true });
       applyAccent(nextAccent);
       safeSetStorage(StorageKey.Accent, nextAccent);
       setIsOpen(false);
@@ -283,7 +283,7 @@ export default function AccentPicker({
     }
 
     setAccent(resolvedAccent);
-    form.reset(toDraftChannels(resolvedAccent));
+    form.reset(toDraftChannels(resolvedAccent), { keepDefaultValues: true });
     applyAccent(resolvedAccent);
     setMounted(true);
   }, [form]);
@@ -302,7 +302,7 @@ export default function AccentPicker({
   }, [focusFrom, mounted]);
 
   const closeWithoutApply = useCallback(() => {
-    form.reset(toDraftChannels(accent));
+    form.reset(toDraftChannels(accent), { keepDefaultValues: true });
     applyAccent(accent);
     setIsOpen(false);
     setLiveMessage("Accent picker closed without applying changes.");
@@ -346,7 +346,7 @@ export default function AccentPicker({
   }, [accent, draft]);
 
   const openPicker = useCallback(() => {
-    form.reset(toDraftChannels(accent));
+    form.reset(toDraftChannels(accent), { keepDefaultValues: true });
     setLiveMessage("");
     setIsOpen(true);
   }, [accent, form]);
@@ -356,7 +356,7 @@ export default function AccentPicker({
       const parsed = toValidOklch(hex);
       if (!parsed) return;
       const nextDraft = toDraftChannels(formatOklch(parsed));
-      form.reset(nextDraft);
+      form.reset(nextDraft, { keepDefaultValues: true });
 
       const { accent: previewAccent } = validateChannels(nextDraft);
       if (previewAccent) {
@@ -369,7 +369,7 @@ export default function AccentPicker({
 
   const resetAccent = useCallback(() => {
     setAccent(DEFAULT_ACCENT);
-    form.reset(toDraftChannels(DEFAULT_ACCENT));
+    form.reset(toDraftChannels(DEFAULT_ACCENT), { keepDefaultValues: true });
     applyAccent(DEFAULT_ACCENT);
     safeRemoveStorage(StorageKey.Accent);
     setLiveMessage("Accent reset to default.");
