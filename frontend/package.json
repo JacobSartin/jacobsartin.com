@@ -12,6 +12,7 @@
     "size": "vp build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs"
   },
   "dependencies": {
+    "@tanstack/react-form": "1.33.5",
     "@tanstack/react-router": "^1.170.17",
     "culori": "^4.0.2",
     "react": "19.2.4",
