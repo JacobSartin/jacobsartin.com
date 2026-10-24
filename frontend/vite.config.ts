@@ -1,5 +1,6 @@
 import { defineConfig, lazyPlugins } from "vite-plus";
 import react from "@vitejs/plugin-react";
+import { redact } from "@tanstack/redact/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import path from "node:path";
 import fs from "node:fs";
@@ -22,9 +23,13 @@ export default defineConfig({
   base,
   environments: {
     client: { build: { outDir: "dist" } },
-    ssr: { build: { outDir: ".tanstack/server" } },
+    ssr: {
+      build: { outDir: ".tanstack/server" },
+      resolve: { noExternal: true },
+    },
   },
   plugins: lazyPlugins(() => [
+    redact(),
     tanstackStart({
       prerender: {
         enabled: true,
