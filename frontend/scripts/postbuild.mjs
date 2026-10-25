@@ -4,17 +4,16 @@ import fs from "node:fs";
 import path from "node:path";
 
 const output = path.resolve("dist");
-const routes = [
-  "",
-  "about",
-  "skills",
-  "projects",
-  "projects/this-site",
-  "projects/smesh-vpn",
-  "projects/cluster",
-  "projects/game-of-life",
-  "projects/solitaire",
-];
+const projectsDirectory = path.resolve("src/routes/projects");
+const projectRoutes = fs
+  .readdirSync(projectsDirectory, { withFileTypes: true })
+  .filter(
+    (entry) =>
+      entry.isDirectory() &&
+      fs.existsSync(path.join(projectsDirectory, entry.name, "index.tsx")),
+  )
+  .map((entry) => `projects/${entry.name}`);
+const routes = ["", "about", "skills", "projects", ...projectRoutes];
 const titles = new Set();
 for (const route of routes) {
   const html = fs.readFileSync(path.join(output, route, "index.html"), "utf8");

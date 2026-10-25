@@ -7,12 +7,15 @@
     "dev": "vp dev",
     "build": "vp build && node scripts/postbuild.mjs",
     "start": "vp preview",
-    "check": "vp check",
+    "check": "node scripts/generate-routes.mjs && vp check",
     "fmt": "vp fmt",
-    "typecheck": "tsc --noEmit",
-    "size": "vp build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs"
+    "typecheck": "node scripts/generate-routes.mjs && tsc --noEmit",
+    "size": "vp build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs",
+    "generate:routes": "node scripts/generate-routes.mjs",
+    "postinstall": "node scripts/generate-routes.mjs"
   },
   "dependencies": {
+    "@tanstack/react-form": "1.33.5",
     "@tanstack/react-router": "^1.170.46",
     "@tanstack/react-router-devtools": "1.167.2",
     "@tanstack/react-start": "1.169.4",
@@ -22,6 +25,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@tanstack/router-generator": "1.167.46",
     "@types/culori": "^4.0.1",
     "@types/node": "^25.9.5",
     "@types/react": "^19.2.17",
