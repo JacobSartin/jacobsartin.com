@@ -6,6 +6,4 @@ export const routerConfig = {
   generatedRouteTree: fileURLToPath(
     new URL("./.tanstack/routeTree.gen.ts", import.meta.url),
   ),
-  quoteStyle: "double",
-  semicolons: true,
 };
