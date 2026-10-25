@@ -3,8 +3,24 @@ import Icon from "./Icon";
 import { slidersIcon } from "./icons";
 
 type Picker = typeof import("./AccentPicker").default;
+type PickerModule = typeof import("./AccentPicker");
 
-/** Keep color conversion and picker code out of visits that never use it. */
+let pickerPromise: Promise<PickerModule> | null = null;
+
+function loadPicker() {
+  pickerPromise ??= import("./AccentPicker").catch((error: unknown) => {
+    pickerPromise = null;
+    throw error;
+  });
+  return pickerPromise;
+}
+
+function preloadPicker() {
+  // Speculative failures stay quiet; opening the picker can retry and report one.
+  void loadPicker().catch(() => {});
+}
+
+/** Warm the picker after page load without adding it to the initial bundle. */
 export default function AccentControl() {
   const [Picker, setPicker] = useState<Picker | null>(null);
   const [pending, setPending] = useState(false);
@@ -21,8 +37,28 @@ export default function AccentControl() {
   }, []);
 
   useEffect(() => {
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+
+    const schedulePreload = () => {
+      if (typeof window.requestIdleCallback === "function") {
+        idleId = window.requestIdleCallback(preloadPicker, { timeout: 1000 });
+      } else {
+        timeoutId = window.setTimeout(preloadPicker, 200);
+      }
+    };
+
+    if (document.readyState === "complete") {
+      schedulePreload();
+    } else {
+      window.addEventListener("load", schedulePreload, { once: true });
+    }
+
     return () => {
       requestRef.current += 1;
+      window.removeEventListener("load", schedulePreload);
+      if (idleId !== undefined) window.cancelIdleCallback(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
   }, []);
 
@@ -58,7 +94,7 @@ export default function AccentControl() {
     const request = ++requestRef.current;
     setPending(true);
     setMessage("Loading accent color picker.");
-    void import("./AccentPicker")
+    void loadPicker()
       .then(({ default: LoadedPicker }) => {
         if (request !== requestRef.current) return;
         setFocusFrom(
@@ -85,6 +121,9 @@ export default function AccentControl() {
           <button
             ref={triggerRef}
             type="button"
+            onPointerEnter={preloadPicker}
+            onFocus={preloadPicker}
+            onPointerDown={preloadPicker}
             onClick={open}
             className="accent-toggle"
             aria-expanded={false}
