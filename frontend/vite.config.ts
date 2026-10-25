@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import { redact } from "@tanstack/redact/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import path from "node:path";
-import { routerConfig } from "./router.config.mjs";
 import fs from "node:fs";
 import type { Plugin } from "vite-plus";
 
@@ -14,8 +13,9 @@ const base = normalizedBasePath.endsWith("/")
   : `${normalizedBasePath}/`;
 
 export default defineConfig({
-  fmt: { printWidth: 80 },
+  fmt: { printWidth: 80, ignorePatterns: ["src/routeTree.gen.ts"] },
   lint: {
+    ignorePatterns: ["src/routeTree.gen.ts"],
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     rules: { "vite-plus/prefer-vite-plus-imports": "error" },
     options: { typeAware: true, typeCheck: true },
@@ -31,7 +31,6 @@ export default defineConfig({
   plugins: lazyPlugins(() => [
     redact(),
     tanstackStart({
-      router: routerConfig,
       prerender: {
         enabled: true,
         autoStaticPathsDiscovery: true,

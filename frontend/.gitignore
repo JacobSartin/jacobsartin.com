@@ -41,5 +41,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# generated routing and build intermediates
+# build intermediates
 /.tanstack/
