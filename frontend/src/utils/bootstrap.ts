@@ -1,17 +1,5 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="%BASE_URL%favicon.ico" sizes="any" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap"
-      rel="stylesheet"
-    />
-    <script>
-      (function () {
+// Apply persisted appearance before first paint; recover stale chunks once.
+export const bootstrapScript = String.raw`(function () {
         try {
           var t = localStorage.getItem("theme");
           var accent = localStorage.getItem("accent");
@@ -32,9 +20,7 @@
           }
         } catch (e) {}
       })();
-    </script>
-    <script>
-      // A deploy replaces the previous build's chunks, so a page opened before it
+// A deploy replaces the previous build's chunks, so a page opened before it
       // reloads once to pick up the new build instead of failing to load a page.
       window.addEventListener("vite:preloadError", function (event) {
         try {
@@ -44,11 +30,4 @@
         } catch (e) {}
         event.preventDefault();
         location.reload();
-      });
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+      });`;
