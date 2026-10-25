@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import type { FileRouteTypes } from "@/routeTree.gen";
 import Icon from "./Icon";
 import type { IconDefinition } from "./icons";
 import "@/projects/projects.css";
 
-type InternalProjectRoute = "/projects" | `/projects/${string}`;
+type InternalProjectRoute = Extract<FileRouteTypes["to"], `/projects${string}`>;
 type ExternalProjectLink = `http://${string}` | `https://${string}`;
 type ProjectLink = InternalProjectRoute | ExternalProjectLink;
 
@@ -56,7 +57,7 @@ export default function Card({
     }
 
     return (
-      <Link key={title} to={link as never} className="card">
+      <Link key={title} to={link} className="card">
         {content}
       </Link>
     );

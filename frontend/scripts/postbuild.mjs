@@ -13,17 +13,16 @@ import fs from "fs";
 import path from "path";
 
 const outDir = path.resolve("dist");
-const projectsDir = path.resolve("src/projects");
+const projectsDir = path.resolve("src/routes/projects");
 
-// The fixed routes in src/router.tsx. Project routes are found the same way
-// the router finds them: one per src/projects/<slug>/page.tsx.
+// Project pages own their file routes in src/routes/projects/<slug>/index.tsx.
 const staticRoutes = ["about", "skills", "projects"];
 const projectRoutes = fs
   .readdirSync(projectsDir, { withFileTypes: true })
   .filter(
     (entry) =>
       entry.isDirectory() &&
-      fs.existsSync(path.join(projectsDir, entry.name, "page.tsx")),
+      fs.existsSync(path.join(projectsDir, entry.name, "index.tsx")),
   )
   .map((entry) => `projects/${entry.name}`);
 

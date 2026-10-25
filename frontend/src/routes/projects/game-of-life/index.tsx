@@ -1,6 +1,13 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { projectHead } from "@/utils/head";
 import ProjectTemplate from "@/components/ProjectTemplate";
 
-export default function GameOfLifePage() {
+export const Route = createFileRoute("/projects/game-of-life/")({
+  head: () => projectHead("/projects/game-of-life"),
+  component: GameOfLifePage,
+});
+
+function GameOfLifePage() {
   return (
     <ProjectTemplate
       title="Game of Life"
