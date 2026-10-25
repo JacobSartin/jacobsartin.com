@@ -1,6 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { projectHead } from "@/utils/head";
+
+export const Route = createFileRoute("/projects/this-site/")({
+  head: () => projectHead("/projects/this-site"),
+  component: ThisSite,
+});
+
 import ProjectTemplate from "@/components/ProjectTemplate";
 
-export default function ThisSite() {
+function ThisSite() {
   return (
     <ProjectTemplate
       title="This Site"

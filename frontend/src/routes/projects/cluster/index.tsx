@@ -1,6 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { projectHead } from "@/utils/head";
+
+export const Route = createFileRoute("/projects/cluster/")({
+  head: () => projectHead("/projects/cluster"),
+  component: ClusterPage,
+});
+
 import ProjectTemplate from "@/components/ProjectTemplate";
 
-export default function ClusterPage() {
+function ClusterPage() {
   return (
     <ProjectTemplate title="Cluster" subtitle="Distributed tooling">
       <p>

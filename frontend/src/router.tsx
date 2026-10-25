@@ -1,5 +1,5 @@
 import { createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import { routeTree } from "../.tanstack/routeTree.gen";
 
 const basepath = import.meta.env.BASE_URL.replace(/\/$/, "") || "/";
 

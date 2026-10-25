@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { FileRouteTypes } from "@/routeTree.gen";
+import type { FileRouteTypes } from "../../.tanstack/routeTree.gen";
 import Icon from "./Icon";
 import type { IconDefinition } from "./icons";
 import "@/projects/projects.css";

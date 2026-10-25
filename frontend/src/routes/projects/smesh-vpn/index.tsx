@@ -1,6 +1,14 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { projectHead } from "@/utils/head";
+
+export const Route = createFileRoute("/projects/smesh-vpn/")({
+  head: () => projectHead("/projects/smesh-vpn"),
+  component: SmeshVpnPage,
+});
+
 import ProjectTemplate from "@/components/ProjectTemplate";
 
-export default function SmeshVpnPage() {
+function SmeshVpnPage() {
   return (
     <ProjectTemplate
       title="Smesh VPN"
