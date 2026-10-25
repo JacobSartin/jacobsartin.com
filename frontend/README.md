@@ -44,7 +44,7 @@ The bundler regenerates `src/routeTree.gen.ts` during development and builds. Co
 
 To add a project, create `src/routes/projects/<slug>/index.tsx` with a named component and an exported `Route = createFileRoute("/projects/<slug>/")({ component: ProjectPage, head: ... })`. Add its listing card to `src/projects/cards.ts`. Supporting modules inside route folders should use TanStack’s `-` filename prefix so they are excluded from route discovery. The page content stays in its own TSX; there is no generic project renderer or separate route wrapper.
 
-Home loads eagerly. Secondary routes and their CSS load on navigation or link intent; the projects listing does not fetch every detail page. The accent picker and color libraries load only when its control is activated.
+Home loads eagerly. Secondary routes and their CSS load on navigation or link intent; the projects listing does not fetch every detail page. The accent picker and color libraries stay out of the initial bundle. After the page's load event, the control warms them during browser idle time (within one second, or after a short timer on browsers without idle callbacks). Hover, keyboard focus, or pointer down starts loading sooner. Warming and opening share one request; warming never mounts or opens the picker.
 
 Route metadata is rendered by `HeadContent`, including page titles, descriptions and social tags. A catch-all route supplies not-found metadata. Router Devtools are available in development and excluded from production. Add new internal project links using the generated route types so invalid destinations fail type checking.
 
