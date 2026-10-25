@@ -161,6 +161,7 @@ snapshots:
 
 
 
+
 ---
 lockfileVersion: '9.0'
 
@@ -209,9 +210,6 @@ importers:
         specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
     devDependencies:
-      '@tanstack/router-generator':
-        specifier: 1.167.46
-        version: 1.167.46
       '@types/culori':
         specifier: ^4.0.1
         version: 4.0.1
