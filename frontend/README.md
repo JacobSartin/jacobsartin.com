@@ -2,6 +2,8 @@
 
 Personal portfolio site, prerendered with [TanStack Start](https://tanstack.com/start/latest), [Vite+](https://viteplus.dev/), React, and [TanStack Router](https://tanstack.com/router/latest). jacobsartin.com is served from my homelab; CI also publishes a mirror to GitHub Pages.
 
+The React imports run on [TanStack Redact](https://github.com/TanStack/redact) using its default feature preset, including hydration, context and Suspense. Rendering and transitions are synchronous; check Redact compatibility before introducing React action or concurrent rendering APIs. SSR dependencies are bundled together so prerendering uses the same runtime as the browser.
+
 ## Getting Started
 
 Use Node.js 22.18+, 24.11+, or 26+ (CI uses Node.js 24). The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. From `frontend/`, install dependencies and start the dev server:
