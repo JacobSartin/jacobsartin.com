@@ -41,5 +41,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# TanStack Start build state
+# generated routing and build intermediates
 /.tanstack/

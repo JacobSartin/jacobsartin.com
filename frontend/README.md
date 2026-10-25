@@ -19,25 +19,32 @@ Open <http://localhost:5173> in your browser.
 
 - `pnpm dev`: start the Vite+ dev server
 - `pnpm build`: build the production bundle into `dist/`, then run the post-build step
-- `pnpm check`: check formatting, lint rules, and TypeScript types with Vite+
+- `pnpm check`: generate routes, then check formatting, lint rules, and TypeScript types with Vite+
 - `pnpm fmt`: format the project with Vite+
-- `pnpm typecheck`: type-check the project with `tsc --noEmit`
+- `pnpm typecheck`: generate routes, then type-check the project with `tsc --noEmit`
+- `pnpm generate:routes`: regenerate route types without starting the dev server
 - `pnpm start`: preview the production build locally
 - `pnpm size`: build and report initial/deferred JS/CSS sizes (raw, gzip, and Brotli)
 
 Vite+ is installed locally, so no global CLI is required. `vite.config.ts` holds the build, lint, and format settings; `pnpm-workspace.yaml` pins Vite+ and aliases Vite to the matching Vite+ core so plugins share one toolchain. Keep those versions aligned when upgrading. The project retains its existing 80-column formatting preference.
 
-With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp check`, and `vp run build`. Use `vp run build` instead of the bare `vp build` command when you need the complete static site, including prerendered pages and the 404 fallback. `vp build` bundles and prerenders; the complete script also verifies the static output and creates `.nojekyll`.
+With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp run check`, and `vp run build`. Use `vp run build` instead of the bare `vp build` command when you need the complete static site, including prerendered pages and the 404 fallback. `vp build` bundles and prerenders; the complete script also verifies the static output and creates `.nojekyll`.
 
 ## Project Layout
 
-- `src/router.tsx`: a fresh Router factory for Start, intent preloading and scroll restoration
-- `src/routes/`: typed route definitions and root layout. Start generates `src/routeTree.gen.ts`; do not edit the generated file.
+- `src/router.tsx`: router configuration, intent preloading and scroll restoration
+- `src/routes/`: typed route definitions and root layout.
+- `src/routes/projects/<slug>/index.tsx`: each project owns its route, metadata and JSX in one file, with its own folder for supporting files.
+- `router.config.mjs`: shared route generation paths for the bundler and checks.
+- `.tanstack/routeTree.gen.ts`: generated route types and imports; ignored by Git.
 - `src/page.tsx`, `src/about/`, `src/skills/`, `src/projects/`: page components and their styles
-- `src/projects/<slug>/page.tsx`: project pages. Register each with a thin `src/routes/projects/<slug>.tsx` route; Start splits page components automatically.
 - `src/projects/cards.ts`: project metadata shared by routing and the listing
 - `src/components/`: shared UI (nav, cards, theme and accent controls, project template)
 - `src/globals.css`: design tokens (spacing, colors, widths) and shared utilities
+
+Installation generates the ignored route tree automatically. Checks and type checking regenerate it before inspecting types, while dev and build use the bundler plugin. On a fresh checkout, run `pnpm install` before opening the project; if lifecycle scripts are disabled, run `pnpm generate:routes` once. Do not edit or commit `.tanstack/`.
+
+To add a project, create `src/routes/projects/<slug>/index.tsx` with a named component and an exported `Route = createFileRoute("/projects/<slug>/")({ component: ProjectPage, head: ... })`. Add its listing card to `src/projects/cards.ts`. Supporting modules inside route folders should use TanStack’s `-` filename prefix so they are excluded from route discovery. The page content stays in its own TSX; there is no generic project renderer or separate route wrapper.
 
 Home loads eagerly. Secondary routes and their CSS load on navigation or link intent; the projects listing does not fetch every detail page. The accent picker and color libraries load only when its control is activated.
 
@@ -55,6 +62,8 @@ All three workflows use `voidzero-dev/setup-vp` to install Node.js, the pinned V
 
 `.github/workflows/ci.yaml` runs `pnpm check` and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
-Start prerenders every page into `<route>/index.html`, including page content, unique titles, descriptions and sharing metadata. A separate SPA shell becomes `404.html` for static-host unknown paths. The postbuild step verifies the nine real pages and fallback, then creates `.nojekyll`.
+Start prerenders every page into `<route>/index.html`, including page content, unique titles, descriptions and sharing metadata. A separate SPA shell becomes `404.html` for static-host unknown paths. The postbuild step verifies each page and fallback, then creates `.nojekyll`.
+
+Start renders pages only during the build. Production serves static HTML, CSS and JavaScript, with navigation and interactions running in the browser. No request-time rendering, server functions or Start server are deployed.
 
 Only `dist/` is published. `.tanstack/server/` contains the temporary server used during prerendering and is ignored by Git. Both the default `/` base and the GitHub Pages `/jacobsartin.com/` base are supported. Run the complete `pnpm build` to verify prerendered output before deployment.

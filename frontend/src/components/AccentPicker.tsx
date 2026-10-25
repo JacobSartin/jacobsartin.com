@@ -14,6 +14,7 @@ import {
   parse,
   useMode,
 } from "culori/fn";
+import { useForm, useSelector } from "@tanstack/react-form";
 import { HexColorPicker } from "react-colorful";
 import Icon from "./Icon";
 import { slidersIcon } from "./icons";
@@ -33,6 +34,33 @@ const LIGHTNESS_MAX = 1;
 const CHROMA_MIN = 0;
 const HUE_MIN = 0;
 const HUE_MAX = 360;
+
+const channels = [
+  {
+    name: "l",
+    label: "Lightness",
+    id: "accent-lightness",
+    min: LIGHTNESS_MIN,
+    max: LIGHTNESS_MAX,
+    step: "0.0001",
+  },
+  {
+    name: "c",
+    label: "Chroma",
+    id: "accent-chroma",
+    min: CHROMA_MIN,
+    max: undefined,
+    step: "0.0001",
+  },
+  {
+    name: "h",
+    label: "Hue",
+    id: "accent-hue",
+    min: HUE_MIN,
+    max: HUE_MAX,
+    step: "0.01",
+  },
+] as const;
 
 type OklchColor = {
   mode: "oklch";
@@ -163,33 +191,32 @@ function validateChannels(channels: DraftChannels): {
   };
 }
 
-function getChannelErrorMessages(channels: DraftChannels): string[] {
-  const l = parseChannel(channels.l);
-  const c = parseChannel(channels.c);
-  const h = parseChannel(channels.h);
-  const messages: string[] = [];
-
-  if (l === null) {
-    messages.push("Lightness is required.");
-  } else if (l < LIGHTNESS_MIN || l > LIGHTNESS_MAX) {
-    messages.push(
-      `Lightness must be between ${LIGHTNESS_MIN} and ${LIGHTNESS_MAX}.`,
-    );
+function getChannelErrors(values: DraftChannels) {
+  const errors: Partial<Record<keyof DraftChannels, string>> = {};
+  for (const channel of channels) {
+    const value = parseChannel(values[channel.name]);
+    if (value === null) errors[channel.name] = channel.label + " is required.";
+    else if (
+      value < channel.min ||
+      (channel.max !== undefined && value > channel.max)
+    ) {
+      errors[channel.name] =
+        channel.max === undefined
+          ? channel.label + " must be " + channel.min + " or greater."
+          : channel.label +
+            " must be between " +
+            channel.min +
+            " and " +
+            channel.max +
+            ".";
+    }
   }
+  return errors;
+}
 
-  if (c === null) {
-    messages.push("Chroma is required.");
-  } else if (c < CHROMA_MIN) {
-    messages.push(`Chroma must be ${CHROMA_MIN} or greater.`);
-  }
-
-  if (h === null) {
-    messages.push("Hue is required.");
-  } else if (h < HUE_MIN || h > HUE_MAX) {
-    messages.push(`Hue must be between ${HUE_MIN} and ${HUE_MAX}.`);
-  }
-
-  return messages;
+function validateForm(values: DraftChannels) {
+  const fields = getChannelErrors(values);
+  return Object.keys(fields).length ? { fields } : undefined;
 }
 
 function applyAccent(accent: string) {
@@ -208,18 +235,45 @@ export default function AccentPicker({
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(initiallyOpen);
   const [accent, setAccent] = useState(DEFAULT_ACCENT);
-  const [draft, setDraft] = useState<DraftChannels>(() =>
-    toDraftChannels(DEFAULT_ACCENT),
-  );
-  const [channelErrors, setChannelErrors] = useState<ChannelErrors>({
-    l: false,
-    c: false,
-    h: false,
-  });
   const [liveMessage, setLiveMessage] = useState("");
   const controlRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const focusHandledRef = useRef(false);
+  const form = useForm({
+    defaultValues: toDraftChannels(DEFAULT_ACCENT),
+    validators: {
+      onChange: ({ value }) => validateForm(value),
+      onSubmit: ({ value }) => validateForm(value),
+    },
+    listeners: {
+      onChange: ({ formApi }) => {
+        const { accent: preview } = validateChannels(formApi.state.values);
+        if (preview) {
+          applyAccent(preview);
+          setLiveMessage("Previewing accent color.");
+        }
+      },
+    },
+    onSubmit: ({ value }) => {
+      const { accent: nextAccent } = validateChannels(value);
+      if (!nextAccent) return;
+      setAccent(nextAccent);
+      form.reset(toDraftChannels(nextAccent), { keepDefaultValues: true });
+      applyAccent(nextAccent);
+      safeSetStorage(StorageKey.Accent, nextAccent);
+      setIsOpen(false);
+      triggerRef.current?.focus();
+      setLiveMessage("Accent color applied.");
+    },
+    onSubmitInvalid: ({ value }) => {
+      setLiveMessage(
+        "Invalid accent channels. " +
+          Object.values(getChannelErrors(value)).join(" "),
+      );
+    },
+  });
+  const draft = useSelector(form.store, (state) => state.values);
+  const activeErrorMessages = Object.values(getChannelErrors(draft));
 
   useEffect(() => {
     const resolvedAccent = resolveAccent(safeGetStorage(StorageKey.Accent));
@@ -229,10 +283,10 @@ export default function AccentPicker({
     }
 
     setAccent(resolvedAccent);
-    setDraft(toDraftChannels(resolvedAccent));
+    form.reset(toDraftChannels(resolvedAccent), { keepDefaultValues: true });
     applyAccent(resolvedAccent);
     setMounted(true);
-  }, []);
+  }, [form]);
 
   useLayoutEffect(() => {
     if (!mounted || !focusFrom || focusHandledRef.current) return;
@@ -248,12 +302,11 @@ export default function AccentPicker({
   }, [focusFrom, mounted]);
 
   const closeWithoutApply = useCallback(() => {
-    setDraft(toDraftChannels(accent));
-    setChannelErrors({ l: false, c: false, h: false });
+    form.reset(toDraftChannels(accent), { keepDefaultValues: true });
     applyAccent(accent);
     setIsOpen(false);
     setLiveMessage("Accent picker closed without applying changes.");
-  }, [accent]);
+  }, [accent, form]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -292,81 +345,35 @@ export default function AccentPicker({
     return parsed ? formatHex(parsed) : "#8a00e5";
   }, [accent, draft]);
 
-  const activeErrorMessages = useMemo(
-    () => getChannelErrorMessages(draft),
-    [draft],
-  );
-
   const openPicker = useCallback(() => {
-    setDraft(toDraftChannels(accent));
-    setChannelErrors({ l: false, c: false, h: false });
+    form.reset(toDraftChannels(accent), { keepDefaultValues: true });
     setLiveMessage("");
     setIsOpen(true);
-  }, [accent]);
+  }, [accent, form]);
 
-  const handleHexChange = useCallback((hex: string) => {
-    const parsed = toValidOklch(hex);
-    if (!parsed) return;
-    const nextDraft = toDraftChannels(formatOklch(parsed));
-    setDraft(nextDraft);
-    setChannelErrors({ l: false, c: false, h: false });
+  const handleHexChange = useCallback(
+    (hex: string) => {
+      const parsed = toValidOklch(hex);
+      if (!parsed) return;
+      const nextDraft = toDraftChannels(formatOklch(parsed));
+      form.reset(nextDraft, { keepDefaultValues: true });
 
-    const { accent: previewAccent } = validateChannels(nextDraft);
-    if (previewAccent) {
-      applyAccent(previewAccent);
-      setLiveMessage("Previewing accent color.");
-    }
-  }, []);
-
-  const handleChannelChange = useCallback(
-    (channel: keyof DraftChannels, value: string) => {
-      setDraft((previous) => {
-        const next = { ...previous, [channel]: value };
-        const validation = validateChannels(next);
-        setChannelErrors(validation.errors);
-
-        if (validation.accent) {
-          applyAccent(validation.accent);
-          setLiveMessage("Previewing accent color.");
-        }
-
-        return next;
-      });
+      const { accent: previewAccent } = validateChannels(nextDraft);
+      if (previewAccent) {
+        applyAccent(previewAccent);
+        setLiveMessage("Previewing accent color.");
+      }
     },
-    [],
+    [form],
   );
-
-  const applyDraftAccent = useCallback(() => {
-    const validation = validateChannels(draft);
-    setChannelErrors(validation.errors);
-
-    if (!validation.accent) {
-      const details = getChannelErrorMessages(draft).join(" ");
-      setLiveMessage(
-        details
-          ? `Invalid accent channels. ${details}`
-          : "Invalid accent channels.",
-      );
-      return;
-    }
-
-    setAccent(validation.accent);
-    setDraft(toDraftChannels(validation.accent));
-    applyAccent(validation.accent);
-    safeSetStorage(StorageKey.Accent, validation.accent);
-    setIsOpen(false);
-    triggerRef.current?.focus();
-    setLiveMessage("Accent color applied.");
-  }, [draft]);
 
   const resetAccent = useCallback(() => {
     setAccent(DEFAULT_ACCENT);
-    setDraft(toDraftChannels(DEFAULT_ACCENT));
-    setChannelErrors({ l: false, c: false, h: false });
+    form.reset(toDraftChannels(DEFAULT_ACCENT), { keepDefaultValues: true });
     applyAccent(DEFAULT_ACCENT);
     safeRemoveStorage(StorageKey.Accent);
     setLiveMessage("Accent reset to default.");
-  }, []);
+  }, [form]);
 
   if (!mounted) {
     return <div className="accent-toggle" aria-hidden="true" />;
@@ -393,7 +400,12 @@ export default function AccentPicker({
       </button>
 
       {isOpen && (
-        <div
+        <form
+          noValidate
+          onSubmit={(event) => {
+            event.preventDefault();
+            void form.handleSubmit();
+          }}
           id="accent-picker-panel"
           className="accent-popover"
           role="dialog"
@@ -406,75 +418,46 @@ export default function AccentPicker({
           />
 
           <div className="accent-channel-grid">
-            <label className="accent-channel" htmlFor="accent-lightness">
-              <span>Lightness</span>
-              <input
-                id="accent-lightness"
-                type="number"
-                min={LIGHTNESS_MIN}
-                max={LIGHTNESS_MAX}
-                step="0.0001"
-                className={`accent-input ${channelErrors.l ? "invalid" : ""}`}
-                value={draft.l}
-                onChange={(event) =>
-                  handleChannelChange("l", event.target.value)
-                }
-                autoComplete="off"
-              />
-            </label>
-
-            <label className="accent-channel" htmlFor="accent-chroma">
-              <span>Chroma</span>
-              <input
-                id="accent-chroma"
-                type="number"
-                min={CHROMA_MIN}
-                step="0.0001"
-                className={`accent-input ${channelErrors.c ? "invalid" : ""}`}
-                value={draft.c}
-                onChange={(event) =>
-                  handleChannelChange("c", event.target.value)
-                }
-                autoComplete="off"
-              />
-            </label>
-
-            <label className="accent-channel" htmlFor="accent-hue">
-              <span>Hue</span>
-              <input
-                id="accent-hue"
-                type="number"
-                min={HUE_MIN}
-                max={HUE_MAX}
-                step="0.01"
-                className={`accent-input ${channelErrors.h ? "invalid" : ""}`}
-                value={draft.h}
-                onChange={(event) =>
-                  handleChannelChange("h", event.target.value)
-                }
-                autoComplete="off"
-              />
-            </label>
+            {channels.map((channel) => (
+              <form.Field key={channel.name} name={channel.name}>
+                {(field) => (
+                  <label className="accent-channel" htmlFor={channel.id}>
+                    <span>{channel.label}</span>
+                    <input
+                      id={channel.id}
+                      type="number"
+                      min={channel.min}
+                      max={channel.max}
+                      step={channel.step}
+                      className={
+                        "accent-input" +
+                        (field.state.meta.errors.length ? " invalid" : "")
+                      }
+                      value={field.state.value}
+                      onChange={(event) =>
+                        field.handleChange(event.target.value)
+                      }
+                      onBlur={field.handleBlur}
+                      aria-invalid={field.state.meta.errors.length > 0}
+                      aria-describedby="accent-channel-errors"
+                      autoComplete="off"
+                    />
+                  </label>
+                )}
+              </form.Field>
+            ))}
           </div>
-
           <p
-            className={`accent-input-hint ${
-              channelErrors.l || channelErrors.c || channelErrors.h
-                ? "error"
-                : ""
-            }`}
+            id="accent-channel-errors"
+            className={
+              "accent-input-hint" + (activeErrorMessages.length ? " error" : "")
+            }
           >
-            {activeErrorMessages.length > 0
-              ? activeErrorMessages.join(" ")
-              : ""}
+            {activeErrorMessages.join(" ")}
           </p>
 
           <div className="accent-actions">
-            <button
-              type="button"
-              className="accent-apply"
-              onClick={applyDraftAccent}
-            >
+            <button type="submit" className="accent-apply">
               Apply
             </button>
             <button
@@ -485,7 +468,7 @@ export default function AccentPicker({
               Reset to default
             </button>
           </div>
-        </div>
+        </form>
       )}
 
       <p className="sr-only" aria-live="polite" role="status">

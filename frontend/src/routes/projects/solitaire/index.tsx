@@ -1,6 +1,13 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { projectHead } from "@/utils/head";
 import ProjectTemplate from "@/components/ProjectTemplate";
 
-export default function Solitaire() {
+export const Route = createFileRoute("/projects/solitaire/")({
+  head: () => projectHead("/projects/solitaire"),
+  component: Solitaire,
+});
+
+function Solitaire() {
   return (
     <ProjectTemplate title="Solitaire" subtitle="A simple solitaire web app">
       <p>
