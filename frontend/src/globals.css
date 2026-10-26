@@ -469,7 +469,7 @@ li::marker {
 
 .subheader {
   text-wrap: pretty;
-  font-size: 1.05em;
+  font-size: var(--text-lg);
   line-height: 1.6;
   max-width: 640px;
   color: var(--text-secondary);
@@ -537,20 +537,14 @@ li::marker {
 }
 
 @media (min-width: 64rem) {
-  .container-compact {
-    --page-space: var(--space-lg);
+  .profile-page {
+    /* Restore normal spacing as the viewport grows from 54rem to 64rem tall. */
+    --profile-room: clamp(0px, calc(10svh - 5.4rem), var(--space-md));
+    --page-space: calc(var(--space-md) * 2 + var(--profile-room) * 2);
   }
 
-  .container-compact .header {
-    margin-bottom: var(--space-lg);
-  }
-
-  .container-compact .header h1 {
-    font-size: 2.5em;
-  }
-
-  .container-compact .divider {
-    margin-top: 12px;
+  .profile-page .header {
+    margin-bottom: calc(var(--space-lg) + var(--profile-room));
   }
 }
 

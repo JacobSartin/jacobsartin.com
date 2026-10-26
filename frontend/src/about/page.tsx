@@ -26,7 +26,7 @@ const interests: Interest[] = [
 
 export default function AboutPage() {
   return (
-    <section className="container container-sm container-compact about-page">
+    <section className="container container-sm profile-page about-page">
       <div className="header">
         <h1>About Me</h1>
         <div className="divider" aria-hidden="true" />

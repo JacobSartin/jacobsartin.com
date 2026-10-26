@@ -73,31 +73,11 @@
 }
 
 @media (min-width: 64rem) {
-  .skill-category {
-    padding: var(--space-md) 20px;
+  .skills-page .skill-list li {
+    padding-block: calc(var(--space-xs) + var(--profile-room) / 4);
   }
 
-  .skill-category h2 {
-    font-size: 0.9em;
-    line-height: 1.4;
-    margin-bottom: 12px;
-  }
-
-  .skill-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 6px 14px;
-  }
-
-  .skill-list li {
-    min-width: 0;
-    overflow-wrap: anywhere;
-    padding: 0;
-    line-height: 1.5;
-    gap: 6px;
-  }
-
-  .skill-list li::before {
-    font-size: 1em;
+  .skills-page .skill-list li::before {
+    line-height: 1;
   }
 }

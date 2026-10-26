@@ -91,12 +91,12 @@
   min-height: 72px;
   justify-content: center;
   overflow: hidden;
-  border-radius: 8px 8px 0 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
 }
 
 .card-image > .icon {
   font-size: 3.5em;
-  margin-block: 8px;
+  margin-block: var(--space-sm);
   opacity: 0.18;
   transition:
     opacity var(--transition-base),

@@ -23,7 +23,7 @@
   background-color: var(--overlay-light);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: calc(var(--space-sm) + 2px) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   color: var(--text-primary);
   font-size: var(--text-sm);
   transition:
@@ -46,31 +46,10 @@
 
 @media (min-width: 64rem) {
   .about-page {
-    max-width: var(--content-md);
+    padding-block-end: calc(var(--space-sm) + var(--profile-room) * 3.5);
   }
 
-  .about-content {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 17.5rem;
-    align-items: start;
-  }
-
-  .about-content .content-card {
-    padding: var(--space-lg);
-  }
-
-  .about-content p {
-    line-height: 1.65;
-  }
-
-  .interests-grid {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
-
-  .interests-grid li {
-    padding: var(--space-sm) 12px;
-    line-height: 1.4;
-    gap: 12px;
+  .about-page .about-content {
+    gap: calc(var(--space-md) + var(--profile-room) / 2);
   }
 }
