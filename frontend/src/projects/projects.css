@@ -152,6 +152,29 @@
   }
 }
 
+/* Share image, title and description tracks within each row of cards. */
+@supports (grid-template-rows: subgrid) {
+  #cards > .card {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  .card > .card-content {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  .card-info {
+    grid-row: 2 / span 2;
+    grid-template-rows: subgrid;
+    align-items: start;
+  }
+}
+
 /* ===================== */
 /* Responsive            */
 /* ===================== */
