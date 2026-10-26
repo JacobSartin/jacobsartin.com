@@ -40,7 +40,7 @@
   --content-md: 1100px;
   --content-lg: 1600px;
   --page-gutter: clamp(16px, 3vw, 32px);
-  --page-space: clamp(24px, 5vw, 64px);
+  --page-space: calc(var(--space-md) * 2);
   --card-padding: clamp(16px, 3vw, 40px);
 
   /* Base colors — everything derives from these */
@@ -447,15 +447,20 @@ li::marker {
 /* ===================== */
 /* Global Utilities      */
 /* ===================== */
+.container,
+.hero,
+.not-found {
+  padding-block: var(--page-space) var(--space-sm);
+}
+
 .container {
   width: 100%;
   min-width: 0;
   margin-inline: auto;
-  padding-block: var(--page-space);
 }
 
 .header {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .header h1 {
