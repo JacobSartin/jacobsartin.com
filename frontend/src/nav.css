@@ -192,7 +192,7 @@ nav:has(.accent-popover) {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   font-family: var(--font-mono);
-  font-size: 0.86em;
+  font-size: max(1rem, 16px);
 }
 
 .accent-input.invalid {
@@ -211,6 +211,7 @@ nav:has(.accent-popover) {
 
 .accent-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm);
 }
