@@ -4,7 +4,7 @@
 #cards {
   display: grid;
   gap: var(--space-sm);
-  grid-template-columns: repeat(auto-fill, minmax(240px, 290px));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   justify-content: center;
   margin: 0 auto;
   max-width: inherit;
@@ -158,11 +158,5 @@
 @media (max-width: 936px) {
   #cards {
     padding: 0;
-  }
-}
-
-@media (max-width: 600px) {
-  #cards {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
