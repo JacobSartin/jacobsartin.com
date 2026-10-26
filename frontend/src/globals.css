@@ -160,6 +160,19 @@ html {
   );
 }
 
+/* Native snapshots animate navigation; unsupported browsers navigate normally. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 .skip-link {
   position: fixed;
   top: var(--space-md);
