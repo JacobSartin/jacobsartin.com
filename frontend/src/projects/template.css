@@ -65,9 +65,3 @@
 .project-template-content li {
   margin-bottom: var(--space-sm);
 }
-
-@media (max-width: 600px) {
-  .project-template-content {
-    padding: var(--space-md);
-  }
-}
