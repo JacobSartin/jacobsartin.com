@@ -72,7 +72,7 @@ export default function SkillsPage() {
 
       <div className="skills-grid">
         {skillCategories.map((category) => (
-          <div key={category.title} className="skill-category">
+          <div key={category.title} className="content-card skill-category">
             <h2>
               <Icon icon={category.icon} />
               {category.title}
