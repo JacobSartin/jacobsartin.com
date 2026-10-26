@@ -31,7 +31,7 @@ With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp run check`, a
 
 ## Dependency Updates
 
-[Renovate configuration and setup](../docs/dependency-updates.md) cover npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown and manual merging. Related React, TanStack Router/Start, and Vite+ packages update together. Node types stay on the Node 24 line used in CI.
+The [Renovate configuration](../.github/renovate.json5) manages npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown and manual merging. Related React, TanStack Router/Start, and Vite+ packages update together. Node types stay on the Node 24 line used in CI.
 
 CI audits dependencies on pull requests and every Monday at 13:00 UTC, as well as checking and building the site. Run `pnpm audit --audit-level=high` locally for the same vulnerability check. The weekly run also checks for advisories affecting an unchanged lockfile.
 
