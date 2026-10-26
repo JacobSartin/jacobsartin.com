@@ -465,7 +465,7 @@ li::marker {
 
 .subheader {
   text-wrap: pretty;
-  font-size: 1.05em;
+  font-size: var(--text-lg);
   line-height: 1.6;
   max-width: 640px;
   color: var(--text-secondary);
