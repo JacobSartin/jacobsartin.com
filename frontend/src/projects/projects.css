@@ -4,7 +4,7 @@
 #cards {
   display: grid;
   gap: var(--space-sm);
-  grid-template-columns: repeat(auto-fill, minmax(240px, 290px));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
   justify-content: center;
   margin: 0 auto;
   max-width: inherit;
@@ -177,11 +177,5 @@
 
   .card-info > h4 {
     font-size: 0.74em;
-  }
-}
-
-@media (max-width: 600px) {
-  #cards {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   }
 }
