@@ -1,3 +1,10 @@
+/* Reject malformed accent values while preserving inherited live previews. */
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.475 0.25 300);
+}
+
 /* ===================== */
 /* Theme / CSS Variables */
 /* ===================== */
