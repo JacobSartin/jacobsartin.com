@@ -29,6 +29,14 @@ Vite+ is installed locally, so no global CLI is required. `vite.config.ts` holds
 
 With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp run check`, and `vp run build`. Use `vp run build` instead of the bare `vp build` command when you need the complete static site, including prerendered pages and the 404 fallback. `vp build` bundles and prerenders; the complete script also verifies the static output and creates `.nojekyll`.
 
+## Dependency Updates
+
+[Renovate configuration and setup](../docs/dependency-updates.md) cover npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown and manual merging. Related React, TanStack Router/Start, and Vite+ packages update together. Node types stay on the Node 24 line used in CI.
+
+CI audits dependencies on pull requests and every Monday at 13:00 UTC, as well as checking and building the site. Run `pnpm audit --audit-level=high` locally for the same vulnerability check. The weekly run also checks for advisories affecting an unchanged lockfile.
+
+The Dependency graph workflow submits the resolved pnpm dependencies to GitHub on pushes to `main`. This restores dependency graph coverage for pnpm 12's two-document lockfile without changing its format or weakening package-manager version enforcement. Enable Dependabot alerts in the repository settings to receive vulnerability alerts for the submitted dependencies.
+
 ## Project Layout
 
 - `src/router.tsx`: router configuration, intent preloading and scroll restoration
@@ -58,7 +66,7 @@ To roll back, revert the commit on `main`, or re-run an earlier Deploy run.
 
 A deploy replaces the previous build's hashed chunks. The document bootstrap in `src/utils/bootstrap.ts` reloads once when an old page cannot load a replaced chunk. That bootstrap also applies persisted theme/accent preferences before first paint.
 
-All three workflows use `voidzero-dev/setup-vp` to install Node.js, the pinned Vite+ toolchain, and dependencies with a frozen lockfile. Builds run through `vp run build` so the post-build step is included.
+CI and both deployment workflows use `voidzero-dev/setup-vp` to install Node.js, the pinned Vite+ toolchain, and dependencies with a frozen lockfile. Builds run through `vp run build` so the post-build step is included. The separate Dependency graph workflow reads the manifests and lockfile without installing dependencies.
 
 Each workflow passes the checked-out source commit as `VITE_COMMIT_SHA`. The shared footer displays its first seven characters and links to the full commit on GitHub. The value is embedded during the build, including prerendered pages and the 404 fallback, so it identifies the source used for that deployment rather than the generated `site` branch commit. Local development and builds omit the footer unless `VITE_COMMIT_SHA` is set.
 
