@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ToggleEvent,
 } from "react";
 import {
   converter,
@@ -17,7 +18,6 @@ import {
 import { useForm, useSelector } from "@tanstack/react-form";
 import { HexColorPicker } from "react-colorful";
 import Icon from "./Icon";
-import { useAccentPopoverPosition } from "./useAccentPopoverPosition";
 import { slidersIcon } from "./icons";
 import {
   safeGetStorage,
@@ -234,14 +234,13 @@ export default function AccentPicker({
   focusFrom = null,
 }: Props) {
   const [mounted, setMounted] = useState(false);
-  const [isOpen, setIsOpen] = useState(initiallyOpen);
+  const [expanded, setExpanded] = useState(false);
   const [accent, setAccent] = useState(DEFAULT_ACCENT);
   const [liveMessage, setLiveMessage] = useState("");
-  const controlRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const focusHandledRef = useRef(false);
+  const openedInitiallyRef = useRef(false);
+  const appliedRef = useRef(false);
   const panelRef = useRef<HTMLFormElement>(null);
-  useAccentPopoverPosition(isOpen && mounted, triggerRef, panelRef);
   const form = useForm({
     defaultValues: toDraftChannels(DEFAULT_ACCENT),
     validators: {
@@ -260,12 +259,12 @@ export default function AccentPicker({
     onSubmit: ({ value }) => {
       const { accent: nextAccent } = validateChannels(value);
       if (!nextAccent) return;
+      appliedRef.current = true;
       setAccent(nextAccent);
       form.reset(toDraftChannels(nextAccent), { keepDefaultValues: true });
       applyAccent(nextAccent);
       safeSetStorage(StorageKey.Accent, nextAccent);
-      setIsOpen(false);
-      triggerRef.current?.focus();
+      panelRef.current?.hidePopover();
       setLiveMessage("Accent color applied.");
     },
     onSubmitInvalid: ({ value }) => {
@@ -294,54 +293,42 @@ export default function AccentPicker({
   }, [form]);
 
   useLayoutEffect(() => {
-    if (!mounted || !focusFrom || focusHandledRef.current) return;
-    focusHandledRef.current = true;
-    // Replacing the loading trigger drops focus to body. Keep a user's newer
-    // focus target if they moved elsewhere while the module was loading.
+    const trigger = triggerRef.current;
+    const panel = panelRef.current;
     if (
-      document.activeElement === document.body ||
-      document.activeElement === focusFrom
+      !mounted ||
+      !initiallyOpen ||
+      openedInitiallyRef.current ||
+      !trigger ||
+      !panel
+    )
+      return;
+    openedInitiallyRef.current = true;
+    // The first open follows a lazy import; later opens use popoverTarget.
+    if (
+      focusFrom &&
+      (document.activeElement === document.body ||
+        document.activeElement === focusFrom)
     ) {
-      triggerRef.current?.focus();
+      trigger.focus();
     }
-  }, [focusFrom, mounted]);
+    trigger.click();
+  }, [focusFrom, initiallyOpen, mounted]);
 
-  const closeWithoutApply = useCallback(() => {
-    form.reset(toDraftChannels(accent), { keepDefaultValues: true });
-    applyAccent(accent);
-    setIsOpen(false);
-    setLiveMessage("Accent picker closed without applying changes.");
-  }, [accent, form]);
+  const handleBeforeToggle = (event: ToggleEvent<HTMLFormElement>) => {
+    if (event.newState === "open") {
+      form.reset(toDraftChannels(accent), { keepDefaultValues: true });
+      setLiveMessage("");
+      return;
+    }
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const onOutsideInteraction = (event: Event) => {
-      if (
-        controlRef.current &&
-        !controlRef.current.contains(event.target as Node)
-      ) {
-        closeWithoutApply();
-      }
-    };
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeWithoutApply();
-        triggerRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("pointerdown", onOutsideInteraction);
-    document.addEventListener("focusin", onOutsideInteraction);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onOutsideInteraction);
-      document.removeEventListener("focusin", onOutsideInteraction);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [closeWithoutApply, isOpen]);
+    if (!appliedRef.current) {
+      form.reset(toDraftChannels(accent), { keepDefaultValues: true });
+      applyAccent(accent);
+      setLiveMessage("Accent picker closed without applying changes.");
+    }
+    appliedRef.current = false;
+  };
 
   const pickerHex = useMemo(() => {
     const { accent: previewAccent } = validateChannels(draft);
@@ -351,12 +338,6 @@ export default function AccentPicker({
       toValidOklch(DEFAULT_ACCENT);
     return parsed ? formatHex(parsed) : "#8a00e5";
   }, [accent, draft]);
-
-  const openPicker = useCallback(() => {
-    form.reset(toDraftChannels(accent), { keepDefaultValues: true });
-    setLiveMessage("");
-    setIsOpen(true);
-  }, [accent, form]);
 
   const handleHexChange = useCallback(
     (hex: string) => {
@@ -387,13 +368,13 @@ export default function AccentPicker({
   }
 
   return (
-    <div className="accent-control" ref={controlRef}>
+    <div className="accent-control">
       <button
         ref={triggerRef}
         type="button"
-        onClick={isOpen ? closeWithoutApply : openPicker}
+        popoverTarget="accent-picker-panel"
         className="accent-toggle"
-        aria-expanded={isOpen}
+        aria-expanded={expanded}
         aria-haspopup="dialog"
         aria-controls="accent-picker-panel"
         aria-label="Customize accent color"
@@ -406,78 +387,84 @@ export default function AccentPicker({
         <Icon icon={slidersIcon} />
       </button>
 
-      {isOpen && (
-        <form
-          ref={panelRef}
-          noValidate
-          onSubmit={(event) => {
-            event.preventDefault();
-            void form.handleSubmit();
-          }}
-          id="accent-picker-panel"
-          className="accent-popover"
-          role="dialog"
-          aria-label="Accent color picker"
+      <form
+        ref={panelRef}
+        popover="auto"
+        onBeforeToggle={handleBeforeToggle}
+        onToggle={(event) => setExpanded(event.newState === "open")}
+        onBlurCapture={(event) => {
+          const next = event.relatedTarget;
+          if (
+            next instanceof Node &&
+            !event.currentTarget.contains(next) &&
+            next !== triggerRef.current &&
+            event.currentTarget.matches(":popover-open")
+          ) {
+            event.currentTarget.hidePopover();
+          }
+        }}
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+        id="accent-picker-panel"
+        className="accent-popover"
+        role="dialog"
+        aria-label="Accent color picker"
+      >
+        <HexColorPicker
+          color={pickerHex}
+          onChange={handleHexChange}
+          className="accent-hex-picker"
+        />
+
+        <div className="accent-channel-grid">
+          {channels.map((channel) => (
+            <form.Field key={channel.name} name={channel.name}>
+              {(field) => (
+                <label className="accent-channel" htmlFor={channel.id}>
+                  <span>{channel.label}</span>
+                  <input
+                    id={channel.id}
+                    type="number"
+                    min={channel.min}
+                    max={channel.max}
+                    step={channel.step}
+                    className={
+                      "accent-input" +
+                      (field.state.meta.errors.length ? " invalid" : "")
+                    }
+                    value={field.state.value}
+                    onChange={(event) => field.handleChange(event.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={field.state.meta.errors.length > 0}
+                    aria-describedby="accent-channel-errors"
+                    autoComplete="off"
+                  />
+                </label>
+              )}
+            </form.Field>
+          ))}
+        </div>
+        <p
+          id="accent-channel-errors"
+          className={
+            "accent-input-hint" + (activeErrorMessages.length ? " error" : "")
+          }
         >
-          <HexColorPicker
-            color={pickerHex}
-            onChange={handleHexChange}
-            className="accent-hex-picker"
-          />
+          {activeErrorMessages.join(" ")}
+        </p>
 
-          <div className="accent-channel-grid">
-            {channels.map((channel) => (
-              <form.Field key={channel.name} name={channel.name}>
-                {(field) => (
-                  <label className="accent-channel" htmlFor={channel.id}>
-                    <span>{channel.label}</span>
-                    <input
-                      id={channel.id}
-                      type="number"
-                      min={channel.min}
-                      max={channel.max}
-                      step={channel.step}
-                      className={
-                        "accent-input" +
-                        (field.state.meta.errors.length ? " invalid" : "")
-                      }
-                      value={field.state.value}
-                      onChange={(event) =>
-                        field.handleChange(event.target.value)
-                      }
-                      onBlur={field.handleBlur}
-                      aria-invalid={field.state.meta.errors.length > 0}
-                      aria-describedby="accent-channel-errors"
-                      autoComplete="off"
-                    />
-                  </label>
-                )}
-              </form.Field>
-            ))}
-          </div>
-          <p
-            id="accent-channel-errors"
-            className={
-              "accent-input-hint" + (activeErrorMessages.length ? " error" : "")
-            }
-          >
-            {activeErrorMessages.join(" ")}
-          </p>
-
-          <div className="accent-actions">
-            <button type="submit" className="accent-apply">
-              Apply
-            </button>
-            <button
-              type="button"
-              className="accent-reset"
-              onClick={resetAccent}
-            >
-              Reset to default
-            </button>
-          </div>
-        </form>
-      )}
+        <div className="accent-actions">
+          <button type="submit" className="accent-apply">
+            Apply
+          </button>
+          <button type="button" className="accent-reset" onClick={resetAccent}>
+            Reset to default
+          </button>
+        </div>
+      </form>
 
       <p className="sr-only" aria-live="polite" role="status">
         {liveMessage}

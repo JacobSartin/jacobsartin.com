@@ -94,6 +94,7 @@ nav {
 }
 
 .accent-toggle {
+  anchor-name: --accent-toggle;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -112,7 +113,7 @@ nav {
 }
 
 .accent-toggle:hover,
-.accent-toggle[aria-expanded="true"] {
+.accent-control:has(.accent-popover:popover-open) > .accent-toggle {
   background-color: var(--overlay-medium);
   border-color: var(--border-hover);
   color: var(--text-primary);
@@ -124,32 +125,41 @@ nav {
   border-radius: 100%;
 }
 
-/* A backdrop filter would make the header contain the fixed panel. */
-nav:has(.accent-popover) {
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-}
-
 .accent-control .accent-popover {
   position: fixed;
-  top: var(--accent-panel-top, var(--space-md));
-  left: var(--accent-panel-left, var(--space-md));
-  right: auto;
-  max-width: none;
-  margin: 0;
-  transform: none;
-  z-index: 120;
-  width: min(320px, var(--accent-panel-width, calc(100vw - 32px)));
-  max-height: var(--accent-panel-height, calc(100dvh - 32px));
+  inset: var(--space-md);
+  margin: auto;
+  width: min(320px, calc(100vw - var(--space-md) * 2));
+  max-height: calc(100dvh - var(--space-md) * 2);
   overflow-y: auto;
   overscroll-behavior: contain;
+  color: var(--text-primary);
   background-color: var(--surface-raised);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
   padding: var(--space-md);
+}
+
+.accent-popover:popover-open {
   display: grid;
   gap: var(--space-md);
+}
+
+@supports (position-area: bottom span-left) and (max-height: stretch) {
+  @media (min-width: 40rem) and (min-height: 40rem) {
+    .accent-control .accent-popover {
+      position-anchor: --accent-toggle;
+      position-area: bottom span-left;
+      position-try-fallbacks:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
+      inset: auto;
+      margin: var(--space-sm);
+      max-height: stretch;
+    }
+  }
 }
 
 .accent-popover .react-colorful {
@@ -336,15 +346,6 @@ nav:has(.accent-popover) {
 
   .social-links .link {
     padding: var(--space-sm);
-  }
-
-  .accent-popover {
-    left: var(--space-sm);
-    right: var(--space-sm);
-    width: auto;
-    max-width: 330px;
-    margin-inline: auto;
-    transform: none;
   }
 }
 
