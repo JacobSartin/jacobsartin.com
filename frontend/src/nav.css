@@ -351,6 +351,7 @@ nav {
   }
 
   .social-links .link {
+    justify-content: center;
     padding: var(--space-sm);
   }
 }
