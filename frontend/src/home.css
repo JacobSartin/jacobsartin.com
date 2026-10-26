@@ -33,6 +33,7 @@
 }
 
 .hero-name {
+  text-wrap: balance;
   font-size: clamp(2.8em, 7vw, 5em);
   font-weight: 700;
   letter-spacing: -0.04em;
@@ -72,6 +73,7 @@
 }
 
 .hero-description {
+  text-wrap: pretty;
   font-size: clamp(0.92em, 2vw, 1.05em);
   line-height: 1.8;
   color: var(--text-secondary);

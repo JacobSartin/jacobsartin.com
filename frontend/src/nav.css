@@ -255,18 +255,9 @@ nav {
 }
 
 .accent-apply:hover {
+  color: var(--text-on-accent-hover, var(--text-on-accent));
   background-color: var(--accent-hover);
   border-color: var(--accent-hover);
-}
-
-@supports (color: contrast-color(white)) {
-  .accent-apply {
-    color: contrast-color(var(--accent));
-  }
-
-  .accent-apply:hover {
-    color: contrast-color(var(--accent-hover));
-  }
 }
 
 .accent-reset:hover {
