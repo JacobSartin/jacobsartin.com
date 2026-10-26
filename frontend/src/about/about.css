@@ -23,7 +23,7 @@
   background-color: var(--overlay-light);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: calc(var(--space-sm) + 2px) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   color: var(--text-primary);
   font-size: var(--text-sm);
   transition:
