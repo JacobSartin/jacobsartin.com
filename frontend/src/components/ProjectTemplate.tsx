@@ -43,8 +43,8 @@ export default function ProjectTemplate({
           Projects
         </Link>
         <h1>{title}</h1>
-        {subtitle && <p className="subheader">{subtitle}</p>}
         <div className="divider" aria-hidden="true" />
+        {subtitle && <p className="subheader">{subtitle}</p>}
       </div>
 
       <div className="content-card project-template-content">
