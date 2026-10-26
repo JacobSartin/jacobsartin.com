@@ -243,7 +243,8 @@ nav {
   font-size: max(1rem, 16px);
 }
 
-.accent-input.invalid {
+.accent-input:user-invalid,
+.accent-input[aria-invalid="true"] {
   border-color: var(--status-error);
 }
 
