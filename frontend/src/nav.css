@@ -365,3 +365,13 @@ nav {
     position: static;
   }
 }
+
+@supports (color: contrast-color(white)) {
+  .accent-apply {
+    color: contrast-color(var(--accent));
+  }
+
+  .accent-apply:hover {
+    color: contrast-color(var(--accent-hover));
+  }
+}

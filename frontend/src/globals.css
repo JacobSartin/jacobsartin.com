@@ -546,3 +546,14 @@ li::marker {
     transform: translateY(0);
   }
 }
+
+/* Keep a usable fallback when the browser cannot calculate contrast. */
+@supports (color: contrast-color(white)) {
+  .cta-button:not(.secondary) {
+    color: contrast-color(var(--accent));
+  }
+
+  .cta-button:not(.secondary):hover {
+    color: contrast-color(var(--accent-hover));
+  }
+}
