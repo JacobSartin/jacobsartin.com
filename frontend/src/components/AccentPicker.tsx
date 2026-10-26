@@ -17,6 +17,7 @@ import {
 import { useForm, useSelector } from "@tanstack/react-form";
 import { HexColorPicker } from "react-colorful";
 import Icon from "./Icon";
+import { useAccentPopoverPosition } from "./useAccentPopoverPosition";
 import { slidersIcon } from "./icons";
 import {
   safeGetStorage,
@@ -239,6 +240,8 @@ export default function AccentPicker({
   const controlRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const focusHandledRef = useRef(false);
+  const panelRef = useRef<HTMLFormElement>(null);
+  useAccentPopoverPosition(isOpen && mounted, triggerRef, panelRef);
   const form = useForm({
     defaultValues: toDraftChannels(DEFAULT_ACCENT),
     validators: {
@@ -401,6 +404,7 @@ export default function AccentPicker({
 
       {isOpen && (
         <form
+          ref={panelRef}
           noValidate
           onSubmit={(event) => {
             event.preventDefault();
