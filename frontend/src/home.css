@@ -115,3 +115,11 @@
     justify-content: center;
   }
 }
+
+.hero-name {
+  text-wrap: balance;
+}
+
+.hero-description {
+  text-wrap: pretty;
+}
