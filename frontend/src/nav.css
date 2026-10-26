@@ -265,39 +265,6 @@ nav {
   gap: var(--space-sm);
 }
 
-.accent-apply,
-.accent-reset {
-  width: fit-content;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background-color: var(--overlay-light);
-  color: var(--text-secondary);
-  font-size: var(--text-xs);
-  letter-spacing: 0.02em;
-  transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast);
-}
-
-.accent-apply {
-  background-color: var(--accent);
-  border-color: var(--accent);
-  color: var(--text-on-accent);
-}
-
-.accent-apply:hover {
-  background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
-}
-
-.accent-reset:hover {
-  background-color: var(--overlay-medium);
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-}
-
 .sr-only {
   position: absolute;
   width: 1px;

@@ -248,8 +248,6 @@ button {
   .nav-links a,
   .theme-toggle,
   .accent-toggle,
-  .accent-apply,
-  .accent-reset,
   .project-back-link
 ) {
   min-block-size: var(--control-size);
@@ -429,6 +427,17 @@ li::marker {
 
 .cta-button.secondary .icon {
   color: var(--accent-bright);
+}
+
+/* All filled CTA controls share the same foreground contrast rules. */
+@supports (color: contrast-color(white)) {
+  .cta-button:not(.secondary) {
+    color: contrast-color(var(--accent));
+  }
+
+  .cta-button:not(.secondary):hover {
+    color: contrast-color(var(--accent-hover));
+  }
 }
 
 /* ===================== */
