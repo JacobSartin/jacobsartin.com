@@ -139,6 +139,7 @@ nav {
   max-height: calc(100dvh - var(--space-md) * 2);
   overflow-y: auto;
   overscroll-behavior: contain;
+  gap: var(--space-md);
   color: var(--text-primary);
   background-color: var(--surface-raised);
   border: 1px solid var(--border);
@@ -149,7 +150,6 @@ nav {
 
 .accent-popover:popover-open {
   display: grid;
-  gap: var(--space-md);
 }
 
 @media (prefers-reduced-motion: no-preference) {
