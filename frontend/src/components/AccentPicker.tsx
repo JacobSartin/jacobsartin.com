@@ -266,10 +266,12 @@ export default function AccentPicker({
       setLiveMessage("Accent color applied.");
     },
     onSubmitInvalid: ({ value }) => {
+      const errors = getChannelErrors(value);
       setLiveMessage(
-        "Invalid accent channels. " +
-          Object.values(getChannelErrors(value)).join(" "),
+        "Invalid accent channels. " + Object.values(errors).join(" "),
       );
+      const invalidChannel = channels.find((channel) => errors[channel.name]);
+      if (invalidChannel) document.getElementById(invalidChannel.id)?.focus();
     },
   });
   const draft = useSelector(form.store, (state) => state.values);
@@ -311,7 +313,7 @@ export default function AccentPicker({
   useEffect(() => {
     if (!isOpen) return;
 
-    const onPointerDown = (event: PointerEvent) => {
+    const onOutsideInteraction = (event: Event) => {
       if (
         controlRef.current &&
         !controlRef.current.contains(event.target as Node)
@@ -328,10 +330,12 @@ export default function AccentPicker({
       }
     };
 
-    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("pointerdown", onOutsideInteraction);
+    document.addEventListener("focusin", onOutsideInteraction);
     document.addEventListener("keydown", onKeyDown);
     return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("pointerdown", onOutsideInteraction);
+      document.removeEventListener("focusin", onOutsideInteraction);
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [closeWithoutApply, isOpen]);
