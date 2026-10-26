@@ -63,6 +63,7 @@ export default function Nav() {
           <a
             className="link"
             href="https://www.linkedin.com/in/jacob-sartin"
+            aria-label="LinkedIn"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -72,6 +73,7 @@ export default function Nav() {
           <a
             className="link"
             href="https://github.com/JacobSartin"
+            aria-label="GitHub"
             target="_blank"
             rel="noopener noreferrer"
           >
