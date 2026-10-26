@@ -314,6 +314,35 @@ main > .not-found {
   margin-block: auto;
 }
 
+.site-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-sm) var(--page-gutter);
+  font-size: var(--text-xs);
+}
+
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--control-size);
+  padding-inline: var(--space-sm);
+  box-sizing: border-box;
+  touch-action: manipulation;
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .site-footer {
+    justify-content: center;
+  }
+}
+
 .page-loading {
   color: var(--text-muted);
   font-size: var(--text-sm);

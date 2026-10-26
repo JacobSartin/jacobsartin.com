@@ -29,4 +29,6 @@ jobs:
 
       - name: Build
         working-directory: frontend
+        env:
+          VITE_COMMIT_SHA: ${{ github.sha }}
         run: vp run build

@@ -7,6 +7,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type { ReactNode } from "react";
 import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 import NotFound from "@/not-found";
 import { pageHead } from "@/utils/head";
 import { bootstrapScript } from "@/utils/bootstrap";
@@ -66,6 +67,7 @@ function RootLayout() {
       <main>
         <Outlet />
       </main>
+      <Footer />
       {import.meta.env.DEV && <TanStackRouterDevtools />}
     </>
   );
