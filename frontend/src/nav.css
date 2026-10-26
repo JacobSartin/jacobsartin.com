@@ -1,3 +1,9 @@
+:root {
+  /* Reserve space before hydration; the observer replaces this with the
+     actual height, including font loading and enlarged text. */
+  --sticky-nav-offset: var(--sticky-nav-height, 8rem);
+}
+
 nav {
   position: sticky;
   top: 0;
@@ -350,6 +356,10 @@ nav {
 }
 
 @media (max-height: 30rem) {
+  :root {
+    --sticky-nav-offset: 0px;
+  }
+
   nav {
     position: static;
   }

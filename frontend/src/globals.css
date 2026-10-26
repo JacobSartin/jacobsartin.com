@@ -158,6 +158,27 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-block-start: calc(
+    var(--sticky-nav-offset, 0px) + var(--space-md)
+  );
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-md);
+  left: var(--space-md);
+  z-index: 200;
+  max-inline-size: calc(100% - var(--space-md) * 2);
+  overflow-wrap: anywhere;
+  padding: var(--space-md);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  transform: translateY(calc(-100% - var(--space-lg)));
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 /* Respect the OS "reduce motion" setting: skip entrance animations and the

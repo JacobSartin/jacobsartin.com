@@ -1,4 +1,6 @@
 import { Link as RouterLink, useMatchRoute } from "@tanstack/react-router";
+import { useRef } from "react";
+import { useStickyNavOffset } from "./useStickyNavOffset";
 import ThemeToggle from "./ThemeToggle";
 import Icon from "./Icon";
 import { githubIcon, linkedinIcon } from "./icons";
@@ -18,6 +20,8 @@ const navLinks: NavLink[] = [
 
 export default function Nav() {
   const matchRoute = useMatchRoute();
+  const navRef = useRef<HTMLElement>(null);
+  useStickyNavOffset(navRef);
 
   // TanStack marks every active link aria-current="page", so section links
   // (e.g. Projects on /projects/foo) are highlighted via inactiveProps instead
@@ -26,7 +30,7 @@ export default function Nav() {
     to !== "/" && Boolean(matchRoute({ to, fuzzy: true }));
 
   return (
-    <nav>
+    <nav ref={navRef} aria-label="Main navigation">
       <div className="nav-left">
         <RouterLink
           to="/"
