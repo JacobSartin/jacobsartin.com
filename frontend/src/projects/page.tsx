@@ -3,7 +3,7 @@ import ProjectCards from "./ProjectCards";
 
 export default function ProjectsPage() {
   return (
-    <section className="container container-lg">
+    <section className="container container-md">
       <div className="header">
         <h1>Projects</h1>
         <div className="divider" aria-hidden="true" />
