@@ -248,8 +248,6 @@ button {
   .nav-links a,
   .theme-toggle,
   .accent-toggle,
-  .accent-apply,
-  .accent-reset,
   .project-back-link
 ) {
   min-block-size: var(--control-size);
@@ -409,7 +407,6 @@ li::marker {
 }
 
 .cta-button:hover {
-  color: var(--text-on-accent-hover, var(--text-on-accent));
   background-color: var(--accent-hover);
   border-color: var(--accent-hover);
   transform: translateY(-2px);
@@ -432,11 +429,14 @@ li::marker {
   color: var(--accent-bright);
 }
 
-/* Share contrast tokens across filled buttons, including their hover colors. */
+/* All filled CTA controls share the same foreground contrast rules. */
 @supports (color: contrast-color(white)) {
-  :root {
-    --text-on-accent: contrast-color(var(--accent));
-    --text-on-accent-hover: contrast-color(var(--accent-hover));
+  .cta-button:not(.secondary) {
+    color: contrast-color(var(--accent));
+  }
+
+  .cta-button:not(.secondary):hover {
+    color: contrast-color(var(--accent-hover));
   }
 }
 

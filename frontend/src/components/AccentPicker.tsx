@@ -457,10 +457,14 @@ export default function AccentPicker({
         </p>
 
         <div className="accent-actions">
-          <button type="submit" className="accent-apply">
+          <button type="submit" className="cta-button">
             Apply
           </button>
-          <button type="button" className="accent-reset" onClick={resetAccent}>
+          <button
+            type="button"
+            className="cta-button secondary"
+            onClick={resetAccent}
+          >
             Reset to default
           </button>
         </div>

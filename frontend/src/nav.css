@@ -152,6 +152,38 @@ nav {
   gap: var(--space-md);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .accent-control .accent-popover {
+    opacity: 0;
+    translate: 0 -6px;
+    transition:
+      opacity 160ms ease,
+      translate 160ms ease;
+  }
+
+  .accent-control .accent-popover:popover-open {
+    opacity: 1;
+    translate: 0;
+  }
+
+  @starting-style {
+    .accent-control .accent-popover:popover-open {
+      opacity: 0;
+      translate: 0 -6px;
+    }
+  }
+
+  @supports (transition-behavior: allow-discrete) and (overlay: auto) {
+    .accent-control .accent-popover {
+      transition:
+        opacity 160ms ease,
+        translate 160ms ease,
+        display 160ms allow-discrete,
+        overlay 160ms allow-discrete;
+    }
+  }
+}
+
 @supports (position-area: bottom span-left) and (max-height: stretch) {
   @media (min-width: 40rem) and (min-height: 40rem) {
     .accent-control .accent-popover {
@@ -230,40 +262,6 @@ nav {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-sm);
-}
-
-.accent-apply,
-.accent-reset {
-  width: fit-content;
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border);
-  background-color: var(--overlay-light);
-  color: var(--text-secondary);
-  font-size: var(--text-xs);
-  letter-spacing: 0.02em;
-  transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
-    color var(--transition-fast);
-}
-
-.accent-apply {
-  background-color: var(--accent);
-  border-color: var(--accent);
-  color: var(--text-on-accent);
-}
-
-.accent-apply:hover {
-  color: var(--text-on-accent-hover, var(--text-on-accent));
-  background-color: var(--accent-hover);
-  border-color: var(--accent-hover);
-}
-
-.accent-reset:hover {
-  background-color: var(--overlay-medium);
-  border-color: var(--border-hover);
-  color: var(--text-primary);
 }
 
 .sr-only {
