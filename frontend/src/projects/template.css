@@ -39,6 +39,12 @@
   margin-top: var(--space-lg);
 }
 
+.project-template-actions .cta-button {
+  max-width: 100%;
+  flex-wrap: wrap;
+  overflow-wrap: anywhere;
+}
+
 .project-template-actions .source-link::after {
   content: "source";
   border-left: 1px solid var(--border-subtle);
