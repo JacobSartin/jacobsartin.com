@@ -1,3 +1,10 @@
+/* Reject malformed accent values while preserving inherited live previews. */
+@property --accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: oklch(0.475 0.25 300);
+}
+
 /* ===================== */
 /* Theme / CSS Variables */
 /* ===================== */
@@ -41,103 +48,93 @@
   --accent-bright: oklch(from var(--accent) calc(l + 0.1) c h);
 }
 
-/* ===================== */
-/* Dark Theme (default)  */
-/* ===================== */
+/* Paired colors share one token; the explicit preference selects the scheme. */
 :root,
 [data-theme="dark"] {
   color-scheme: dark;
-
-  --neutral: oklch(0.16 0.01 285);
-  --text-base: oklch(0.95 0.01 285);
-
-  /* Backgrounds (derived from --neutral) */
-  --bg-primary: var(--neutral);
-  --bg-secondary: oklch(from var(--neutral) calc(l + 0.02) c h);
-  --surface: oklch(from var(--neutral) calc(l + 0.03) c h);
-  --surface-raised: oklch(from var(--surface) calc(l + 0.03) c h);
-  --bg-translucent: oklch(from var(--neutral) l c h / 0.75);
-
-  /* Accent variants (derived from --accent / --accent-bright) */
-  --accent-hover: oklch(from var(--accent-bright) calc(l - 0.03) c h);
-  --accent-muted: oklch(from var(--accent) l c h / 0.6);
-  --accent-glow: oklch(from var(--accent) l c h / 0.2);
-  --accent-subtle: oklch(from var(--accent) l c h / 0.12);
-  --accent-wash: oklch(from var(--accent) l c h / 0.06);
-
-  /* Text (derived from --text-base) */
-  --text-primary: var(--text-base);
-  --text-secondary: oklch(from var(--text-base) l c h / 0.55);
-  /* Keeps muted text at >= 4.5:1 contrast on every background (WCAG AA) */
-  --text-muted: oklch(from var(--text-base) l c h / 0.5);
-  --text-on-accent: oklch(0.95 0 0);
-
-  /* Borders */
-  --border: oklch(1 0 0 / 0.08);
-  --border-subtle: oklch(from var(--border) l c h / 0.05);
-  --border-hover: oklch(from var(--border) l c h / 0.35);
-  --border-accent: oklch(from var(--accent) l c h / 0.5);
-
-  /* Overlays */
-  --overlay-light: oklch(1 0 0 / 0.05);
-  --overlay-medium: oklch(from var(--overlay-light) l c h / 0.08);
-
-  /* Status colors */
-  --status-error: oklch(0.75 0.18 26);
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.3), 0 1px 2px oklch(0 0 0 / 0.2);
-  --shadow-md: 0 4px 16px oklch(0 0 0 / 0.4), 0 2px 6px oklch(0 0 0 / 0.3);
-  --shadow-accent-lg: 0px 6px 24px var(--accent-muted);
 }
 
-/* ===================== */
-/* Light Theme           */
-/* ===================== */
 [data-theme="light"] {
   color-scheme: light;
+}
 
-  /* Base colors */
-  --neutral: oklch(0.95 0.005 285);
-  --text-base: oklch(0.2 0.01 285);
-
-  /* Backgrounds */
+:root {
+  --neutral: light-dark(oklch(0.95 0.005 285), oklch(0.16 0.01 285));
+  --text-base: light-dark(oklch(0.2 0.01 285), oklch(0.95 0.01 285));
   --bg-primary: var(--neutral);
-  --bg-secondary: oklch(from var(--neutral) calc(l - 0.02) c h);
-  --surface: oklch(from var(--neutral) calc(l + 0.025) c h);
-  --surface-raised: var(--neutral);
-  --bg-translucent: oklch(from var(--neutral) l c h / 0.85);
-
-  /* Accent variants */
-  --accent-hover: oklch(from var(--accent) calc(l - 0.03) c h);
-  --accent-muted: oklch(from var(--accent) l c h / 0.15);
-  --accent-glow: oklch(from var(--accent) l c h / 0.08);
-  --accent-subtle: oklch(from var(--accent) l c h / 0.06);
-  --accent-wash: oklch(from var(--accent) l c h / 0.03);
-
-  /* Text */
+  --bg-secondary: light-dark(
+    oklch(from var(--neutral) calc(l - 0.02) c h),
+    oklch(from var(--neutral) calc(l + 0.02) c h)
+  );
+  --surface: light-dark(
+    oklch(from var(--neutral) calc(l + 0.025) c h),
+    oklch(from var(--neutral) calc(l + 0.03) c h)
+  );
+  --surface-raised: light-dark(
+    var(--neutral),
+    oklch(from var(--surface) calc(l + 0.03) c h)
+  );
+  --bg-translucent: light-dark(
+    oklch(from var(--neutral) l c h / 0.85),
+    oklch(from var(--neutral) l c h / 0.75)
+  );
+  --accent-hover: light-dark(
+    oklch(from var(--accent) calc(l - 0.03) c h),
+    oklch(from var(--accent-bright) calc(l - 0.03) c h)
+  );
+  --accent-muted: light-dark(
+    oklch(from var(--accent) l c h / 0.15),
+    oklch(from var(--accent) l c h / 0.6)
+  );
+  --accent-glow: light-dark(
+    oklch(from var(--accent) l c h / 0.08),
+    oklch(from var(--accent) l c h / 0.2)
+  );
+  --accent-subtle: light-dark(
+    oklch(from var(--accent) l c h / 0.06),
+    oklch(from var(--accent) l c h / 0.12)
+  );
+  --accent-wash: light-dark(
+    oklch(from var(--accent) l c h / 0.03),
+    oklch(from var(--accent) l c h / 0.06)
+  );
   --text-primary: var(--text-base);
-  --text-secondary: oklch(from var(--text-base) l c h / 0.65);
-  /* Keeps muted text at >= 4.5:1 contrast on every background (WCAG AA) */
-  --text-muted: oklch(from var(--text-base) l c h / 0.62);
+  --text-secondary: light-dark(
+    oklch(from var(--text-base) l c h / 0.65),
+    oklch(from var(--text-base) l c h / 0.55)
+  );
+  --text-muted: light-dark(
+    oklch(from var(--text-base) l c h / 0.62),
+    oklch(from var(--text-base) l c h / 0.5)
+  );
   --text-on-accent: oklch(0.95 0 0);
-
-  /* Borders */
-  --border: oklch(0 0 0 / 0.1);
-  --border-subtle: oklch(from var(--border) l c h / 0.06);
-  --border-hover: oklch(from var(--border) l c h / 0.2);
-  --border-accent: oklch(from var(--accent) l c h / 0.3);
-
-  /* Overlays */
-  --overlay-light: oklch(0 0 0 / 0.03);
-  --overlay-medium: oklch(from var(--overlay-light) l c h / 0.06);
-
-  /* Status colors */
-  --status-error: oklch(0.5 0.18 26);
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.08), 0 1px 2px oklch(0 0 0 / 0.05);
-  --shadow-md: 0 4px 16px oklch(0 0 0 / 0.1), 0 2px 6px oklch(0 0 0 / 0.06);
+  --border: light-dark(oklch(0 0 0 / 0.1), oklch(1 0 0 / 0.08));
+  --border-subtle: light-dark(
+    oklch(from var(--border) l c h / 0.06),
+    oklch(from var(--border) l c h / 0.05)
+  );
+  --border-hover: light-dark(
+    oklch(from var(--border) l c h / 0.2),
+    oklch(from var(--border) l c h / 0.35)
+  );
+  --border-accent: light-dark(
+    oklch(from var(--accent) l c h / 0.3),
+    oklch(from var(--accent) l c h / 0.5)
+  );
+  --overlay-light: light-dark(oklch(0 0 0 / 0.03), oklch(1 0 0 / 0.05));
+  --overlay-medium: light-dark(
+    oklch(from var(--overlay-light) l c h / 0.06),
+    oklch(from var(--overlay-light) l c h / 0.08)
+  );
+  --status-error: light-dark(oklch(0.5 0.18 26), oklch(0.75 0.18 26));
+  --shadow-sm-color: light-dark(oklch(0 0 0 / 0.05), oklch(0 0 0 / 0.3));
+  --shadow-sm-detail: light-dark(oklch(0 0 0 / 0.05), oklch(0 0 0 / 0.2));
+  --shadow-sm:
+    0 1px 3px var(--shadow-sm-color), 0 1px 2px var(--shadow-sm-detail);
+  --shadow-md-color: light-dark(oklch(0 0 0 / 0.1), oklch(0 0 0 / 0.4));
+  --shadow-md-detail: light-dark(oklch(0 0 0 / 0.06), oklch(0 0 0 / 0.3));
+  --shadow-md:
+    0 4px 16px var(--shadow-md-color), 0 2px 6px var(--shadow-md-detail);
   --shadow-accent-lg: 0px 6px 24px var(--accent-muted);
 }
 
@@ -161,6 +158,19 @@ html {
   scroll-padding-block-start: calc(
     var(--sticky-nav-offset, 0px) + var(--space-md)
   );
+}
+
+/* Native snapshots animate navigation; unsupported browsers navigate normally. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
 
 .skip-link {
@@ -436,6 +446,7 @@ li::marker {
 }
 
 .header h1 {
+  text-wrap: balance;
   font-size: clamp(2em, 5vw, 3em);
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -444,6 +455,7 @@ li::marker {
 }
 
 .subheader {
+  text-wrap: pretty;
   font-size: 1.05em;
   line-height: 1.6;
   max-width: 640px;
@@ -475,6 +487,7 @@ li::marker {
 }
 
 .content-card h2 {
+  text-wrap: balance;
   font-size: 1.1em;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -484,6 +497,7 @@ li::marker {
 }
 
 .content-card p {
+  text-wrap: pretty;
   font-size: 1em;
   line-height: 1.85;
 }

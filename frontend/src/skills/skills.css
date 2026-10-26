@@ -28,6 +28,7 @@
 }
 
 .skill-category h2 {
+  text-wrap: balance;
   font-size: 1em;
   font-weight: 600;
   letter-spacing: 0.07em;
