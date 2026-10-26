@@ -114,9 +114,9 @@ both lockfile documents from a clean fixture with no installed dependencies,
 including React 19.3.1 and pnpm 12.15.0. Actual submission and alert ingestion run
 after merging to `main`. Local install and frozen-lockfile verification used the
 compatible JavaScript pnpm 11.28.8 CLI because this Windows session cannot write
-the native pnpm 12 lock directory. The pnpm 12.15.0 CLI successfully reads the
-installed dependency graph; a native frozen install still needs confirmation in
-CI. The committed package-manager pin remains 12.15.0.
+the native pnpm 12 lock directory. Linux PR CI also passed the native pnpm
+12.15.0 frozen installation, formatting/lint/type checks, audit, and production
+build. The committed package-manager pin remains 12.15.0.
 
 CI runs for pull requests, every Monday at 13:00 UTC, and on manual dispatch. A
 high or critical advisory fails the audit. Scheduled runs catch new advisories in
