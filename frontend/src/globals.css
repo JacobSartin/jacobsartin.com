@@ -406,6 +406,10 @@ li::marker {
     box-shadow var(--transition-base);
 }
 
+.cta-button .icon {
+  color: inherit;
+}
+
 .cta-button:hover {
   background-color: var(--accent-hover);
   border-color: var(--accent-hover);
