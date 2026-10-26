@@ -259,6 +259,16 @@ nav {
   border-color: var(--accent-hover);
 }
 
+@supports (color: contrast-color(white)) {
+  .accent-apply {
+    color: contrast-color(var(--accent));
+  }
+
+  .accent-apply:hover {
+    color: contrast-color(var(--accent-hover));
+  }
+}
+
 .accent-reset:hover {
   background-color: var(--overlay-medium);
   border-color: var(--border-hover);
@@ -363,15 +373,5 @@ nav {
 
   nav {
     position: static;
-  }
-}
-
-@supports (color: contrast-color(white)) {
-  .accent-apply {
-    color: contrast-color(var(--accent));
-  }
-
-  .accent-apply:hover {
-    color: contrast-color(var(--accent-hover));
   }
 }
