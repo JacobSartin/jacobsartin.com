@@ -37,6 +37,8 @@ jobs:
 
       - name: Build
         working-directory: frontend
+        env:
+          VITE_COMMIT_SHA: ${{ github.sha }}
         run: vp run build
 
       # The site branch holds only the latest build, as a single commit; the web server

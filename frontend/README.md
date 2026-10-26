@@ -58,6 +58,8 @@ A deploy replaces the previous build's hashed chunks. The document bootstrap in 
 
 All three workflows use `voidzero-dev/setup-vp` to install Node.js, the pinned Vite+ toolchain, and dependencies with a frozen lockfile. Builds run through `vp run build` so the post-build step is included.
 
+Each workflow passes the checked-out source commit as `VITE_COMMIT_SHA`. The shared footer displays its first seven characters and links to the full commit on GitHub. The value is embedded during the build, including prerendered pages and the 404 fallback, so it identifies the source used for that deployment rather than the generated `site` branch commit. Local development and builds omit the footer unless `VITE_COMMIT_SHA` is set.
+
 `.github/workflows/ci.yaml` runs `pnpm check` and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 Start prerenders every page into `<route>/index.html`, including page content, unique titles, descriptions and sharing metadata. A separate SPA shell becomes `404.html` for static-host unknown paths. The postbuild step verifies each page and fallback, then creates `.nojekyll`.
