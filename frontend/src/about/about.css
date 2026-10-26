@@ -43,3 +43,34 @@
   text-align: center;
   flex-shrink: 0;
 }
+
+@media (min-width: 64rem) {
+  .about-page {
+    max-width: var(--content-md);
+  }
+
+  .about-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17.5rem;
+    align-items: start;
+  }
+
+  .about-content .content-card {
+    padding: var(--space-lg);
+  }
+
+  .about-content p {
+    line-height: 1.65;
+  }
+
+  .interests-grid {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .interests-grid li {
+    padding: var(--space-sm) 12px;
+    line-height: 1.4;
+    gap: 12px;
+  }
+}

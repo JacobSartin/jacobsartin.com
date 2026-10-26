@@ -536,6 +536,24 @@ li::marker {
   max-width: var(--content-lg);
 }
 
+@media (min-width: 64rem) {
+  .container-compact {
+    --page-space: var(--space-lg);
+  }
+
+  .container-compact .header {
+    margin-bottom: var(--space-lg);
+  }
+
+  .container-compact .header h1 {
+    font-size: 2.5em;
+  }
+
+  .container-compact .divider {
+    margin-top: 12px;
+  }
+}
+
 /* Subtle grid backdrop shared by the hero and 404 pages */
 .grid-backdrop {
   position: relative;

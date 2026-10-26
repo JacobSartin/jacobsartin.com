@@ -64,7 +64,7 @@ const skillCategories: SkillCategory[] = [
 
 export default function SkillsPage() {
   return (
-    <section className="container container-md">
+    <section className="container container-md container-compact">
       <div className="header">
         <h1>Technical Skills</h1>
         <div className="divider" aria-hidden="true" />
