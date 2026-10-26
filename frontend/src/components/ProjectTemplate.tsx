@@ -32,7 +32,7 @@ export default function ProjectTemplate({
   sourceIcon = githubIcon,
 }: Props) {
   return (
-    <section className="container">
+    <section className="container container-sm">
       <div className="header">
         <Link
           to="/projects"

@@ -15,6 +15,8 @@
   --radius-md: 10px;
   --radius-lg: 16px;
 
+  --control-size: 44px;
+
   /* Typography */
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
   --text-xs: 0.82em;
@@ -30,6 +32,9 @@
   --content-sm: 760px;
   --content-md: 1100px;
   --content-lg: 1600px;
+  --page-gutter: clamp(16px, 3vw, 32px);
+  --page-space: clamp(24px, 5vw, 64px);
+  --card-padding: clamp(16px, 3vw, 40px);
 
   /* Base colors — everything derives from these */
   --accent: oklch(0.475 0.25 300);
@@ -154,7 +159,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-block-start: calc(
-    var(--sticky-nav-height, 0px) + var(--space-md)
+    var(--sticky-nav-offset, 0px) + var(--space-md)
   );
 }
 
@@ -163,6 +168,8 @@ html {
   top: var(--space-md);
   left: var(--space-md);
   z-index: 200;
+  max-inline-size: calc(100% - var(--space-md) * 2);
+  overflow-wrap: anywhere;
   padding: var(--space-md);
   border-radius: var(--radius-sm);
   background: var(--surface-raised);
@@ -193,6 +200,8 @@ html {
 }
 
 body {
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-primary);
   background-image:
     radial-gradient(
@@ -218,7 +227,33 @@ body {
 
 button {
   all: unset;
+  box-sizing: border-box;
   cursor: pointer;
+}
+
+:is(
+  .link,
+  .cta-button,
+  .nav-brand,
+  .nav-links a,
+  .theme-toggle,
+  .accent-toggle,
+  .accent-apply,
+  .accent-reset,
+  .project-back-link
+) {
+  min-block-size: var(--control-size);
+  min-inline-size: var(--control-size);
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.nav-links a,
+.accent-apply,
+.accent-reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h1,
@@ -289,9 +324,15 @@ p {
 main {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: var(--space-md);
+  justify-content: flex-start;
+  padding-inline: var(--page-gutter);
+}
+
+main > .hero,
+main > .not-found {
+  margin-block: auto;
 }
 
 .page-loading {
@@ -356,7 +397,9 @@ li::marker {
 /* ===================== */
 .container {
   width: 100%;
-  padding: var(--space-xl) var(--space-md);
+  min-width: 0;
+  margin-inline: auto;
+  padding-block: var(--page-space);
 }
 
 .header {
@@ -391,7 +434,9 @@ li::marker {
   background-color: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-lg) var(--space-xl);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  padding: clamp(16px, 3vw, 24px) var(--card-padding);
   color: var(--text-secondary);
   transition: border-color var(--transition-base);
 }

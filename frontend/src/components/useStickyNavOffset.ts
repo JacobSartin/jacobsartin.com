@@ -1,28 +1,25 @@
 import { useLayoutEffect, type RefObject } from "react";
 
-/** Match keyboard scrolling to the header's actual height after text reflow. */
+/** Publish the nav's border-box height; CSS decides when an offset is needed. */
 export function useStickyNavOffset(navRef: RefObject<HTMLElement | null>) {
   useLayoutEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
 
-    const update = () => {
-      const height =
-        getComputedStyle(nav).position === "sticky"
-          ? nav.getBoundingClientRect().height
-          : 0;
+    const update = (height: number) => {
       document.documentElement.style.setProperty(
         "--sticky-nav-height",
         height + "px",
       );
     };
-    const observer = new ResizeObserver(update);
-    observer.observe(nav);
-    window.addEventListener("resize", update);
-    update();
+    const observer = new ResizeObserver(([entry]) => {
+      const size = entry.borderBoxSize[0];
+      if (size) update(size.blockSize);
+    });
+    observer.observe(nav, { box: "border-box" });
+    update(nav.getBoundingClientRect().height);
     return () => {
       observer.disconnect();
-      window.removeEventListener("resize", update);
       document.documentElement.style.removeProperty("--sticky-nav-height");
     };
   }, [navRef]);
