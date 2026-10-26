@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  container-type: inline-size;
+  min-height: 180px;
   min-width: 0;
   width: 100%;
   text-decoration: none;
@@ -72,7 +72,6 @@
   flex-direction: column;
   flex-grow: 1;
   margin: 1px;
-  min-height: 248px;
   min-width: 0;
   padding: var(--space-sm);
   position: relative;
@@ -85,17 +84,19 @@
 }
 
 .card-image {
+  container-type: inline-size;
   align-items: center;
   display: flex;
   flex: 1;
-  min-height: 140px;
+  min-height: 72px;
   justify-content: center;
   overflow: hidden;
   border-radius: 8px 8px 0 0;
 }
 
 .card-image > .icon {
-  font-size: 5em;
+  font-size: 3.5em;
+  margin-block: 8px;
   opacity: 0.18;
   transition:
     opacity var(--transition-base),
@@ -113,7 +114,7 @@
   overflow-wrap: anywhere;
   grid-template-rows: auto auto;
   align-items: center;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-sm) clamp(8px, 5%, 16px);
   gap: 0 var(--space-md);
 }
 
@@ -126,6 +127,7 @@
 }
 
 .card-info > h3 {
+  container-type: inline-size;
   grid-column: 2;
   grid-row: 1;
   font-size: 1em;
@@ -135,6 +137,7 @@
 }
 
 .card-info > h4 {
+  container-type: inline-size;
   grid-column: 2;
   grid-row: 2;
   color: var(--text-muted);
@@ -185,24 +188,20 @@
   }
 }
 
-/* A narrow card gets compact contents even in a wide viewport. */
-@container (width < 20rem) {
-  .card-content {
-    min-height: 178px;
-  }
-  .card-image {
-    min-height: 72px;
-  }
+/* Keep size containment within individual tracks so row subgrids can align. */
+@container (width >= 20rem) {
   .card-image > .icon {
-    font-size: 3.5em;
+    font-size: 5em;
+    margin-block: 30px;
   }
-  .card-info {
-    padding: var(--space-sm);
-  }
-  .card-info > h3 {
+}
+
+@container (width < 18rem) {
+  .card-info > h3 > span {
     font-size: 0.88em;
   }
-  .card-info > h4 {
-    font-size: 0.74em;
+
+  .card-info > h4 > span {
+    font-size: calc(0.74 / 0.78 * 1em);
   }
 }
