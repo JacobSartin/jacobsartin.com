@@ -161,6 +161,11 @@
 }
 
 html {
+  /* Keep the viewport themed, including areas outside the body during bounce. */
+  background-color: var(--bg-primary);
+  /* Stop vertical rubber-banding from pulling the footer off the page edge.
+     This also disables native pull-to-refresh in supporting browsers. */
+  overscroll-behavior-y: none;
   scroll-behavior: smooth;
   scroll-padding-block-start: calc(
     var(--sticky-nav-offset, 0px) + var(--space-md)
