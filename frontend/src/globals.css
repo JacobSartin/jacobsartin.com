@@ -78,6 +78,8 @@
     oklch(from var(--neutral) l c h / 0.85),
     oklch(from var(--neutral) l c h / 0.75)
   );
+  /* Opaque endpoints avoid compositing the glow through transparency. */
+  --bg-gradient-start: color-mix(in srgb, var(--accent) 12%, var(--bg-primary));
   --accent-hover: light-dark(
     oklch(from var(--accent) calc(l - 0.03) c h),
     oklch(from var(--accent-bright) calc(l - 0.03) c h)
@@ -112,6 +114,11 @@
   --border-subtle: light-dark(
     oklch(from var(--border) l c h / 0.06),
     oklch(from var(--border) l c h / 0.05)
+  );
+  /* Opaque grid strokes keep the page glow behind the pattern. */
+  --grid-line: light-dark(
+    color-mix(in srgb, black 6%, var(--bg-primary)),
+    color-mix(in srgb, white 5%, var(--bg-primary))
   );
   --border-hover: light-dark(
     oklch(from var(--border) l c h / 0.2),
@@ -213,13 +220,11 @@ body {
   display: flex;
   flex-direction: column;
   background-color: var(--bg-primary);
-  background-image:
-    radial-gradient(
-      ellipse 80% 50% at 50% -20%,
-      var(--accent-subtle),
-      transparent
-    ),
-    radial-gradient(ellipse 60% 40% at 80% 80%, var(--accent-wash), transparent);
+  background-image: radial-gradient(
+    ellipse 60% 40% at 80% 80% in srgb,
+    var(--bg-gradient-start),
+    var(--bg-primary)
+  );
   min-height: 100dvh;
   margin: 0;
   padding: 0;
@@ -552,8 +557,8 @@ li::marker {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(var(--border-subtle) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: var(--space-xl) var(--space-xl);
   mask-image: radial-gradient(
     ellipse 70% 60% at 50% 50%,
