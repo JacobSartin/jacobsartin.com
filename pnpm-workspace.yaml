@@ -17,3 +17,6 @@ permissions:
     skills: true
   "@tanstack/react-start":
     skills: true
+skills:
+  dirs:
+    - .agents/skills
