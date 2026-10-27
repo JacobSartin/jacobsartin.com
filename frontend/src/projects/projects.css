@@ -146,10 +146,44 @@
   margin-top: 2px;
 }
 
-@media (hover: none),
-  (pointer: coarse),
-  (pointer: none),
-  (prefers-reduced-motion: reduce) {
+/* Keep a stationary glow on the active card without tracking the cursor. */
+@media (prefers-reduced-motion: reduce) {
+  .card::before {
+    background: radial-gradient(
+      700px circle at center,
+      var(--accent-subtle),
+      transparent 40%
+    );
+  }
+
+  .card::after {
+    background: radial-gradient(
+      500px circle at center,
+      var(--border-accent),
+      transparent 40%
+    );
+  }
+
+  .card::before,
+  .card::after {
+    transition: none;
+  }
+
+  #cards:hover > .card::after {
+    opacity: 0;
+  }
+
+  #cards > .card:is(:hover, :focus-visible)::before,
+  #cards > .card:is(:hover, :focus-visible)::after {
+    opacity: 0.5;
+  }
+
+  .card:hover .card-image > .icon {
+    transform: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse), (pointer: none) {
   .card::before,
   .card::after {
     display: none;
