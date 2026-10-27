@@ -12,9 +12,7 @@ nav {
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
   border-bottom: 1px solid var(--border-subtle);
-  padding: calc(var(--space-md) + env(safe-area-inset-top))
-    max(var(--page-gutter), env(safe-area-inset-right)) var(--space-md)
-    max(var(--page-gutter), env(safe-area-inset-left));
+  padding: var(--space-md) var(--page-gutter);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   grid-template-areas: "brand links controls";
@@ -317,8 +315,7 @@ nav {
     grid-template-areas:
       "brand controls"
       "links links";
-    padding-block: calc(var(--space-sm) + env(safe-area-inset-top))
-      var(--space-sm);
+    padding: var(--space-sm) var(--page-gutter);
     gap: var(--space-sm);
   }
 

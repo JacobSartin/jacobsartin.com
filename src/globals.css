@@ -80,11 +80,6 @@
   );
   /* Opaque endpoints avoid compositing the glow through transparency. */
   --bg-gradient-start: color-mix(in srgb, var(--accent) 12%, var(--bg-primary));
-  --page-background: radial-gradient(
-    ellipse 60% 40% at 80% 80% in srgb,
-    var(--bg-gradient-start),
-    var(--bg-primary)
-  );
   --accent-hover: light-dark(
     oklch(from var(--accent) calc(l - 0.03) c h),
     oklch(from var(--accent-bright) calc(l - 0.03) c h)
@@ -168,16 +163,14 @@
 html {
   /* The canvas also paints beyond the document during native overscroll. */
   background-color: var(--bg-primary);
-  background-image: var(--page-background);
   scroll-behavior: smooth;
   scroll-padding-block-start: calc(
     var(--sticky-nav-offset, 0px) + var(--space-md)
   );
 }
 
-/* A fixed layer keeps the glow continuous beneath Safari's floating controls.
-   The large viewport covers the screen even while those controls expand.
-   Use positioning rather than background-attachment, which iOS ignores. */
+/* Keep the backdrop stationary during native overscroll. The large viewport
+   keeps its size stable as mobile browser controls expand and collapse. */
 html::before {
   content: "";
   position: fixed;
@@ -186,7 +179,11 @@ html::before {
   z-index: -1;
   pointer-events: none;
   background-color: var(--bg-primary);
-  background-image: var(--page-background);
+  background-image: radial-gradient(
+    ellipse 60% 40% at 80% 80% in srgb,
+    var(--bg-gradient-start),
+    var(--bg-primary)
+  );
 }
 
 /* Native snapshots animate navigation; unsupported browsers navigate normally. */
@@ -356,8 +353,7 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-inline: max(var(--page-gutter), env(safe-area-inset-left))
-    max(var(--page-gutter), env(safe-area-inset-right));
+  padding-inline: var(--page-gutter);
 }
 
 main > .hero,
@@ -372,9 +368,7 @@ main > .not-found {
 .site-footer {
   display: flex;
   justify-content: flex-end;
-  padding: var(--space-sm) max(var(--page-gutter), env(safe-area-inset-right))
-    calc(var(--space-sm) + env(safe-area-inset-bottom))
-    max(var(--page-gutter), env(safe-area-inset-left));
+  padding: var(--space-sm) var(--page-gutter);
   font-size: var(--text-xs);
 }
 
