@@ -1,2 +1,2 @@
-# Keep the frontend compatible with the formatter on Windows and in CI.
-frontend/** text=auto eol=lf
+# Keep project files compatible with the formatter on Windows and in CI.
+* text=auto eol=lf

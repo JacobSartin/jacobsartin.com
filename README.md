@@ -13,7 +13,7 @@ Compare bundle sizes and exercise the picker, theme controls, navigation and
 hydration when changing compiler or runtime versions. This integration enables
 automatic memoization; it does not establish a measured speed improvement.
 
-Use Node.js 22.18+, 24.11+, or 26+ (CI uses Node.js 24). The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. From `frontend/`, install dependencies and start the dev server:
+Use Node.js 22.18+, 24.11+, or 26+ (CI uses Node.js 24). The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. From the repository root, install dependencies and start the dev server:
 
 ```bash
 pnpm install
@@ -38,7 +38,7 @@ With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp run check`, a
 
 ## Dependency Updates
 
-The [Renovate configuration](../.github/renovate.json5) manages npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown and manual merging. Related React, TanStack Router/Start, and Vite+ packages update together. Node types stay on the Node 24 line used in CI.
+The [Renovate configuration](.github/renovate.json5) manages npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown and manual merging. Related React, TanStack Router/Start, and Vite+ packages update together. Node types stay on the Node 24 line used in CI.
 
 CI audits dependencies on pull requests and every Monday at 13:00 UTC, as well as checking and building the site. Run `pnpm audit --audit-level=high` locally for the same vulnerability check. The weekly run also checks for advisories affecting an unchanged lockfile.
 

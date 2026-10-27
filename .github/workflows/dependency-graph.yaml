@@ -27,7 +27,7 @@ jobs:
       - name: Submit resolved dependencies
         uses: advanced-security/component-detection-dependency-submission-action@a02aeda7a175ad4dd38a13c4d3ff2df9da8f2cf0 # v0.2.0
         with:
-          filePath: frontend
+          filePath: .
           detectorsCategories: Npm
           fail-on-empty: true
           correlator: pnpm-frontend

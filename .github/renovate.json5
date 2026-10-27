@@ -1,110 +1,67 @@
 {
-  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-  extends: [
-    'config:recommended',
-    'helpers:pinGitHubActionDigests',
-  ],
-  enabledManagers: [
-    'npm',
-    'github-actions',
-  ],
-  timezone: 'America/Chicago',
-  schedule: [
-    'before 7am on monday',
-  ],
-  minimumReleaseAge: '3 days',
-  internalChecksFilter: 'strict',
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["config:recommended", "helpers:pinGitHubActionDigests"],
+  enabledManagers: ["npm", "github-actions"],
+  timezone: "America/Chicago",
+  schedule: ["before 7am on monday"],
+  minimumReleaseAge: "3 days",
+  internalChecksFilter: "strict",
   prConcurrentLimit: 5,
   automerge: false,
   lockFileMaintenance: {
     enabled: true,
-    schedule: [
-      'before 7am on monday',
-    ],
+    schedule: ["before 7am on monday"],
   },
   packageRules: [
     {
-      matchManagers: [
-        'npm',
-      ],
-      rangeStrategy: 'bump',
+      matchManagers: ["npm"],
+      rangeStrategy: "bump",
     },
     {
-      matchManagers: [
-        'npm',
-      ],
-      matchUpdateTypes: [
-        'minor',
-        'patch',
-      ],
-      groupName: 'npm non-major dependencies',
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch"],
+      groupName: "npm non-major dependencies",
     },
     {
-      matchManagers: [
-        'github-actions',
-      ],
-      matchUpdateTypes: [
-        'minor',
-        'patch',
-        'digest',
-        'pinDigest',
-      ],
-      groupName: 'GitHub Actions',
+      matchManagers: ["github-actions"],
+      matchUpdateTypes: ["minor", "patch", "digest", "pinDigest"],
+      groupName: "GitHub Actions",
     },
     {
-      matchManagers: [
-        'npm',
-      ],
+      matchManagers: ["npm"],
+      matchPackageNames: ["vite-plus", "@voidzero-dev/vite-plus-core"],
+      groupName: "Vite+ toolchain",
+    },
+    {
+      matchManagers: ["npm"],
       matchPackageNames: [
-        'vite-plus',
-        '@voidzero-dev/vite-plus-core',
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom",
       ],
-      groupName: 'Vite+ toolchain',
+      groupName: "React",
     },
     {
-      matchManagers: [
-        'npm',
-      ],
+      matchManagers: ["npm"],
       matchPackageNames: [
-        'react',
-        'react-dom',
-        '@types/react',
-        '@types/react-dom',
+        "@tanstack/react-router",
+        "@tanstack/react-router-devtools",
+        "@tanstack/react-start",
       ],
-      groupName: 'React',
+      groupName: "TanStack Router and Start",
     },
     {
-      matchManagers: [
-        'npm',
-      ],
-      matchPackageNames: [
-        '@tanstack/react-router',
-        '@tanstack/react-router-devtools',
-        '@tanstack/react-start',
-      ],
-      groupName: 'TanStack Router and Start',
-    },
-    {
-      description: 'Review Redact runtime changes separately, including 0.x minors.',
-      matchManagers: [
-        'npm',
-      ],
-      matchPackageNames: [
-        '@tanstack/redact',
-      ],
+      description: "Review Redact runtime changes separately, including 0.x minors.",
+      matchManagers: ["npm"],
+      matchPackageNames: ["@tanstack/redact"],
       groupName: null,
     },
     {
-      description: 'Keep the CI runtime and Node types on Node 24 until upgraded together.',
-      matchManagers: [
-        'npm',
-        'github-actions',
-      ],
-      matchPackageNames: [
-        'node',
-        '@types/node',
-      ],
-      allowedVersions: '^24.0.0',
+      description: "Keep the CI runtime and Node types on Node 24 until upgraded together.",
+      matchManagers: ["npm", "github-actions"],
+      matchPackageNames: ["node", "@types/node"],
+      allowedVersions: "^24.0.0",
     },
   ],
 }
