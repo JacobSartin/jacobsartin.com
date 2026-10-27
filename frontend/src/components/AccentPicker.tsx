@@ -190,34 +190,6 @@ function validateChannels(channels: DraftChannels): {
   };
 }
 
-function getChannelErrors(values: DraftChannels) {
-  const errors: Partial<Record<keyof DraftChannels, string>> = {};
-  for (const channel of channels) {
-    const value = parseChannel(values[channel.name]);
-    if (value === null) errors[channel.name] = channel.label + " is required.";
-    else if (
-      value < channel.min ||
-      (channel.max !== undefined && value > channel.max)
-    ) {
-      errors[channel.name] =
-        channel.max === undefined
-          ? channel.label + " must be " + channel.min + " or greater."
-          : channel.label +
-            " must be between " +
-            channel.min +
-            " and " +
-            channel.max +
-            ".";
-    }
-  }
-  return errors;
-}
-
-function validateForm(values: DraftChannels) {
-  const fields = getChannelErrors(values);
-  return Object.keys(fields).length ? { fields } : undefined;
-}
-
 function applyAccent(accent: string) {
   document.documentElement.style.setProperty("--accent", accent);
 }
@@ -235,16 +207,13 @@ export default function AccentPicker({
   const [expanded, setExpanded] = useState(false);
   const [accent, setAccent] = useState(DEFAULT_ACCENT);
   const [liveMessage, setLiveMessage] = useState("");
+  const [nativeErrors, setNativeErrors] = useState<Record<string, string>>({});
   const triggerRef = useRef<HTMLButtonElement>(null);
   const openedInitiallyRef = useRef(false);
   const appliedRef = useRef(false);
   const panelRef = useRef<HTMLFormElement>(null);
   const form = useForm({
     defaultValues: toDraftChannels(DEFAULT_ACCENT),
-    validators: {
-      onChange: ({ value }) => validateForm(value),
-      onSubmit: ({ value }) => validateForm(value),
-    },
     listeners: {
       onChange: ({ formApi }) => {
         const { accent: preview } = validateChannels(formApi.state.values);
@@ -265,17 +234,25 @@ export default function AccentPicker({
       panelRef.current?.hidePopover();
       setLiveMessage("Accent color applied.");
     },
-    onSubmitInvalid: ({ value }) => {
-      const errors = getChannelErrors(value);
-      setLiveMessage(
-        "Invalid accent channels. " + Object.values(errors).join(" "),
-      );
-      const invalidChannel = channels.find((channel) => errors[channel.name]);
-      if (invalidChannel) document.getElementById(invalidChannel.id)?.focus();
-    },
   });
   const draft = useSelector(form.store, (state) => state.values);
-  const activeErrorMessages = Object.values(getChannelErrors(draft));
+  const activeErrorMessages = Object.values(nativeErrors);
+
+  const updateNativeError = (input: HTMLInputElement) => {
+    const label = channels.find(
+      (channel) => channel.name === input.name,
+    )?.label;
+    const message = input.validity.valid
+      ? ""
+      : label + ": " + input.validationMessage;
+    setNativeErrors((previous) => {
+      const next = { ...previous };
+      if (message) next[input.name] = message;
+      else delete next[input.name];
+      return next;
+    });
+    return message;
+  };
 
   useEffect(() => {
     const resolvedAccent = resolveAccent(safeGetStorage(StorageKey.Accent));
@@ -317,6 +294,7 @@ export default function AccentPicker({
     if (event.newState === "open") {
       form.reset(toDraftChannels(accent), { keepDefaultValues: true });
       setLiveMessage("");
+      setNativeErrors({});
       return;
     }
 
@@ -353,6 +331,7 @@ export default function AccentPicker({
     form.reset(toDraftChannels(DEFAULT_ACCENT), { keepDefaultValues: true });
     applyAccent(DEFAULT_ACCENT);
     safeRemoveStorage(StorageKey.Accent);
+    setNativeErrors({});
     setLiveMessage("Accent reset to default.");
   };
 
@@ -396,7 +375,11 @@ export default function AccentPicker({
             event.currentTarget.hidePopover();
           }
         }}
-        noValidate
+        onInvalidCapture={(event) => {
+          if (event.target instanceof HTMLInputElement) {
+            setLiveMessage(updateNativeError(event.target));
+          }
+        }}
         onSubmit={(event) => {
           event.preventDefault();
           void form.handleSubmit();
@@ -420,18 +403,24 @@ export default function AccentPicker({
                   <span>{channel.label}</span>
                   <input
                     id={channel.id}
+                    name={channel.name}
                     type="number"
+                    required
                     min={channel.min}
                     max={channel.max}
                     step={channel.step}
-                    className={
-                      "accent-input" +
-                      (field.state.meta.errors.length ? " invalid" : "")
-                    }
+                    className="accent-input"
                     value={field.state.value}
-                    onChange={(event) => field.handleChange(event.target.value)}
-                    onBlur={field.handleBlur}
-                    aria-invalid={field.state.meta.errors.length > 0}
+                    onChange={(event) => {
+                      field.handleChange(event.target.value);
+                      if (nativeErrors[channel.name])
+                        updateNativeError(event.target);
+                    }}
+                    onBlur={(event) => {
+                      field.handleBlur();
+                      updateNativeError(event.target);
+                    }}
+                    aria-invalid={Boolean(nativeErrors[channel.name])}
                     aria-describedby="accent-channel-errors"
                     autoComplete="off"
                   />
@@ -450,10 +439,14 @@ export default function AccentPicker({
         </p>
 
         <div className="accent-actions">
-          <button type="submit" className="accent-apply">
+          <button type="submit" className="cta-button">
             Apply
           </button>
-          <button type="button" className="accent-reset" onClick={resetAccent}>
+          <button
+            type="button"
+            className="cta-button secondary"
+            onClick={resetAccent}
+          >
             Reset to default
           </button>
         </div>

@@ -1,7 +1,7 @@
 .project-back-link {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: var(--space-sm);
   color: var(--text-muted);
   text-decoration: none;
   font-size: var(--text-xs);

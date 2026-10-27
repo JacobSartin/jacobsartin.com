@@ -34,8 +34,12 @@ export default function Card({
       </div>
       <div className="card-info">
         <Icon icon={icon} />
-        <h3>{title}</h3>
-        <h4>{subtitle}</h4>
+        <h3>
+          <span>{title}</span>
+        </h3>
+        <h4>
+          <span>{subtitle}</span>
+        </h4>
       </div>
     </div>
   );
