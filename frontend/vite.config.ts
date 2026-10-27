@@ -1,5 +1,6 @@
 import { defineConfig, lazyPlugins } from "vite-plus";
-import react from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
+import babel from "@rolldown/plugin-babel";
 import { redact } from "@tanstack/redact/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import path from "node:path";
@@ -44,6 +45,7 @@ export default defineConfig({
       },
     }),
     react(),
+    babel({ presets: [reactCompilerPreset()] }),
     staticPreview(),
   ]),
   resolve: {

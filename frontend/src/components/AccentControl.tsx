@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import { slidersIcon } from "./icons";
 
@@ -30,11 +30,11 @@ export default function AccentControl() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const requestRef = useRef(0);
 
-  const cancel = useCallback(() => {
+  const cancel = () => {
     requestRef.current += 1;
     setPending(false);
     setMessage("");
-  }, []);
+  };
 
   useEffect(() => {
     let idleId: number | undefined;

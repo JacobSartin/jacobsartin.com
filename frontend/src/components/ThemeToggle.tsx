@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Icon from "./Icon";
 import { moonIcon, sunIcon } from "./icons";
 import { safeGetStorage, safeSetStorage, StorageKey } from "@/utils/storage";
@@ -44,14 +44,14 @@ export default function ThemeToggle() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const toggle = useCallback(() => {
+  const toggle = () => {
     setTheme((prev) => {
       const next: Theme = prev === "dark" ? "light" : "dark";
       applyTheme(next);
       safeSetStorage(StorageKey.Theme, next);
       return next;
     });
-  }, []);
+  };
 
   if (!mounted) {
     return <div className="theme-toggle" aria-hidden="true" />;

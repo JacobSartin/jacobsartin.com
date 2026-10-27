@@ -6,6 +6,13 @@ The React imports run on [TanStack Redact](https://github.com/TanStack/redact) u
 
 ## Getting Started
 
+React Compiler optimizes browser components through the official Vite React
+preset and `@rolldown/plugin-babel`. Redact supplies the aliased
+`react/compiler-runtime`; server prerendering keeps its existing pipeline.
+Compare bundle sizes and exercise the picker, theme controls, navigation and
+hydration when changing compiler or runtime versions. This integration enables
+automatic memoization; it does not establish a measured speed improvement.
+
 Use Node.js 22.18+, 24.11+, or 26+ (CI uses Node.js 24). The pnpm version is pinned through the `packageManager` field in `package.json`, and pnpm switches to it automatically. From `frontend/`, install dependencies and start the dev server:
 
 ```bash

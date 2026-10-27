@@ -24,11 +24,13 @@
     "react-dom": "19.3.1"
   },
   "devDependencies": {
+    "@rolldown/plugin-babel": "0.2.4",
     "@types/culori": "^4.0.1",
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "babel-plugin-react-compiler": "1.0.0",
     "typescript": "^7.0.2",
     "vite": "catalog:",
     "vite-plus": "catalog:"

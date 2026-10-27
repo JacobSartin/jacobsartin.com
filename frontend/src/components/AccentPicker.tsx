@@ -1,8 +1,6 @@
 import {
-  useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
   type ToggleEvent,
@@ -308,39 +306,34 @@ export default function AccentPicker({
     appliedRef.current = false;
   };
 
-  const pickerHex = useMemo(() => {
-    const { accent: previewAccent } = validateChannels(draft);
-    const parsed =
-      toValidOklch(previewAccent ?? accent) ??
-      toValidOklch(accent) ??
-      toValidOklch(DEFAULT_ACCENT);
-    return parsed ? formatHex(parsed) : "#8a00e5";
-  }, [accent, draft]);
+  const { accent: previewAccent } = validateChannels(draft);
+  const pickerColor =
+    toValidOklch(previewAccent ?? accent) ??
+    toValidOklch(accent) ??
+    toValidOklch(DEFAULT_ACCENT);
+  const pickerHex = pickerColor ? formatHex(pickerColor) : "#8a00e5";
 
-  const handleHexChange = useCallback(
-    (hex: string) => {
-      const parsed = toValidOklch(hex);
-      if (!parsed) return;
-      const nextDraft = toDraftChannels(formatOklch(parsed));
-      form.reset(nextDraft, { keepDefaultValues: true });
+  const handleHexChange = (hex: string) => {
+    const parsed = toValidOklch(hex);
+    if (!parsed) return;
+    const nextDraft = toDraftChannels(formatOklch(parsed));
+    form.reset(nextDraft, { keepDefaultValues: true });
 
-      const { accent: previewAccent } = validateChannels(nextDraft);
-      if (previewAccent) {
-        applyAccent(previewAccent);
-        setLiveMessage("Previewing accent color.");
-      }
-    },
-    [form],
-  );
+    const { accent: previewAccent } = validateChannels(nextDraft);
+    if (previewAccent) {
+      applyAccent(previewAccent);
+      setLiveMessage("Previewing accent color.");
+    }
+  };
 
-  const resetAccent = useCallback(() => {
+  const resetAccent = () => {
     setAccent(DEFAULT_ACCENT);
     form.reset(toDraftChannels(DEFAULT_ACCENT), { keepDefaultValues: true });
     applyAccent(DEFAULT_ACCENT);
     safeRemoveStorage(StorageKey.Accent);
     setNativeErrors({});
     setLiveMessage("Accent reset to default.");
-  }, [form]);
+  };
 
   if (!mounted) {
     return <div className="accent-toggle" aria-hidden="true" />;
