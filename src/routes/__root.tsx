@@ -19,7 +19,10 @@ export const Route = createRootRoute({
     ...pageHead(null),
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1.0" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1.0, viewport-fit=cover",
+      },
       ...pageHead(null).meta,
     ],
     links: [
