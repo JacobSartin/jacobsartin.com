@@ -17,6 +17,7 @@ import { useForm, useSelector } from "@tanstack/react-form";
 import { HexColorPicker } from "react-colorful";
 import Icon from "./Icon";
 import { slidersIcon } from "./icons";
+import { createAccentPreview } from "./accentPreview";
 import {
   safeGetStorage,
   safeRemoveStorage,
@@ -190,10 +191,6 @@ function validateChannels(channels: DraftChannels): {
   };
 }
 
-function applyAccent(accent: string) {
-  document.documentElement.style.setProperty("--accent", accent);
-}
-
 interface Props {
   initiallyOpen?: boolean;
   focusFrom?: HTMLElement | null;
@@ -212,13 +209,14 @@ export default function AccentPicker({
   const openedInitiallyRef = useRef(false);
   const appliedRef = useRef(false);
   const panelRef = useRef<HTMLFormElement>(null);
+  const [accentPreview] = useState(createAccentPreview);
   const form = useForm({
     defaultValues: toDraftChannels(DEFAULT_ACCENT),
     listeners: {
       onChange: ({ formApi }) => {
         const { accent: preview } = validateChannels(formApi.state.values);
         if (preview) {
-          applyAccent(preview);
+          accentPreview.preview(preview);
           setLiveMessage("Previewing accent color.");
         }
       },
@@ -229,7 +227,7 @@ export default function AccentPicker({
       appliedRef.current = true;
       setAccent(nextAccent);
       form.reset(toDraftChannels(nextAccent), { keepDefaultValues: true });
-      applyAccent(nextAccent);
+      accentPreview.commit(nextAccent);
       safeSetStorage(StorageKey.Accent, nextAccent);
       panelRef.current?.hidePopover();
       setLiveMessage("Accent color applied.");
@@ -263,9 +261,11 @@ export default function AccentPicker({
 
     setAccent(resolvedAccent);
     form.reset(toDraftChannels(resolvedAccent), { keepDefaultValues: true });
-    applyAccent(resolvedAccent);
+    accentPreview.commit(resolvedAccent);
     setMounted(true);
-  }, [form]);
+  }, [accentPreview, form]);
+
+  useEffect(() => () => accentPreview.dispose(), [accentPreview]);
 
   useLayoutEffect(() => {
     const trigger = triggerRef.current;
@@ -292,6 +292,7 @@ export default function AccentPicker({
 
   const handleBeforeToggle = (event: ToggleEvent<HTMLFormElement>) => {
     if (event.newState === "open") {
+      accentPreview.begin(accent);
       form.reset(toDraftChannels(accent), { keepDefaultValues: true });
       setLiveMessage("");
       setNativeErrors({});
@@ -300,7 +301,7 @@ export default function AccentPicker({
 
     if (!appliedRef.current) {
       form.reset(toDraftChannels(accent), { keepDefaultValues: true });
-      applyAccent(accent);
+      accentPreview.commit(accent);
       setLiveMessage("Accent picker closed without applying changes.");
     }
     appliedRef.current = false;
@@ -321,7 +322,7 @@ export default function AccentPicker({
 
     const { accent: previewAccent } = validateChannels(nextDraft);
     if (previewAccent) {
-      applyAccent(previewAccent);
+      accentPreview.preview(previewAccent);
       setLiveMessage("Previewing accent color.");
     }
   };
@@ -329,7 +330,8 @@ export default function AccentPicker({
   const resetAccent = () => {
     setAccent(DEFAULT_ACCENT);
     form.reset(toDraftChannels(DEFAULT_ACCENT), { keepDefaultValues: true });
-    applyAccent(DEFAULT_ACCENT);
+    accentPreview.commit(DEFAULT_ACCENT);
+    accentPreview.begin(DEFAULT_ACCENT);
     safeRemoveStorage(StorageKey.Accent);
     setNativeErrors({});
     setLiveMessage("Accent reset to default.");

@@ -93,7 +93,11 @@
     oklch(from var(--neutral) l c h / 0.75)
   );
   /* Opaque endpoints avoid compositing the glow through transparency. */
-  --bg-gradient-start: color-mix(in srgb, var(--accent) 12%, var(--bg-primary));
+  --bg-gradient-start: color-mix(
+    in srgb,
+    var(--accent-backdrop, var(--accent)) 12%,
+    var(--bg-primary)
+  );
   --accent-hover: light-dark(
     oklch(from var(--accent) calc(l - 0.03) c h),
     oklch(from var(--accent-bright) calc(l - 0.03) c h)
@@ -490,6 +494,15 @@ li::marker {
 /* ===================== */
 /* Global Utilities      */
 /* ===================== */
+/* Color previews follow input directly; keep motion/opacity feedback intact.
+   The native popover keeps its discrete visibility transitions. The controller
+   retains this flag through the final apply/cancel paint. */
+:root[data-accent-preview] :not(.accent-popover),
+:root[data-accent-preview] *::before,
+:root[data-accent-preview] *::after {
+  transition-property: transform, translate, scale, rotate, opacity !important;
+}
+
 .container,
 .hero,
 .not-found {
