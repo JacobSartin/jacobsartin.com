@@ -65,6 +65,13 @@ The accent picker uses the native [Popover API](https://developer.mozilla.org/en
 
 Route metadata is rendered by `HeadContent`, including page titles, descriptions and social tags. A catch-all route supplies not-found metadata. Router Devtools are available in development and excluded from production. Add new internal project links using the generated route types so invalid destinations fail type checking.
 
+JetBrains Mono's Latin variable WOFF2 (weights 400–700, Google Fonts v24) is
+bundled from `src/assets/jetbrains-mono-latin-wght.woff2` and preloaded by the root
+document. Its SIL Open Font License is in `public/licenses/jetbrains-mono.txt`.
+`font-display: optional` keeps the fallback for the current visit if the font
+arrives too late for first paint, avoiding text resizing on a cold connection.
+Both theme icons are prerendered; CSS selects the visible one from the theme applied by the document bootstrap before paint.
+
 ## Deployment
 
 Every push to `main` runs `.github/workflows/deploy.yaml`. It builds the site, then force-pushes `dist/` to the `site` branch as a single commit. jacobsartin.com serves whatever that branch holds and picks up a new build within about a minute.

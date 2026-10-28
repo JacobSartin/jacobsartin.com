@@ -1,42 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Icon from "./Icon";
 import { moonIcon, sunIcon } from "./icons";
 import { safeGetStorage, safeSetStorage, StorageKey } from "@/utils/storage";
 
 type Theme = "light" | "dark";
 
-function getSystemTheme(): Theme {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
 function applyTheme(theme: Theme) {
   document.documentElement.setAttribute("data-theme", theme);
 }
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
-
-  // On mount: read stored preference or fall back to system preference
-  useEffect(() => {
-    const stored = safeGetStorage(StorageKey.Theme) as Theme | null;
-    const resolved =
-      stored === "light" || stored === "dark" ? stored : getSystemTheme();
-
-    setTheme(resolved);
-    applyTheme(resolved);
-    setMounted(true);
-  }, []);
-
+  // The document bootstrap resolves the initial theme before first paint.
   // Listen for system preference changes (only when no explicit stored pref)
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e: MediaQueryListEvent) => {
       if (!safeGetStorage(StorageKey.Theme)) {
         const next = e.matches ? "dark" : "light";
-        setTheme(next);
         applyTheme(next);
       }
     };
@@ -45,26 +25,23 @@ export default function ThemeToggle() {
   }, []);
 
   const toggle = () => {
-    setTheme((prev) => {
-      const next: Theme = prev === "dark" ? "light" : "dark";
-      applyTheme(next);
-      safeSetStorage(StorageKey.Theme, next);
-      return next;
-    });
+    const next: Theme =
+      document.documentElement.getAttribute("data-theme") === "light"
+        ? "dark"
+        : "light";
+    applyTheme(next);
+    safeSetStorage(StorageKey.Theme, next);
   };
-
-  if (!mounted) {
-    return <div className="theme-toggle" aria-hidden="true" />;
-  }
 
   return (
     <button
       type="button"
       onClick={toggle}
       className="theme-toggle"
-      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+      aria-label="Toggle color theme"
     >
-      <Icon icon={theme === "dark" ? sunIcon : moonIcon} />
+      <Icon icon={sunIcon} className="theme-icon-light" />
+      <Icon icon={moonIcon} className="theme-icon-dark" />
     </button>
   );
 }

@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import NotFound from "@/not-found";
 import { pageHead } from "@/utils/head";
 import { bootstrapScript } from "@/utils/bootstrap";
+import monoFontUrl from "@/assets/jetbrains-mono-latin-wght.woff2?url";
 import "@/globals.css";
 import "@/nav.css";
 
@@ -28,15 +29,12 @@ export const Route = createRootRoute({
         href: import.meta.env.BASE_URL + "favicon.ico",
         sizes: "any",
       },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
+        rel: "preload",
+        href: monoFontUrl,
+        as: "font",
+        type: "font/woff2",
         crossOrigin: "anonymous",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap",
       },
     ],
   }),

@@ -18,6 +18,11 @@ const titles = new Set();
 for (const route of routes) {
   const html = fs.readFileSync(path.join(output, route, "index.html"), "utf8");
   assert.match(html, /<h1[ >]/, "Missing prerendered content for /" + route);
+  assert.match(
+    html,
+    /<button[^>]+class="theme-toggle"[^>]*>\s*<svg/,
+    "Missing theme icon before hydration for /" + route,
+  );
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
   assert.ok(
     title && !titles.has(title),

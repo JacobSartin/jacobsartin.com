@@ -1,8 +1,12 @@
 // Apply persisted appearance before first paint; recover stale chunks once.
 export const bootstrapScript = String.raw`(function () {
         try {
-          var t = localStorage.getItem("theme");
-          var accent = localStorage.getItem("accent");
+          var t;
+          var accent;
+          try {
+            t = localStorage.getItem("theme");
+            accent = localStorage.getItem("accent");
+          } catch (e) {}
           if (t !== "light" && t !== "dark") {
             t = matchMedia("(prefers-color-scheme: dark)").matches
               ? "dark"

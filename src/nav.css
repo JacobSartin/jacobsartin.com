@@ -300,6 +300,16 @@ nav {
   color: var(--text-primary);
 }
 
+/* Both icons are prerendered; the pre-paint theme selects one before hydration. */
+.theme-toggle .theme-icon-dark,
+[data-theme="light"] .theme-toggle .theme-icon-light {
+  display: none;
+}
+
+[data-theme="light"] .theme-toggle .theme-icon-dark {
+  display: inline-block;
+}
+
 .social-links {
   display: flex;
   gap: var(--space-sm);
