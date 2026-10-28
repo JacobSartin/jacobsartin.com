@@ -12,11 +12,9 @@ export default function Footer() {
     if (!slot || !footer) return;
 
     // Reserve the measured height before taking the footer out of flow.
-    // Publish the height so centered pages can reserve it within 100svh.
+    // Observers handle font, safe-area and route changes without scroll handlers.
     const reserveHeight = () => {
-      const height = footer.getBoundingClientRect().height + "px";
-      slot.style.blockSize = height;
-      document.body.style.setProperty("--site-footer-height", height);
+      slot.style.blockSize = footer.getBoundingClientRect().height + "px";
     };
     reserveHeight();
     const resizeObserver = new ResizeObserver(reserveHeight);
@@ -35,7 +33,6 @@ export default function Footer() {
       intersectionObserver.disconnect();
       slot.removeAttribute("data-pinned");
       slot.style.removeProperty("block-size");
-      document.body.style.removeProperty("--site-footer-height");
     };
   }, []);
 

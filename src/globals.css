@@ -238,7 +238,6 @@ html::before {
 body {
   display: flex;
   flex-direction: column;
-  /* Let the footer follow the visible viewport as browser controls move. */
   min-height: 100dvh;
   margin: 0;
   padding: 0;
@@ -246,11 +245,6 @@ body {
   font-variant-ligatures: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Reserve the usual footer height before its observer measures enlarged text. */
-body:has(> .site-footer-slot) {
-  --site-footer-height: calc(var(--control-size) + var(--space-sm) * 2);
 }
 
 #root {
@@ -364,15 +358,7 @@ main {
 
 main > .hero,
 main > .not-found {
-  /* Center in a stable viewport; extra dynamic height stays below the content. */
-  min-block-size: max(
-    0px,
-    calc(
-      100svh - var(--sticky-nav-height, 8rem) - var(--site-footer-height, 0px)
-    )
-  );
-  flex-shrink: 0;
-  margin-block: 0;
+  margin-block: auto;
 }
 
 .site-footer-slot {
