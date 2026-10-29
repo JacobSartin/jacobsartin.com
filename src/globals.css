@@ -200,19 +200,6 @@ html::before {
   );
 }
 
-/* Native snapshots animate navigation; unsupported browsers navigate normally. */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: 160ms;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-  }
-}
-
 .skip-link {
   position: fixed;
   top: var(--space-md);
@@ -374,6 +361,23 @@ main {
   align-items: center;
   justify-content: flex-start;
   padding-inline: var(--page-gutter);
+}
+
+/* The pathname-keyed main fades in without snapshots or an outgoing-page wait.
+   Navigation stays live, and a new page replaces any unfinished fade. */
+@media (prefers-reduced-motion: no-preference) {
+  main {
+    animation: page-content-in 120ms ease-out;
+  }
+}
+
+@keyframes page-content-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 main > .hero,

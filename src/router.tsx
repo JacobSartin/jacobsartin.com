@@ -5,13 +5,6 @@ export function getRouter() {
   return createRouter({
     routeTree,
     defaultPreload: "intent",
-    defaultViewTransition: {
-      types: ({ pathChanged }) =>
-        pathChanged &&
-        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? ["navigation"]
-          : false,
-    },
     scrollRestoration: true,
   });
 }

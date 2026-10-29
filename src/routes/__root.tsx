@@ -3,6 +3,7 @@ import {
   HeadContent,
   Outlet,
   Scripts,
+  useLocation,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type { ReactNode } from "react";
@@ -59,13 +60,15 @@ function RootDocument({ children }: { children: ReactNode }) {
 }
 
 function RootLayout() {
+  const pathname = useLocation({ select: (location) => location.pathname });
+
   return (
     <>
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
       <Nav />
-      <main id="main-content" tabIndex={-1}>
+      <main key={pathname} id="main-content" tabIndex={-1}>
         <Outlet />
       </main>
       <Footer />
