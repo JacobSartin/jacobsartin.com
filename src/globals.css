@@ -273,6 +273,12 @@ button {
   cursor: pointer;
 }
 
+button,
+.cta-button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 :is(
   .link,
   .cta-button,
