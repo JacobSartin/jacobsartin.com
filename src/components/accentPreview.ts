@@ -24,7 +24,6 @@ export function createAccentPreview() {
       cancelFrames();
       saved = accent;
       const root = document.documentElement;
-      root.style.setProperty("--accent-backdrop", accent);
       root.setAttribute("data-accent-preview", "");
     },
     preview(accent: string) {
@@ -42,7 +41,6 @@ export function createAccentPreview() {
       saved = null;
       applyAccent(accent);
       const root = document.documentElement;
-      root.style.removeProperty("--accent-backdrop");
       if (!root.hasAttribute("data-accent-preview")) return;
       // Paint the final/reverted color before restoring hover transitions.
       releaseFrame = window.requestAnimationFrame(() => {
@@ -57,7 +55,6 @@ export function createAccentPreview() {
       if (saved !== null) applyAccent(saved);
       saved = null;
       const root = document.documentElement;
-      root.style.removeProperty("--accent-backdrop");
       root.removeAttribute("data-accent-preview");
     },
   };

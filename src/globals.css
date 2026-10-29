@@ -93,11 +93,7 @@
     oklch(from var(--neutral) l c h / 0.75)
   );
   /* Opaque endpoints avoid compositing the glow through transparency. */
-  --bg-gradient-start: color-mix(
-    in srgb,
-    var(--accent-backdrop, var(--accent)) 12%,
-    var(--bg-primary)
-  );
+  --bg-gradient-start: color-mix(in srgb, var(--accent) 12%, var(--bg-primary));
   --accent-hover: light-dark(
     oklch(from var(--accent) calc(l - 0.03) c h),
     oklch(from var(--accent-bright) calc(l - 0.03) c h)
