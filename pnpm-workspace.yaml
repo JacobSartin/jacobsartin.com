@@ -20,3 +20,7 @@ permissions:
 skills:
   dirs:
     - .agents/skills
+# setup-vp already installs the pnpm pinned by packageManager. Don't let pnpm
+# manage its own version: that adds a packageManagerDependencies section to the
+# lockfile that Renovate doesn't keep in sync, which breaks --frozen-lockfile.
+pmOnFail: ignore
