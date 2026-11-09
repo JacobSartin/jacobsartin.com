@@ -33,8 +33,8 @@ importers:
         specifier: 1.169.4
         version: 1.169.4(@voidzero-dev/vite-plus-core@1.5.0(@types/node@24.19.2)(jiti@2.7.0)(typescript@7.0.2))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(rolldown@1.2.16)
       '@tanstack/redact':
-        specifier: 0.3.0
-        version: 0.3.0(@voidzero-dev/vite-plus-core@1.5.0(@types/node@24.19.2)(jiti@2.7.0)(typescript@7.0.2))
+        specifier: 0.3.1
+        version: 0.3.1(@voidzero-dev/vite-plus-core@1.5.0(@types/node@24.19.2)(jiti@2.7.0)(typescript@7.0.2))
       culori:
         specifier: ^4.0.2
         version: 4.0.2
@@ -692,8 +692,8 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
-  '@tanstack/redact@0.3.0':
-    resolution: {integrity: sha512-FJ4tn2Gzn8ip4qBCSak2pmWl0S1aTn5vmZGLblsSXM7zvVlZeheao+0LyhrYi6WpZYG3SV+VJ6PAsQp1sCTn2A==}
+  '@tanstack/redact@0.3.1':
+    resolution: {integrity: sha512-8A4SWi2RluvHj5j3/mifSPkUrhvmBLvvVXzM2DU7eTafvcWRXFLA/8cMe7ivZAbL7W1FMKZjitnIoP0sYIAWJA==}
     peerDependencies:
       '@cloudflare/vite-plugin': 1.65.0
       next: ~15.5.0 || ~16.0.0 || ~16.1.0 || ~16.2.0 || ~16.3.0 || ~16.4.0
@@ -2238,7 +2238,7 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
       use-sync-external-store: 1.7.0(react@19.3.1)
 
-  '@tanstack/redact@0.3.0(@voidzero-dev/vite-plus-core@1.5.0(@types/node@24.19.2)(jiti@2.7.0)(typescript@7.0.2))':
+  '@tanstack/redact@0.3.1(@voidzero-dev/vite-plus-core@1.5.0(@types/node@24.19.2)(jiti@2.7.0)(typescript@7.0.2))':
     dependencies:
       '@jridgewell/remapping': 2.3.5
       acorn: 8.19.0
