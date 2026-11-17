@@ -7,7 +7,7 @@
     "dev": "vp dev",
     "build": "vp build && node scripts/postbuild.mjs",
     "start": "vp preview",
-    "check": "vp check",
+    "check": "node scripts/check-toolchain.mjs && vp check",
     "fmt": "vp fmt",
     "typecheck": "tsc --noEmit",
     "size": "vp build --manifest && node scripts/postbuild.mjs && node scripts/bundle-sizes.mjs"

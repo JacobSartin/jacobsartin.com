@@ -26,21 +26,25 @@ Open <http://localhost:5173> in your browser.
 
 - `pnpm dev`: start the Vite+ dev server
 - `pnpm build`: build the production bundle into `dist/`, then run the post-build step
-- `pnpm check`: check formatting, lint rules, and TypeScript types with Vite+
+- `pnpm check`: verify that the Vite+ versions match, then check formatting, lint rules, and TypeScript types with Vite+
 - `pnpm fmt`: format the project with Vite+
 - `pnpm typecheck`: type-check the project with `tsc --noEmit`
 - `pnpm start`: preview the production build locally
 - `pnpm size`: build and report initial/deferred JS/CSS sizes (raw, gzip, and Brotli)
 
-Vite+ is installed locally, so no global CLI is required. `vite.config.ts` holds the build, lint, and format settings; `pnpm-workspace.yaml` pins Vite+ and aliases Vite to the matching Vite+ core so plugins share one toolchain. Keep those versions aligned when upgrading. The project retains its existing 80-column formatting preference.
+Vite+ is installed locally, so no global CLI is required. `vite.config.ts` holds the build, lint, and format settings; `pnpm-workspace.yaml` pins Vite+ and aliases Vite to the matching Vite+ core so plugins share one toolchain. Keep those versions aligned when upgrading: `pnpm check` fails when the alias is not the core that the installed Vite+ was released with. The project retains its existing 80-column formatting preference.
 
 With the optional global `vp` CLI, use `vp install`, `vp dev`, `vp run check`, and `vp run build`. Use `vp run build` instead of the bare `vp build` command when you need the complete static site, including prerendered pages and the 404 fallback. `vp build` bundles and prerenders; the complete script also verifies the static output and creates `.nojekyll`.
 
 ## Dependency Updates
 
-The [Renovate configuration](.github/renovate.json5) manages npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown and manual merging. Related React, TanStack Router/Start, and Vite+ packages update together. Node types stay on the Node 24 line used in CI.
+The [Renovate configuration](.github/renovate.json5) manages npm packages, the pnpm version, the Vite+ catalog, and GitHub Actions. Updates are proposed weekly with a three-day release cooldown. Related React, TanStack Router/Start, and Vite+ packages update together, and pnpm updates on its own. Node types stay on the Node 24 line used in CI.
 
-CI audits dependencies on pull requests and every Monday at 13:00 UTC, as well as checking and building the site. Run `pnpm audit --audit-level=high` locally for the same vulnerability check. The weekly run also checks for advisories affecting an unchanged lockfile.
+Renovate merges minor and patch updates of 1.0+ packages, GitHub Actions updates, and lock file maintenance itself, once CI passes on a branch that is up to date with `main`. Major updates, 0.x packages, and TanStack Redact wait for a manual merge. Every merge to `main` deploys, so the CI check and build are the only review that an automatic update gets.
+
+Renovate rebases each open pull request whenever `main` moves, so a passing check describes what merging would produce. pnpm enforces the same three-day cooldown when Renovate resolves the lockfile. An update forced from the Dependency Dashboard before its cooldown ends therefore arrives with a stale lockfile and fails to install until the release is three days old.
+
+CI checks and builds every pull request. It does not audit, because advisories change without a commit, and a new one would fail every open pull request. The Audit workflow runs `pnpm audit --audit-level=high` every Monday at 13:00 UTC, after Renovate's update window, and can be run manually. It sets aside advisories that have no fixed release, for that run only, and fails once a fix is published. Run `pnpm audit --audit-level=high` locally to list every advisory, including those without a fix.
 
 The Dependency graph workflow submits the resolved pnpm dependencies to GitHub on pushes to `main`. This restores dependency graph coverage for pnpm 12's two-document lockfile without changing its format or weakening package-manager version enforcement. Enable Dependabot alerts in the repository settings to receive vulnerability alerts for the submitted dependencies.
 
