@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import { slidersIcon } from "./icons";
+import { loadOptionalChunk } from "@/utils/bootstrap";
 
 type Picker = typeof import("./AccentPicker").default;
 type PickerModule = typeof import("./AccentPicker");
@@ -8,10 +9,13 @@ type PickerModule = typeof import("./AccentPicker");
 let pickerPromise: Promise<PickerModule> | null = null;
 
 function loadPicker() {
-  pickerPromise ??= import("./AccentPicker").catch((error: unknown) => {
-    pickerPromise = null;
-    throw error;
-  });
+  // The control reports a failed load itself, so the page is never reloaded.
+  pickerPromise ??= loadOptionalChunk(() => import("./AccentPicker")).catch(
+    (error: unknown) => {
+      pickerPromise = null;
+      throw error;
+    },
+  );
   return pickerPromise;
 }
 
