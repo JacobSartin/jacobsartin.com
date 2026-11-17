@@ -16,7 +16,6 @@ const base = normalizedBasePath.endsWith("/")
 export default defineConfig({
   fmt: {
     printWidth: 80,
-    // .claude holds local tool state that Git ignores only per machine.
     ignorePatterns: ["src/routeTree.gen.ts", ".claude/**"],
   },
   lint: {
