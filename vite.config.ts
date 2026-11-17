@@ -14,7 +14,10 @@ const base = normalizedBasePath.endsWith("/")
   : `${normalizedBasePath}/`;
 
 export default defineConfig({
-  fmt: { printWidth: 80, ignorePatterns: ["src/routeTree.gen.ts"] },
+  fmt: {
+    printWidth: 80,
+    ignorePatterns: ["src/routeTree.gen.ts", ".claude/**"],
+  },
   lint: {
     ignorePatterns: ["src/routeTree.gen.ts"],
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],

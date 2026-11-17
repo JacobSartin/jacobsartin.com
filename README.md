@@ -84,7 +84,7 @@ Every push to `main` runs `.github/workflows/deploy.yaml`. It builds the site, t
 
 To roll back, revert the commit on `main`, or re-run an earlier Deploy run.
 
-A deploy replaces the previous build's hashed chunks. The document bootstrap in `src/utils/bootstrap.ts` reloads once when an old page cannot load a replaced chunk. That bootstrap also applies persisted theme/accent preferences before first paint.
+A deploy replaces the previous build's hashed chunks. The document bootstrap in `src/utils/bootstrap.ts` reloads once when an old page cannot load a replaced chunk. It leaves the page alone while offline, when session storage is unavailable to limit the reload to one, and for the accent picker, which reports its own load failure. That bootstrap also applies persisted theme/accent preferences before first paint.
 
 CI and both deployment workflows use `voidzero-dev/setup-vp` to install Node.js, the pinned Vite+ toolchain, and dependencies with a frozen lockfile. Builds run through `vp run build` so the post-build step is included. The separate Dependency graph workflow reads the manifests and lockfile without installing dependencies.
 
