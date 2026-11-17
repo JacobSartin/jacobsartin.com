@@ -7,10 +7,19 @@
   minimumReleaseAge: "3 days",
   internalChecksFilter: "strict",
   prConcurrentLimit: 5,
+  // Keep every PR on top of the current main. Its checks then describe what a
+  // merge would produce, and its lockfile is never combined with one resolved
+  // against an older main.
+  rebaseWhen: "behind-base-branch",
+  // Updates that opt in below are merged by Renovate itself, on a later run,
+  // once every check on the rebased branch has passed. This doesn't rely on
+  // the repository's auto-merge or branch protection settings.
   automerge: false,
+  platformAutomerge: false,
   lockFileMaintenance: {
     enabled: true,
     schedule: ["before 7am on monday"],
+    automerge: true,
   },
   packageRules: [
     {
@@ -23,14 +32,37 @@
       groupName: "npm non-major dependencies",
     },
     {
+      description: "A 0.x package may break in any release. Review these apart from the group that merges itself.",
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchCurrentVersion: "/^0/",
+      groupName: "npm 0.x dependencies",
+    },
+    {
+      description: "Merge minor and patch updates of 1.0+ packages once CI passes. Majors and 0.x stay manual.",
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchCurrentVersion: "!/^0/",
+      automerge: true,
+    },
+    {
       matchManagers: ["github-actions"],
       matchUpdateTypes: ["minor", "patch", "digest", "pinDigest"],
       groupName: "GitHub Actions",
+      automerge: true,
     },
     {
+      description: "A pnpm release can change how the lockfile is read, so test it apart from package updates.",
+      matchManagers: ["npm"],
+      matchPackageNames: ["pnpm"],
+      groupName: "pnpm",
+    },
+    {
+      description: "vite-plus and the core aliased as vite are one release with separate version numbers. Never split them by update type; scripts/check-toolchain.mjs fails CI if they come apart.",
       matchManagers: ["npm"],
       matchPackageNames: ["vite-plus", "@voidzero-dev/vite-plus-core"],
       groupName: "Vite+ toolchain",
+      separateMajorMinor: false,
     },
     {
       matchManagers: ["npm"],

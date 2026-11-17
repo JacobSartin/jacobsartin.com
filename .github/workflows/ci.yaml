@@ -2,16 +2,23 @@ name: CI
 
 on:
   pull_request:
-  schedule:
-    - cron: "0 13 * * 1"
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# A rebase replaces the earlier run for the same pull request.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
+  # The merge gate. Every step depends only on the commit under test, so a
+  # failure here always points at the change. Checks that depend on the outside
+  # world, such as new advisories, run on a schedule in audit.yaml instead.
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout
@@ -27,9 +34,6 @@ jobs:
 
       - name: Check
         run: vp run check
-
-      - name: Audit dependencies
-        run: pnpm audit --audit-level=high
 
       - name: Build
         env:

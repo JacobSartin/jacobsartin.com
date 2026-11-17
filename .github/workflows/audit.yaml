@@ -1,0 +1,43 @@
+name: Audit
+
+# Advisories change without any commit here, so this is a scheduled report
+# rather than a merge gate: a new advisory must not fail every open pull
+# request. It runs after Renovate's Monday window, so it reports what the
+# week's updates and lock file maintenance did not already fix. Dependabot
+# alerts cover the days in between.
+on:
+  schedule:
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # The audit reads the lockfile, so nothing is installed.
+      - name: Setup Vite+
+        uses: voidzero-dev/setup-vp@cab1ab9eaff52d4857875f4f2c016e36af8f2c76 # v1.22.0
+        with:
+          node-version: "24"
+          run-install: false
+
+      # An advisory with no fixed release can't be acted on, so it is set aside
+      # for this run only: pnpm records it in pnpm-workspace.yaml in this
+      # checkout, which is discarded. Each run decides again, so the advisory
+      # fails the audit once a fix is published. This step exits non-zero while
+      # other advisories remain; the next step reports those.
+      - name: Set aside advisories without a fix
+        run: pnpm audit --ignore-unfixable || true
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high
