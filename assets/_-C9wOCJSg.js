@@ -1,0 +1,1 @@
+import{n as e}from"./index-h4b-3lty.js";var t=e;export{t as component};
