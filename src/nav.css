@@ -39,7 +39,7 @@ nav {
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text-primary);
-  background: var(--accent-bright);
+  background: var(--accent-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

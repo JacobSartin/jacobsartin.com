@@ -69,7 +69,7 @@ Accent previews write the latest color at most once per animation frame. Color a
 
 The accent picker uses the native [Popover API](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) for its top layer, dismissal, and focus behavior. CSS anchor positioning attaches it to its trigger on roomy screens. Small viewports and browsers without the required anchor sizing support use a centered, scrollable panel. Browser toggle events synchronize drafts and accessibility state; the picker has no custom position calculations or resize/scroll listeners. Browsers must support the Popover API; CSS anchor positioning is an optional enhancement.
 
-Route metadata is rendered by `HeadContent`, including page titles, descriptions and social tags. A catch-all route supplies not-found metadata. Router Devtools are available in development and excluded from production. Add new internal project links using the generated route types so invalid destinations fail type checking.
+Route metadata is rendered by `HeadContent`, including page titles, descriptions and social tags. A catch-all route supplies not-found metadata. After a client-side navigation has rendered, `RouteAnnouncer` moves focus to `<main>` and announces the new page title in a live region, because the browser does neither without a document load. Router Devtools are available in development and excluded from production. Add new internal project links using the generated route types so invalid destinations fail type checking.
 
 JetBrains Mono's Latin variable WOFF2 (weights 400–700, Google Fonts v24) is
 bundled from `src/assets/jetbrains-mono-latin-wght.woff2` and preloaded by the root
