@@ -80,7 +80,9 @@ Both theme icons are prerendered; CSS selects the visible one from the theme app
 
 ## Deployment
 
-Every push to `main` runs `.github/workflows/deploy.yaml`. It builds the site, then force-pushes `dist/` to the `site` branch as a single commit. jacobsartin.com serves whatever that branch holds and picks up a new build within about a minute.
+Every push to `main` runs `.github/workflows/deploy.yaml`. Its build job runs `pnpm check` and builds the site; its publish job then force-pushes `dist/` to the `site` branch as a single commit. If the check or the build fails, nothing is published and the site keeps the previous build. jacobsartin.com serves whatever that branch holds and picks up a new build within about a minute.
+
+Both deployment workflows keep publishing rights away from project code. Dependencies, checks and the build run in a job whose token can only read the repository. The finished `dist/` passes as an artifact to a second job, the only one allowed to publish, which runs no project code.
 
 To roll back, revert the commit on `main`, or re-run an earlier Deploy run.
 
@@ -90,7 +92,7 @@ CI and both deployment workflows use `voidzero-dev/setup-vp` to install Node.js,
 
 Each workflow passes the checked-out source commit as `VITE_COMMIT_SHA`. The shared footer displays its first seven characters and links to the full commit on GitHub. The value is embedded during the build, including prerendered pages and the 404 fallback, so it identifies the source used for that deployment rather than the generated `site` branch commit. Local development and builds omit the footer unless `VITE_COMMIT_SHA` is set.
 
-`.github/workflows/ci.yaml` runs `pnpm check` and builds every pull request. `.github/workflows/gh-pages.yaml` builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
+`.github/workflows/ci.yaml` runs `pnpm check` and builds every pull request. `.github/workflows/gh-pages.yaml` checks and builds every push to `main` and deploys `dist/` to the GitHub Pages mirror at <https://jacobsartin.github.io/jacobsartin.com/>. The site base path comes from `VITE_BASE_PATH` and defaults to `/`.
 
 Start prerenders every page into `<route>/index.html`, including page content, unique titles, descriptions and sharing metadata. A separate SPA shell becomes `404.html` for static-host unknown paths. The postbuild step verifies each page and fallback, then creates `.nojekyll`.
 
