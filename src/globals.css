@@ -114,6 +114,12 @@
     oklch(from var(--accent) l c h / 0.03),
     oklch(from var(--accent) l c h / 0.06)
   );
+  /* Accent used as text. Capping lightness per scheme keeps at least 4.5:1 on
+     page and card backgrounds for any accent the hex picker can produce. */
+  --accent-text: light-dark(
+    oklch(from var(--accent) min(l, 0.48) c h),
+    oklch(from var(--accent) max(l, 0.68) c h)
+  );
   --text-primary: var(--text-base);
   --text-secondary: light-dark(
     oklch(from var(--text-base) l c h / 0.65),
@@ -363,6 +369,12 @@ main {
   padding-inline: var(--page-gutter);
 }
 
+/* Main only takes focus from the skip link and after route changes, so the
+   next Tab starts in the page content; it is not a control that needs a ring. */
+main:focus-visible {
+  outline: none;
+}
+
 /* The pathname-keyed main fades in without snapshots or an outgoing-page wait.
    Navigation stays live, and a new page replaces any unfinished fade. */
 @media (prefers-reduced-motion: no-preference) {
@@ -587,7 +599,7 @@ li::marker {
 }
 
 .highlight {
-  color: var(--accent-bright);
+  color: var(--accent-text);
   font-weight: 600;
 }
 

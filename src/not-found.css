@@ -28,7 +28,7 @@
 }
 
 .not-found-prompt .prompt-char {
-  color: var(--accent-bright);
+  color: var(--accent-text);
   font-weight: 700;
 }
 

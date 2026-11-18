@@ -35,7 +35,7 @@ export default function Nav() {
         <RouterLink
           to="/"
           className="nav-brand"
-          aria-label="Home"
+          aria-label="Jacob Sartin, home"
           activeOptions={{ exact: true }}
         >
           <span className="nav-brand-name">jacob sartin</span>
