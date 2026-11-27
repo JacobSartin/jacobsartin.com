@@ -20,10 +20,7 @@
     enabled: true,
     schedule: ["before 7am on monday"],
     automerge: true,
-    // A lockfile refresh has no release timestamp, so Renovate can never mark
-    // it as old enough: renovate/stability-days stays pending and blocks the
-    // merge. pnpm applies the same cooldown itself when it resolves the new
-    // lockfile (minimumReleaseAge in pnpm-workspace.yaml).
+    // A lockfile refresh has no release timestamp
     minimumReleaseAge: null,
   },
   packageRules: [
