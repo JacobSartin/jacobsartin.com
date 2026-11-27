@@ -20,6 +20,8 @@
     enabled: true,
     schedule: ["before 7am on monday"],
     automerge: true,
+    // A lockfile refresh has no release timestamp
+    minimumReleaseAge: null,
   },
   packageRules: [
     {
