@@ -243,7 +243,7 @@ html::before {
 }
 
 /* Fill the large viewport, not the dynamic one. With its toolbar collapsed,
-   iOS Chrome reports a dynamic viewport 23px shorter than the screen, so a
+   iOS Chrome reports a dynamic viewport shorter than the screen, so a
    100dvh page stopped short and left bare canvas under the footer. Short
    pages now scroll by the toolbar height, as 100vh pages do. */
 body {
