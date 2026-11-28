@@ -1,0 +1,19 @@
+// From .vscode/tasks.json (Zed stops importing it once this file exists).
+[
+  {
+    "label": "build",
+    "command": "pnpm",
+    "args": ["run", "build"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "tags": ["build"],
+    "save": "all"
+  },
+  {
+    "label": "dev server",
+    "command": "pnpm",
+    "args": ["run", "dev"],
+    "cwd": "$ZED_WORKTREE_ROOT",
+    "use_new_terminal": true,
+    "reveal": "no_focus"
+  }
+]
