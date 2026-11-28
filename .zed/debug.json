@@ -10,6 +10,6 @@
     "webRoot": "$ZED_WORKTREE_ROOT",
     "sourceMaps": true,
     "smartStep": true,
-    "skipFiles": ["<node_internals>/**"],
-  },
+    "skipFiles": ["<node_internals>/**"]
+  }
 ]
