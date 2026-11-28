@@ -1,0 +1,1 @@
+import{n as e}from"./index-RlhbFQ_A.js";var t=e;export{t as component};
