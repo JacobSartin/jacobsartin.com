@@ -1,0 +1,15 @@
+// From .vscode/launch.json ("Open Dev in Chrome"). Start "dev server" first.
+// VS Code's integrated-browser configuration has no Zed equivalent.
+[
+  {
+    "label": "Open Dev in Chrome",
+    "adapter": "JavaScript",
+    "type": "chrome",
+    "request": "launch",
+    "url": "http://localhost:5173",
+    "webRoot": "$ZED_WORKTREE_ROOT",
+    "sourceMaps": true,
+    "smartStep": true,
+    "skipFiles": ["<node_internals>/**"],
+  },
+]
