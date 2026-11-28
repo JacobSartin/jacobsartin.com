@@ -189,17 +189,18 @@ html {
   );
 }
 
-/* Keep the backdrop stationary during native overscroll by making the background larger than the page */
+/* Keep the backdrop stationary during native overscroll. The large viewport
+   keeps its size stable as mobile browser controls expand and collapse. */
 html::before {
   content: "";
   position: fixed;
-  inset: 0 0 auto;
-  block-size: 150lvh;
+  inset: 0;
+  block-size: 100lvh;
   z-index: -1;
   pointer-events: none;
   background-color: var(--bg-primary);
   background-image: radial-gradient(
-    ellipse 60% 40lvh at 80% 80lvh in srgb,
+    ellipse 60% 40% at 80% 80% in srgb,
     var(--bg-gradient-start),
     var(--bg-primary)
   );
@@ -241,10 +242,14 @@ html::before {
   }
 }
 
+/* Fill the large viewport, not the dynamic one. With its toolbar collapsed,
+   iOS Chrome reports a dynamic viewport 23px shorter than the screen, so a
+   100dvh page stopped short and left bare canvas under the footer. Short
+   pages now scroll by the toolbar height, as 100vh pages do. */
 body {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  min-height: 100lvh;
   margin: 0;
   padding: 0;
   font-family: var(--font-mono);
@@ -254,7 +259,7 @@ body {
 }
 
 #root {
-  min-height: 100dvh;
+  min-height: 100lvh;
   display: flex;
   flex-direction: column;
 }
