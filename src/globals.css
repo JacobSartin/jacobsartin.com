@@ -189,18 +189,17 @@ html {
   );
 }
 
-/* Keep the backdrop stationary during native overscroll. The large viewport
-   keeps its size stable as mobile browser controls expand and collapse. */
+/* Keep the backdrop stationary during native overscroll by making the background larger than the page */
 html::before {
   content: "";
   position: fixed;
-  inset: 0;
-  block-size: 100lvh;
+  inset: 0 0 auto;
+  block-size: 150lvh;
   z-index: -1;
   pointer-events: none;
   background-color: var(--bg-primary);
   background-image: radial-gradient(
-    ellipse 60% 40% at 80% 80% in srgb,
+    ellipse 60% 40lvh at 80% 80lvh in srgb,
     var(--bg-gradient-start),
     var(--bg-primary)
   );
@@ -397,22 +396,12 @@ main > .not-found {
   margin-block: auto;
 }
 
-.site-footer-slot {
-  flex-shrink: 0;
-}
-
 .site-footer {
+  flex-shrink: 0;
   display: flex;
   justify-content: flex-end;
   padding: var(--space-sm) var(--page-gutter);
   font-size: var(--text-xs);
-}
-
-/* Pin only at the page end; the slot keeps the document height unchanged. */
-.site-footer-slot[data-pinned] > .site-footer {
-  position: fixed;
-  inset: auto 0 0;
-  z-index: 1;
 }
 
 .site-footer a {
